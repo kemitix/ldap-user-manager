@@ -29,10 +29,7 @@ package net.kemitix.ldapmanager.ldap;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class LdapAttribute {
-
-    private LdapAttribute() {
-    }
+public final class LdapAttribute {
 
     public static final String DN = "dn";
 
@@ -41,4 +38,7 @@ public class LdapAttribute {
     public static final String OU = "ou";
 
     public static final String SN = "sn";
+
+    private LdapAttribute() {
+    }
 }

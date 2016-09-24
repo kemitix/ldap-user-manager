@@ -29,10 +29,7 @@ package net.kemitix.ldapmanager.ldap;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class ObjectClass {
-
-    private ObjectClass() {
-    }
+public final class ObjectClass {
 
     public static final String TOP = "top";
 
@@ -43,4 +40,7 @@ public class ObjectClass {
     public static final String ORGANIZATIONAL_PERSON = "organizationalPerson";
 
     public static final String INET_ORG_PERSON = "inetOrgPerson";
+
+    private ObjectClass() {
+    }
 }
