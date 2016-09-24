@@ -24,16 +24,15 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /**
  * LDAP Attributes.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LdapAttribute {
+
+    private LdapAttribute() {
+    }
 
     public static final String DN = "dn";
 

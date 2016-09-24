@@ -24,16 +24,15 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /**
  * LDAP ObjectClasses.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectClass {
+
+    private ObjectClass() {
+    }
 
     public static final String TOP = "top";
 
