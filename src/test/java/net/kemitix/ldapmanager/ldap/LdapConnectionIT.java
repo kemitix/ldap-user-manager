@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQueryBuilder;
+import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.ldap.authentication.BindAuthenticator;
 import org.springframework.security.ldap.server.ApacheDSContainer;
@@ -93,12 +94,19 @@ public class LdapConnectionIT {
 
     @Test
     public void ldapTemplateCanFindAUser() throws InvalidNameException {
-        val query = LdapQueryBuilder.query()
-                                    .filter("(cn=admin)");
+        //given
+        ldapTemplate.create(User.builder()
+                                .dn(LdapNameBuilder.newInstance("cn=bob")
+                                                   .build())
+                                .cn("bob")
+                                .sn("smith")
+                                .build());
+        //when
         val users = ldapTemplate.search(LdapQueryBuilder.query()
                                                         .filter("(cn=bob)"), userContextMapper);
+        //then
         assertThat(users).hasSize(1)
                          .extracting("cn")
-                         .containsOnly("admin");
+                         .containsOnly("bob");
     }
 }
