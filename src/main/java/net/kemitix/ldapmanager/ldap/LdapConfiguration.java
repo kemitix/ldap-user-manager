@@ -83,11 +83,11 @@ class LdapConfiguration {
     @Bean
     AttributesMapper<User> userAttributesMapper() {
         return a -> User.builder()
-                        .dn((Name) a.get("dn")
+                        .dn((Name) a.get(LdapAttribute.DN)
                                     .get())
-                        .cn((String) a.get("cn")
-                                      .get(0))
-                        .sn((String) a.get("sn")
+                        .cn((String) a.get(LdapAttribute.CN)
+                                      .get())
+                        .sn((String) a.get(LdapAttribute.SN)
                                       .get())
                         .build();
     }
@@ -100,10 +100,10 @@ class LdapConfiguration {
     @Bean
     AttributesMapper<OU> ouAttributesMapper() {
         return a -> OU.builder()
-                      .dn((Name) a.get("dn")
+                      .dn((Name) a.get(LdapAttribute.DN)
                                   .get())
-                      .ou((String) a.get("ou")
-                                    .get(0))
+                      .ou((String) a.get(LdapAttribute.OU)
+                                    .get())
                       .build();
     }
 }
