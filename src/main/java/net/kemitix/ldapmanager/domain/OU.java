@@ -29,6 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.kemitix.ldapmanager.ldap.ObjectClass;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
@@ -43,7 +44,7 @@ import javax.naming.Name;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Entry(objectClasses = {"organizationalUnit", "top"})
+@Entry(objectClasses = {ObjectClass.ORGANIZATIONAL_UNIT, ObjectClass.TOP})
 public final class OU {
 
     @Id
