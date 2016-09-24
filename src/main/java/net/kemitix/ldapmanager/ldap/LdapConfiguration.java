@@ -33,6 +33,8 @@ import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.DirContextSource;
 
+import javax.naming.Name;
+
 /**
  * Configuration for LDAP connections.
  *
@@ -80,8 +82,12 @@ class LdapConfiguration {
     @Bean
     AttributesMapper<User> userAttributesMapper() {
         return a -> User.builder()
+                        .dn((Name) a.get("dn")
+                                    .get())
                         .cn((String) a.get("cn")
                                       .get(0))
+                        .sn((String) a.get("sn")
+                                      .get())
                         .build();
     }
 }

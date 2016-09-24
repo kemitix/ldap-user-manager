@@ -28,6 +28,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.ldap.odm.annotations.Entry;
+import org.springframework.ldap.odm.annotations.Id;
+
+import javax.naming.Name;
 
 /**
  * A user.
@@ -35,9 +40,16 @@ import lombok.Getter;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Entry(objectClasses = {"inetOrgPerson", "organizationalPerson", "person", "top"})
 public final class User {
 
+    @Id
+    private Name dn;
+
     private String cn;
+
+    private String sn;
 }
