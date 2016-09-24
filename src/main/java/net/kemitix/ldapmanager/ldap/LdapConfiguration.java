@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -89,5 +90,20 @@ class LdapConfiguration {
                         .sn((String) a.get("sn")
                                       .get())
                         .build();
+    }
+
+    /**
+     * Attribute Mapper for OUs.
+     *
+     * @return mapper to create ou from attributes
+     */
+    @Bean
+    AttributesMapper<OU> ouAttributesMapper() {
+        return a -> OU.builder()
+                      .dn((Name) a.get("dn")
+                                  .get())
+                      .ou((String) a.get("ou")
+                                    .get(0))
+                      .build();
     }
 }
