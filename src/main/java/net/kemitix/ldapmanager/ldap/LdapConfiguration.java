@@ -30,11 +30,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.ContextSource;
+import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.DirContextSource;
-
-import javax.naming.Name;
 
 /**
  * Configuration for LDAP connections.
@@ -81,15 +81,15 @@ class LdapConfiguration {
      * @return mapper to create user from attributes
      */
     @Bean
-    AttributesMapper<User> userAttributesMapper() {
-        return a -> User.builder()
-                        .dn((Name) a.get(LdapAttribute.DN)
-                                    .get())
-                        .cn((String) a.get(LdapAttribute.CN)
-                                      .get())
-                        .sn((String) a.get(LdapAttribute.SN)
-                                      .get())
-                        .build();
+    ContextMapper<User> userContextMapper() {
+        return a -> {
+            final DirContextAdapter adapter = (DirContextAdapter) a;
+            return User.builder()
+                       .dn(adapter.getDn())
+                       .cn(adapter.getStringAttribute(LdapAttribute.CN))
+                       .sn(adapter.getStringAttribute(LdapAttribute.SN))
+                       .build();
+        };
     }
 
     /**
@@ -99,11 +99,12 @@ class LdapConfiguration {
      */
     @Bean
     AttributesMapper<OU> ouAttributesMapper() {
-        return a -> OU.builder()
-                      .dn((Name) a.get(LdapAttribute.DN)
-                                  .get())
-                      .ou((String) a.get(LdapAttribute.OU)
-                                    .get())
-                      .build();
+        return a -> {
+            final DirContextAdapter adapter = (DirContextAdapter) a;
+            return OU.builder()
+                     .dn(adapter.getDn())
+                     .ou(((DirContextAdapter) a).getStringAttribute(LdapAttribute.OU))
+                     .build();
+        };
     }
 }

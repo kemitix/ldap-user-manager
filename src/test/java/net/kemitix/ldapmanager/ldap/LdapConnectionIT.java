@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,7 +50,7 @@ public class LdapConnectionIT {
     private LdapTemplate ldapTemplate;
 
     @Autowired
-    private AttributesMapper<User> userAttributesMapper;
+    private ContextMapper<User> userContextMapper;
 
     @BeforeClass
     public static void startServer() throws Exception {
@@ -95,7 +95,8 @@ public class LdapConnectionIT {
     public void ldapTemplateCanFindAUser() throws InvalidNameException {
         val query = LdapQueryBuilder.query()
                                     .filter("(cn=admin)");
-        val users = ldapTemplate.search(query, userAttributesMapper);
+        val users = ldapTemplate.search(LdapQueryBuilder.query()
+                                                        .filter("(cn=bob)"), userContextMapper);
         assertThat(users).hasSize(1)
                          .extracting("cn")
                          .containsOnly("admin");
