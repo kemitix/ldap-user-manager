@@ -29,6 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.kemitix.ldapmanager.ldap.ObjectClass;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
@@ -43,7 +44,9 @@ import javax.naming.Name;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Entry(objectClasses = {"inetOrgPerson", "organizationalPerson", "person", "top"})
+@Entry(objectClasses = {
+        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
+})
 public final class User {
 
     @Id
