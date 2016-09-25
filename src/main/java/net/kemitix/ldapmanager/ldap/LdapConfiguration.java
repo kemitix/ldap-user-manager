@@ -60,17 +60,18 @@ class LdapConfiguration {
     /**
      * The Configuration for connecting to the directory server.
      *
+     * @param ldapOptions     The LDAP server options
      * @param ldapCredentials The LDAP Credentials
      *
      * @return the source for the directory context
      */
     @Bean
     @Profile("default")
-    ContextSource contextSource(final LdapCredentials ldapCredentials) {
+    ContextSource contextSource(final LdapOptions ldapOptions, final LdapCredentials ldapCredentials) {
         final DirContextSource dirContextSource = new DirContextSource();
-        dirContextSource.setUrls(ldapCredentials.getUrls());
-        dirContextSource.setBase(ldapCredentials.getBase());
-        dirContextSource.setUserDn(ldapCredentials.getUserDn());
+        dirContextSource.setUrls(ldapOptions.getUrls());
+        dirContextSource.setBase(ldapOptions.getBase());
+        dirContextSource.setUserDn(ldapOptions.getUserDn());
         dirContextSource.setPassword(ldapCredentials.getPassword());
         return dirContextSource;
     }

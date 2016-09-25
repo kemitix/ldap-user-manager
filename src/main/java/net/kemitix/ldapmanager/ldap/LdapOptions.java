@@ -25,16 +25,30 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ldap;
 
 /**
- * Provides access to the credentials to connect to an LDAP server.
+ * Provides access to the LDAP connection options.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-interface LdapCredentials {
+public interface LdapOptions {
 
     /**
-     * Get the password (credentials) to use for getting authenticated contexts.
+     * Gets the urls of the LDAP servers.
      *
-     * @return the password.
+     * @return the urls of all servers.
      */
-    String getPassword();
+    String[] getUrls();
+
+    /**
+     * Gets the base suffix from which all operations should origin.
+     *
+     * @return the base suffix.
+     */
+    String getBase();
+
+    /**
+     * Get the user distinguished name (principal) to use for getting authenticated contexts.
+     *
+     * @return the user distinguished name.
+     */
+    String getUserDn();
 }

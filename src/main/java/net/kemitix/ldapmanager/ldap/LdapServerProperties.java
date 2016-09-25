@@ -43,7 +43,7 @@ import java.util.Arrays;
 @Getter
 @Component
 @ConfigurationProperties(prefix = "ldap")
-class LdapCredentialsProperties implements LdapCredentials {
+class LdapServerProperties implements LdapCredentials, LdapOptions {
 
     private String[] urls = new String[0];
 
