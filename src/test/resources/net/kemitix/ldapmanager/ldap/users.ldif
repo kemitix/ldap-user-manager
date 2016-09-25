@@ -1,0 +1,15 @@
+version: 1
+
+dn: dc=kemitix,dc=net
+objectclass: top
+objectclass: domain
+dc: kemitix
+
+dn: cn=admin,dc=kemitix,dc=net
+objectClass: organizationalPerson
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: top
+cn: admin
+sn: Admin
+userPassword: adminspassword
