@@ -25,6 +25,7 @@
         <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
         <assertj.version>3.5.2</assertj.version>
         <apacheds.version>1.5.5</apacheds.version>
+        <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
     </properties>
 
     <dependencyManagement>
@@ -94,6 +95,12 @@
         <dependency>
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.trajano.commons</groupId>
+            <artifactId>commons-testing</artifactId>
+            <version>${trajano-commons-testing.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
