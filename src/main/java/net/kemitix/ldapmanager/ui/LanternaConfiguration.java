@@ -49,7 +49,7 @@ import java.io.IOException;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Configuration
-@Import({MainUiConfiguration.class})
+@Import(MainUiConfiguration.class)
 public class LanternaConfiguration {
 
     /**
