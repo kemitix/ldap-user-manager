@@ -22,54 +22,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.ui.events;
 
 import com.googlecode.lanterna.gui2.BasicWindow;
-import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * The Lanterna UI.
+ * Application Exit Event Configuration.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Profile("default")
-@Component
-class LanternaUi implements CommandLineRunner {
-
-    private final BasicWindow mainWindow;
-
-    private final WindowBasedTextGUI gui;
+@Configuration
+class AppExitEventConfiguration {
 
     /**
-     * Constructor.
+     * The handler for the exit button, quiting the UI.
      *
-     * @param mainWindow The main UI windows
-     * @param gui        The Lanterna UI
+     * @param publisher The application event publisher
+     *
+     * @return the runnable to perform when triggered
      */
-    @Autowired
-    LanternaUi(
-            final BasicWindow mainWindow, final WindowBasedTextGUI gui
-              ) {
-        this.mainWindow = mainWindow;
-        this.gui = gui;
+    @Bean
+    public Runnable appExitHandler(final ApplicationEventPublisher publisher) {
+        return () -> publisher.publishEvent(new AppExitEvent(this));
     }
 
     /**
-     * Display the Lanterna UI.
+     * Application listener for the application exit event.
      *
-     * @param args The command line arguments - ignored
+     * @param window the main window
      *
-     * @throws IOException if there is an error starting the screen
+     * @return the listener
      */
-    @Override
-    public void run(final String... args) throws IOException {
-        gui.addWindow(mainWindow);
-        gui.waitForWindowToClose(mainWindow);
+    @Bean
+    public ApplicationListener<AppExitEvent> appExitListener(final BasicWindow window) {
+        return e -> window.close();
+    }
+
+    /**
+     * The Application Exit Event.
+     */
+    private static class AppExitEvent extends ApplicationEvent {
+
+        AppExitEvent(final Object source) {
+            super(source);
+        }
     }
 }

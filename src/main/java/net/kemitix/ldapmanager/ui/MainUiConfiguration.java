@@ -34,12 +34,8 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
 import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import java.util.Arrays;
 
@@ -48,7 +44,6 @@ import java.util.Arrays;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Profile("default")
 @Configuration
 class MainUiConfiguration {
 
@@ -122,61 +117,17 @@ class MainUiConfiguration {
     /**
      * The bottom panel of the UI, containing the exit button.
      *
-     * @param exitHandler The exit handler
+     * @param appExitHandler The exit handler
      *
      * @return the bottom panel
      */
     @Bean
-    public Panel bottomPanel(final Runnable exitHandler) {
-        val component = new Panel().addComponent(new Button("Exit", exitHandler))
+    public Panel bottomPanel(final Runnable appExitHandler) {
+        val component = new Panel().addComponent(new Button("Exit", appExitHandler))
                                    .withBorder(Borders.singleLine());
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         val bottomPanel = new Panel().addComponent(component);
         bottomPanel.setLayoutData(BorderLayout.Location.BOTTOM);
         return bottomPanel;
-    }
-
-    /**
-     * The handler for the exit button, quiting the UI.
-     *
-     * @param publisher The application event publisher
-     *
-     * @return the runnable to perform when triggered
-     */
-    @Bean
-    public Runnable exitHandler(final ApplicationEventPublisher publisher) {
-        return () -> publisher.publishEvent(new AppExitEvent(this));
-    }
-
-    /**
-     * Application listener for the application exit event.
-     *
-     * @param window the main window
-     *
-     * @return the listener
-     */
-    @Bean
-    public ApplicationListener<AppExitEvent> eventResponder(final BasicWindow window) {
-        return new ApplicationListener<AppExitEvent>() {
-            @Override
-            public void onApplicationEvent(final AppExitEvent appExitEvent) {
-                window.close();
-            }
-        };
-    }
-
-    /**
-     * Event for exiting the application.
-     */
-    static class AppExitEvent extends ApplicationEvent {
-
-        /**
-         * Constructor.
-         *
-         * @param source the source of the event
-         */
-        AppExitEvent(final Object source) {
-            super(source);
-        }
     }
 }
