@@ -50,7 +50,7 @@ import java.io.IOException;
  */
 @Configuration
 @Import(MainUiConfiguration.class)
-public class LanternaConfiguration {
+class LanternaConfiguration {
 
     /**
      * The Lanterna Terminal Factory.
