@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {LdapTestConfiguration.class, LdapConfiguration.class})
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "ldap-test"})
 public class LdapConnectionIT {
 
     private static final String BASE = "dc=kemitix,dc=net";
