@@ -28,7 +28,6 @@ import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.LayoutManager;
 import com.googlecode.lanterna.gui2.Panel;
-import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,10 +42,8 @@ import javax.annotation.PostConstruct;
 @Component
 class MainPanel extends Panel {
 
-    @Getter
     private final Panel topPanel;
 
-    @Getter
     private final Panel bottomPanel;
 
     private final LayoutManager layoutManager = new BorderLayout();
