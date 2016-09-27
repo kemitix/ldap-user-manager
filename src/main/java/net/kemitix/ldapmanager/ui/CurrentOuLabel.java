@@ -24,37 +24,26 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.BorderLayout;
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
-import com.googlecode.lanterna.gui2.LinearLayout;
-import com.googlecode.lanterna.gui2.Panel;
-import lombok.val;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.googlecode.lanterna.gui2.Label;
+import net.kemitix.ldapmanager.ldap.LdapOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * UI configuration for the LDAP Manager.
+ * The current OU Label.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Configuration
-class MainUiConfiguration {
+@Component
+class CurrentOuLabel extends Label {
 
     /**
-     * The bottom panel of the UI, containing the exit button.
+     * Main constructor, creates a new Label displaying a specific text.
      *
-     * @param appExitHandler The exit handler
-     *
-     * @return the bottom panel
+     * @param ldapOptions The LDAP connection options
      */
-    @Bean
-    public Panel bottomPanel(final Runnable appExitHandler) {
-        val component = new Panel().addComponent(new Button("Exit", appExitHandler))
-                                   .withBorder(Borders.singleLine());
-        component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        val bottomPanel = new Panel().addComponent(component);
-        bottomPanel.setLayoutData(BorderLayout.Location.BOTTOM);
-        return bottomPanel;
+    @Autowired
+    CurrentOuLabel(final LdapOptions ldapOptions) {
+        super(ldapOptions.getBase());
     }
 }
