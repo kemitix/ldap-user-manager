@@ -1,6 +1,6 @@
 package net.kemitix.ldapmanager.ldap;
 
-import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.domain.OU;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -13,14 +13,14 @@ import javax.naming.Name;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link UserContextMapper}.
+ * Tests for {@link OuContextMapper}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class UserContextMapperTest {
+public class OuContextMapperTest {
 
     @InjectMocks
-    private UserContextMapper contextMapper;
+    private OuContextMapper contextMapper;
 
     @Before
     public void setUp() throws Exception {
@@ -31,18 +31,15 @@ public class UserContextMapperTest {
     public void shouldMapFromContext() throws Exception {
         //given
         DirContextAdapter ctx = new DirContextAdapter();
-        final Name dn = LdapNameBuilder.newInstance("dn=cn=name")
+        final Name dn = LdapNameBuilder.newInstance("dn=ou=container")
                                        .build();
-        final String cn = "common name";
-        final String sn = "surname";
+        final String name = "container";
         ctx.setDn(dn);
-        ctx.setAttributeValue(LdapAttribute.CN, cn);
-        ctx.setAttributeValue(LdapAttribute.SN, sn);
+        ctx.setAttributeValue(LdapAttribute.OU, name);
         //when
-        final User user = contextMapper.mapFromContext(ctx);
+        final OU ou = contextMapper.mapFromContext(ctx);
         //then
-        assertThat(user.getDn()).isEqualTo(dn);
-        assertThat(user.getCn()).isEqualTo(cn);
-        assertThat(user.getSn()).isEqualTo(sn);
+        assertThat(ou.getDn()).isEqualTo(dn);
+        assertThat(ou.getOu()).isEqualTo(name);
     }
 }

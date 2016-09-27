@@ -24,13 +24,10 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
-import net.kemitix.ldapmanager.domain.OU;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.ContextSource;
-import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.DirContextSource;
 
@@ -72,21 +69,5 @@ class LdapConfiguration {
         dirContextSource.setUserDn(ldapOptions.getUserDn());
         dirContextSource.setPassword(ldapCredentials.getPassword());
         return dirContextSource;
-    }
-
-    /**
-     * Attribute Mapper for OUs.
-     *
-     * @return mapper to create ou from attributes
-     */
-    @Bean
-    AttributesMapper<OU> ouAttributesMapper() {
-        return a -> {
-            final DirContextAdapter adapter = (DirContextAdapter) a;
-            return OU.builder()
-                     .dn(adapter.getDn())
-                     .ou(((DirContextAdapter) a).getStringAttribute(LdapAttribute.OU))
-                     .build();
-        };
     }
 }
