@@ -24,20 +24,16 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
-import com.googlecode.lanterna.gui2.Window;
 import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Arrays;
 
 /**
  * UI configuration for the LDAP Manager.
@@ -46,21 +42,6 @@ import java.util.Arrays;
  */
 @Configuration
 class MainUiConfiguration {
-
-    /**
-     * The main application window in the UI.
-     *
-     * @param mainPanel The main panel
-     *
-     * @return the window
-     */
-    @Bean
-    public BasicWindow mainWindow(final Panel mainPanel) {
-        BasicWindow window = new BasicWindow();
-        window.setHints(Arrays.asList(Window.Hint.FULL_SCREEN, Window.Hint.NO_DECORATIONS));
-        window.setComponent(mainPanel);
-        return window;
-    }
 
     /**
      * The top panel of the UI, containing the current OU.
