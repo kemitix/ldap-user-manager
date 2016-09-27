@@ -14,7 +14,7 @@ import org.springframework.security.ldap.authentication.BindAuthenticator;
  *
  * @author Paul Campbell
  */
-@Profile("ldap-test")
+@Profile("ldap-connection-it")
 @Configuration
 class LdapTestConfiguration {
 
@@ -40,7 +40,7 @@ class LdapTestConfiguration {
      * @return the LDAP Template
      */
     @Bean
-    LdapTemplate ldapTemplate() {
+    LdapTemplate testLdapTemplate() {
         return new LdapTemplate(contextSource());
     }
 }

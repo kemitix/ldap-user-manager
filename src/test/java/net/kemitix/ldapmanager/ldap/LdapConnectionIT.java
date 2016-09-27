@@ -33,8 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {LdapTestConfiguration.class, LdapConfiguration.class})
-@ActiveProfiles({"test", "ldap-test"})
+@SpringBootTest
+@ActiveProfiles({"test", "ldap-connection-it"})
 public class LdapConnectionIT {
 
     private static final String BASE = "dc=kemitix,dc=net";
@@ -77,10 +77,7 @@ public class LdapConnectionIT {
             return serverSocket.getLocalPort();
         } finally {
             if (serverSocket != null) {
-                try {
-                    serverSocket.close();
-                } catch (IOException e) {
-                }
+                serverSocket.close();
             }
         }
     }
