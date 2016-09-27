@@ -51,12 +51,21 @@ class MainPanel extends Panel {
 
     private final LayoutManager layoutManager = new BorderLayout();
 
+    /**
+     * Constructor.
+     *
+     * @param topPanel    The top panel
+     * @param bottomPanel The bottom panel
+     */
     @Autowired
     MainPanel(final Panel topPanel, final Panel bottomPanel) {
         this.topPanel = topPanel;
         this.bottomPanel = bottomPanel;
     }
 
+    /**
+     * Initializer.
+     */
     @PostConstruct
     public void init() {
         val innerPanel = new Panel();
