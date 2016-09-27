@@ -26,49 +26,42 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
-import net.kemitix.ldapmanager.ldap.LdapOptions;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
- * UI configuration for the LDAP Manager.
+ * The top panel of the UI, containing the current OU.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Configuration
-class MainUiConfiguration {
+@Component
+class TopPanel extends Panel {
+
+    private final Label currentOuLabel;
 
     /**
-     * The current OU Label.
+     * Constructor.
      *
-     * @param ldapOptions The LDAP server options
-     *
-     * @return the label
+     * @param currentOuLabel The current OU label
      */
-    @Bean
-    public Label currentOuLabel(final LdapOptions ldapOptions) {
-        return new Label(ldapOptions.getBase());
+    TopPanel(final Label currentOuLabel) {
+        this.currentOuLabel = currentOuLabel;
     }
 
     /**
-     * The bottom panel of the UI, containing the exit button.
-     *
-     * @param appExitHandler The exit handler
-     *
-     * @return the bottom panel
+     * Initializer.
      */
-    @Bean
-    public Panel bottomPanel(final Runnable appExitHandler) {
-        val component = new Panel().addComponent(new Button("Exit", appExitHandler))
-                                   .withBorder(Borders.singleLine());
+    @PostConstruct
+    public void init() {
+        val component = new Panel().addComponent(currentOuLabel)
+                                   .withBorder(Borders.singleLine("Current OU"));
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        val bottomPanel = new Panel().addComponent(component);
-        bottomPanel.setLayoutData(BorderLayout.Location.BOTTOM);
-        return bottomPanel;
+        addComponent(component);
+        setLayoutData(BorderLayout.Location.TOP);
     }
 }
