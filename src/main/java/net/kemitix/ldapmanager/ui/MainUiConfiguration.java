@@ -63,29 +63,6 @@ class MainUiConfiguration {
     }
 
     /**
-     * The main Panel for the LDAP Manager UI.
-     *
-     * @param topPanel    The top panel
-     * @param bottomPanel The bottom panel
-     *
-     * @return the panel
-     */
-    @Bean
-    public Panel mainPanel(final Panel topPanel, final Panel bottomPanel) {
-        val mainPanel = new Panel();
-        mainPanel.setLayoutManager(new BorderLayout());
-        mainPanel.setLayoutData(BorderLayout.Location.CENTER);
-
-        mainPanel.addComponent(topPanel);
-        mainPanel.addComponent(bottomPanel);
-
-        val panel = new Panel().addComponent(mainPanel.withBorder(Borders.singleLine("LDAP User Manager")));
-        panel.setLayoutManager(new BorderLayout());
-        panel.setLayoutData(BorderLayout.Location.CENTER);
-        return panel;
-    }
-
-    /**
      * The top panel of the UI, containing the current OU.
      *
      * @param currentOuLabel The current OU Lable
