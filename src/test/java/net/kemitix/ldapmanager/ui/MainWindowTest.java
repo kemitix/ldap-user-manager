@@ -32,7 +32,8 @@ public class MainWindowTest {
         //when
         mainWindow.init();
         //then
-        assertThat(mainWindow.getHints()).containsExactly(Window.Hint.FULL_SCREEN, Window.Hint.NO_DECORATIONS);
+        assertThat(mainWindow.getHints()).containsExactlyInAnyOrder(
+                Window.Hint.FULL_SCREEN, Window.Hint.NO_DECORATIONS);
         assertThat(mainWindow.getComponent()).isSameAs(mainPanel);
     }
 
