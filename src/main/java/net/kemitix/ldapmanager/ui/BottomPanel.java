@@ -30,31 +30,40 @@ import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
- * UI configuration for the LDAP Manager.
+ * The bottom panel of the UI, containing the exit button.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Configuration
-class MainUiConfiguration {
+@Component
+class BottomPanel extends Panel {
+
+    private final Runnable appExitHandler;
 
     /**
-     * The bottom panel of the UI, containing the exit button.
+     * Constructor.
      *
      * @param appExitHandler The exit handler
-     *
-     * @return the bottom panel
      */
-    @Bean
-    public Panel bottomPanel(final Runnable appExitHandler) {
+    @Autowired
+    BottomPanel(final Runnable appExitHandler) {
+        this.appExitHandler = appExitHandler;
+    }
+
+    /**
+     * Initializer.
+     */
+    @PostConstruct
+    public void init() {
         val component = new Panel().addComponent(new Button("Exit", appExitHandler))
                                    .withBorder(Borders.singleLine());
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        val bottomPanel = new Panel().addComponent(component);
-        bottomPanel.setLayoutData(BorderLayout.Location.BOTTOM);
-        return bottomPanel;
+        addComponent(component);
+        setLayoutData(BorderLayout.Location.BOTTOM);
     }
 }
