@@ -1,13 +1,20 @@
 package net.kemitix.ldapmanager.ui.events;
 
 import com.googlecode.lanterna.gui2.BasicWindow;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationListener;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
 
 /**
@@ -17,20 +24,46 @@ import static org.mockito.BDDMockito.then;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles({"test"})
+@ActiveProfiles("test")
 public class AppExitEventConfigurationIT {
 
     @Autowired
     private Runnable appExitHandler;
 
     @Autowired
-    private BasicWindow window;
+    private BasicWindow mainWindow;
+
+    @Autowired
+    private ScheduledExecutorService scheduledExecutorService;
+
+    @Autowired
+    List<ApplicationListener<AppExitEvent>> appExitListeners;
+
+    @Before
+    public void setUp() {
+        Mockito.reset(scheduledExecutorService, mainWindow);
+    }
 
     @Test
-    public void appExitHandlerShouldTriggerWindowClose() {
+    public void checkListeners() {
+        assertThat(appExitListeners).hasSize(2);
+    }
+
+    @Test
+    public void appExitHandlerShouldCloseWindow() {
         //when
         appExitHandler.run();
         //then
-        then(window).should().close();
+        then(mainWindow).should()
+                        .close();
+    }
+
+    @Test
+    public void appExitHandlerShouldShutdownExecutorService() {
+        //when
+        appExitHandler.run();
+        //then
+        then(scheduledExecutorService).should()
+                                      .shutdown();
     }
 }

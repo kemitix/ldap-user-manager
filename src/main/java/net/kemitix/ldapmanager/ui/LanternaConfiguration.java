@@ -152,6 +152,7 @@ class LanternaConfiguration {
      * @return the executor service
      */
     @Bean
+    @Profile("default")
     ScheduledExecutorService scheduledExecutorService() {
         return new ScheduledThreadPoolExecutor(CORE_POOL_SIZE);
     }

@@ -33,6 +33,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static org.mockito.Mockito.mock;
 
@@ -52,7 +53,12 @@ public class LanternaTestConfiguration {
     }
 
     @Bean
-    BasicWindow window() {
-        return mock(BasicWindow.class);
+    BasicWindow mainWindow() {
+        return mock(MainWindow.class);
+    }
+
+    @Bean
+    ScheduledExecutorService scheduledExecutorService() {
+        return mock(ScheduledExecutorService.class);
     }
 }
