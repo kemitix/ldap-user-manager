@@ -24,42 +24,21 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui.events;
 
-import com.googlecode.lanterna.gui2.BasicWindow;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
- * Application Exit Event Configuration.
+ * An Event signaling that the application is exiting.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Configuration
-class AppExitEventConfiguration {
+public class AppExitEvent extends ApplicationEvent {
 
     /**
-     * The handler for the exit button, quiting the UI.
+     * Create a new ApplicationEvent.
      *
-     * @param publisher The application event publisher
-     *
-     * @return the runnable to perform when triggered
+     * @param source the object on which the event initially occurred (never {@code null})
      */
-    @Bean
-    public Runnable appExitHandler(final ApplicationEventPublisher publisher) {
-        return () -> publisher.publishEvent(new AppExitEvent(this));
-    }
-
-    /**
-     * Application listener for the application exit event.
-     *
-     * @param window the main window
-     *
-     * @return the listener
-     */
-    @Bean
-    public ApplicationListener<AppExitEvent> appExitListener(final BasicWindow window) {
-        return e -> window.close();
+    public AppExitEvent(final Object source) {
+        super(source);
     }
 }

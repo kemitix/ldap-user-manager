@@ -36,7 +36,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
-import net.kemitix.ldapmanager.ui.events.AppExitEventConfiguration;
+import net.kemitix.ldapmanager.ui.events.AppExitEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -163,9 +163,9 @@ class LanternaConfiguration {
      * @return the listener
      */
     @Bean
-    public ApplicationListener<AppExitEventConfiguration.AppExitEvent> appExitListener(
+    public ApplicationListener<AppExitEvent> scheduledExecutorServiceAppExitListener(
             final ScheduledExecutorService scheduledExecutorService
-                                                                                      ) {
+                                                                                    ) {
         return e -> scheduledExecutorService.shutdown();
     }
 }
