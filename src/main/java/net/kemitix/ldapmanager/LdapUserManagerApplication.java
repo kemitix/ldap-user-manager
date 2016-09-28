@@ -26,12 +26,14 @@ package net.kemitix.ldapmanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Main Spring Application Class.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@EnableScheduling
 @SpringBootApplication
 @SuppressWarnings("hideutilityclassconstructor")
 public class LdapUserManagerApplication {
