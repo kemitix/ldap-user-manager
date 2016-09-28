@@ -25,6 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Component;
 import com.googlecode.lanterna.gui2.DefaultWindowManager;
 import com.googlecode.lanterna.gui2.EmptySpace;
@@ -167,5 +168,17 @@ class LanternaConfiguration {
             final ScheduledExecutorService scheduledExecutorService
                                                                                     ) {
         return e -> scheduledExecutorService.shutdown();
+    }
+
+    /**
+     * Listener to close the main UI window.
+     *
+     * @param mainWindow The main window
+     *
+     * @return the listener
+     */
+    @Bean
+    public ApplicationListener<AppExitEvent> mainWindowAppExitListener(final BasicWindow mainWindow) {
+        return e -> mainWindow.close();
     }
 }

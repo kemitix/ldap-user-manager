@@ -24,10 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui.events;
 
-import com.googlecode.lanterna.gui2.BasicWindow;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -49,17 +46,5 @@ class AppExitEventConfiguration {
     @Bean
     public Runnable appExitHandler(final ApplicationEventPublisher publisher) {
         return () -> publisher.publishEvent(new AppExitEvent(this));
-    }
-
-    /**
-     * Application listener for the application exit event.
-     *
-     * @param window the main window
-     *
-     * @return the listener
-     */
-    @Bean
-    public ApplicationListener<AppExitEvent> appExitListener(final BasicWindow window) {
-        return e -> window.close();
     }
 }
