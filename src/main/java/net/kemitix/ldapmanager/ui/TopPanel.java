@@ -27,6 +27,7 @@ package net.kemitix.ldapmanager.ui;
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Label;
+import com.googlecode.lanterna.gui2.LayoutData;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
@@ -42,15 +43,27 @@ import javax.annotation.PostConstruct;
 @Component
 class TopPanel extends Panel {
 
+    private static final LayoutData FILL = LinearLayout.createLayoutData(LinearLayout.Alignment.Fill);
+
+    private static final LayoutData RIGHT = BorderLayout.Location.RIGHT;
+
+    private static final LayoutData CENTER = BorderLayout.Location.CENTER;
+
+    private static final LayoutData TOP = BorderLayout.Location.TOP;
+
     private final Label currentOuLabel;
+
+    private final Label clockLabel;
 
     /**
      * Constructor.
      *
      * @param currentOuLabel The current OU label
+     * @param clockLabel     The clock label
      */
-    TopPanel(final Label currentOuLabel) {
+    TopPanel(final Label currentOuLabel, final Label clockLabel) {
         this.currentOuLabel = currentOuLabel;
+        this.clockLabel = clockLabel;
     }
 
     /**
@@ -58,10 +71,14 @@ class TopPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(currentOuLabel)
-                                   .withBorder(Borders.singleLine("Current OU"));
-        component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        addComponent(component);
-        setLayoutData(BorderLayout.Location.TOP);
+        val horizon = new Panel(new BorderLayout());
+        val ouPanel = new Panel().addComponent(currentOuLabel)
+                                 .withBorder(Borders.singleLine("Current OU"));
+        val clockPanel = new Panel().addComponent(clockLabel)
+                                    .withBorder(Borders.singleLine("Time"));
+        horizon.addComponent(ouPanel, CENTER)
+               .addComponent(clockPanel, RIGHT);
+        addComponent(horizon, FILL);
+        setLayoutData(TOP);
     }
 }
