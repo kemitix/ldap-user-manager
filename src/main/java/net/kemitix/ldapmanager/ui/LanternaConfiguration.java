@@ -36,6 +36,8 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
+import net.kemitix.ldapmanager.ui.events.AppExitEventConfiguration;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -151,5 +153,19 @@ class LanternaConfiguration {
     @Bean
     ScheduledExecutorService scheduledExecutorService() {
         return new ScheduledThreadPoolExecutor(CORE_POOL_SIZE);
+    }
+
+    /**
+     * Listener to shutdown the scheduledExecutorService on application exit.
+     *
+     * @param scheduledExecutorService The scheduled executor service
+     *
+     * @return the listener
+     */
+    @Bean
+    public ApplicationListener<AppExitEventConfiguration.AppExitEvent> appExitListener(
+            final ScheduledExecutorService scheduledExecutorService
+                                                                                      ) {
+        return e -> scheduledExecutorService.shutdown();
     }
 }
