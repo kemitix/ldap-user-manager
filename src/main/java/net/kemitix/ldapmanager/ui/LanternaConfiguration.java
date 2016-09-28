@@ -44,8 +44,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.function.Supplier;
 
 /**
  * Configuration for main Lanterna UI.
@@ -181,5 +185,16 @@ class LanternaConfiguration {
     @Bean
     public ApplicationListener<AppExitEvent> mainWindowAppExitListener(final BasicWindow mainWindow) {
         return e -> mainWindow.close();
+    }
+
+    /**
+     * Supplier of the current time.
+     *
+     * @return a Supplier for the current time
+     */
+    @Bean
+    public Supplier<String> timeSupplier() {
+        return () -> LocalTime.now()
+                              .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));
     }
 }
