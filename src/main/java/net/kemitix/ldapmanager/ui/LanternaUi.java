@@ -30,7 +30,6 @@ import com.googlecode.lanterna.gui2.DefaultWindowManager;
 import com.googlecode.lanterna.gui2.EmptySpace;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.Panel;
-import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -40,7 +39,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * .
@@ -52,14 +50,18 @@ class LanternaUi implements CommandLineRunner {
 
     private final Panel mainPanel;
 
+    private final BasicWindow mainWindow;
+
     /**
      * Constructor.
      *
-     * @param mainPanel The main Lanterna UI Panel
+     * @param mainWindow The main UI windows
+     * @param mainPanel  The main Lanterna UI Panel
      */
     @Autowired
-    LanternaUi(final Panel mainPanel) {
+    LanternaUi(final BasicWindow mainWindow, final Panel mainPanel) {
         this.mainPanel = mainPanel;
+        this.mainWindow = mainWindow;
     }
 
     /**
@@ -76,16 +78,11 @@ class LanternaUi implements CommandLineRunner {
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
 
-        // Create window to hold the panel
-        BasicWindow window = new BasicWindow();
-        window.setHints(Arrays.asList(Window.Hint.FULL_SCREEN, Window.Hint.NO_DECORATIONS));
-        window.setComponent(mainPanel);
-
         mainPanel.setPreferredSize(screen.getTerminalSize());
 
         // Create gui and start gui
         MultiWindowTextGUI gui =
                 new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
-        gui.addWindowAndWait(window);
+        gui.addWindowAndWait(mainWindow);
     }
 }
