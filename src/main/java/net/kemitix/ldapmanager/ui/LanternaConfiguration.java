@@ -41,6 +41,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Configuration for main Lanterna UI.
@@ -49,6 +51,8 @@ import java.io.IOException;
  */
 @Configuration
 class LanternaConfiguration {
+
+    public static final int CORE_POOL_SIZE = 10;
 
     /**
      * The Lanterna Terminal Factory.
@@ -137,5 +141,15 @@ class LanternaConfiguration {
             final Screen screen, final WindowManager windowManager, final Component background
                           ) {
         return new MultiWindowTextGUI(screen, windowManager, background);
+    }
+
+    /**
+     * Executor Service for scheduled tasks.
+     *
+     * @return the executor service
+     */
+    @Bean
+    ScheduledExecutorService scheduledExecutorService() {
+        return new ScheduledThreadPoolExecutor(CORE_POOL_SIZE);
     }
 }
