@@ -69,13 +69,12 @@ class TopPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val horizon = new Panel(new BorderLayout());
         val ouPanel = new Panel().addComponent(currentOuLabel)
                                  .withBorder(Borders.singleLine("Current OU"));
         val clockPanel = new Panel().addComponent(clockLabel)
                                     .withBorder(Borders.singleLine("Time"));
-        horizon.addComponent(ouPanel, CENTER)
-               .addComponent(clockPanel, RIGHT);
+        val horizon = new Panel(new BorderLayout()).addComponent(ouPanel, CENTER)
+                                                   .addComponent(clockPanel, RIGHT);
         addComponent(horizon, FILL);
     }
 }
