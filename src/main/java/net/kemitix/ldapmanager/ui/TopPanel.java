@@ -49,8 +49,6 @@ class TopPanel extends Panel {
 
     private static final LayoutData CENTER = BorderLayout.Location.CENTER;
 
-    private static final LayoutData TOP = BorderLayout.Location.TOP;
-
     private final Label currentOuLabel;
 
     private final Label clockLabel;
@@ -79,6 +77,5 @@ class TopPanel extends Panel {
         horizon.addComponent(ouPanel, CENTER)
                .addComponent(clockPanel, RIGHT);
         addComponent(horizon, FILL);
-        setLayoutData(TOP);
     }
 }

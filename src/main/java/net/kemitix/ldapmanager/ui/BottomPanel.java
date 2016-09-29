@@ -24,7 +24,6 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.LinearLayout;
@@ -64,6 +63,5 @@ class BottomPanel extends Panel {
                                    .withBorder(Borders.singleLine());
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
-        setLayoutData(BorderLayout.Location.BOTTOM);
     }
 }

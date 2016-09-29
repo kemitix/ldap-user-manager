@@ -68,8 +68,8 @@ class MainPanel extends Panel {
         val innerPanel = new Panel();
         innerPanel.setLayoutManager(layoutManager);
         innerPanel.setLayoutData(BorderLayout.Location.CENTER);
-        innerPanel.addComponent(topPanel);
-        innerPanel.addComponent(bottomPanel);
+        innerPanel.addComponent(topPanel, BorderLayout.Location.TOP);
+        innerPanel.addComponent(bottomPanel, BorderLayout.Location.BOTTOM);
         addComponent(innerPanel.withBorder(Borders.singleLine("LDAP User Manager")));
         setLayoutManager(layoutManager);
         setLayoutData(BorderLayout.Location.CENTER);
