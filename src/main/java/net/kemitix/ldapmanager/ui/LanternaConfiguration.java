@@ -37,6 +37,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
+import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import net.kemitix.ldapmanager.ui.events.AppExitEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +48,8 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.function.Supplier;
@@ -196,5 +199,24 @@ class LanternaConfiguration {
     public Supplier<String> timeSupplier() {
         return () -> LocalTime.now()
                               .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));
+    }
+
+    /**
+     * Supplier of navigation action items.
+     *
+     * @return the supplier of navigation items
+     */
+    @Bean
+    public Supplier<List<NamedItem<Runnable>>> navigationItemSupplier() {
+        final List<NamedItem<Runnable>> list = new ArrayList<>();
+        list.add(NamedItem.of("item 1 - alpha", () -> {
+        }));
+        list.add(NamedItem.of("item 2 - bravo", () -> {
+        }));
+        list.add(NamedItem.of("item 3 - charlie", () -> {
+        }));
+        list.add(NamedItem.of("item 4 - delta", () -> {
+        }));
+        return () -> list;
     }
 }
