@@ -24,44 +24,40 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
+import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.LayoutManager;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
+import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
- * The main Panel for the LDAP Manager UI.
+ * The Left-hand Navigation Panel.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class MainPanel extends Panel {
+class NavigationPanel extends Panel {
 
-    private final Panel topPanel;
+    private static final BorderLayout.Location CENTER = BorderLayout.Location.CENTER;
 
-    private final Panel bottomPanel;
-
-    private final Panel navigationPanel;
-
-    private final LayoutManager layoutManager = new BorderLayout();
+    private final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
 
     /**
      * Constructor.
      *
-     * @param topPanel        The top panel
-     * @param bottomPanel     The bottom panel
-     * @param navigationPanel The navigation panel
+     * @param navigationItemSupplier the supplier of navigation items
      */
     @Autowired
-    MainPanel(final Panel topPanel, final Panel bottomPanel, final Panel navigationPanel) {
-        this.topPanel = topPanel;
-        this.bottomPanel = bottomPanel;
-        this.navigationPanel = navigationPanel;
+    NavigationPanel(final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier) {
+        super(new BorderLayout());
+        this.navigationItemSupplier = navigationItemSupplier;
     }
 
     /**
@@ -69,14 +65,10 @@ class MainPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val innerPanel = new Panel();
-        innerPanel.setLayoutManager(layoutManager);
-        innerPanel.setLayoutData(BorderLayout.Location.CENTER);
-        innerPanel.addComponent(topPanel, BorderLayout.Location.TOP);
-        innerPanel.addComponent(bottomPanel, BorderLayout.Location.BOTTOM);
-        innerPanel.addComponent(navigationPanel, BorderLayout.Location.LEFT);
-        addComponent(innerPanel.withBorder(Borders.singleLine("LDAP User Manager")));
-        setLayoutManager(layoutManager);
-        setLayoutData(BorderLayout.Location.CENTER);
+        val actionListBox = new ActionListBox();
+        navigationItemSupplier.get()
+                              .forEach(item -> actionListBox.addItem(item.getName(), item.getItem()));
+        addComponent(new Panel().addComponent(actionListBox)
+                                .withBorder(Borders.singleLine("Navigation")), CENTER);
     }
 }

@@ -26,10 +26,13 @@ public class MainPanelTest {
     @Mock
     private Panel bottomPanel;
 
+    @Mock
+    private Panel navigationPanel;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mainPanel = new MainPanel(topPanel, bottomPanel);
+        mainPanel = new MainPanel(topPanel, bottomPanel, navigationPanel);
     }
 
     @Test
@@ -47,7 +50,7 @@ public class MainPanelTest {
                      final Panel innerPanel = (Panel) innerComponent;
                      assertThat(innerPanel.getLayoutManager()).isInstanceOf(BorderLayout.class);
                      assertThat(innerPanel.getLayoutData()).isEqualTo(BorderLayout.Location.CENTER);
-                     assertThat(innerPanel.getChildren()).containsExactly(topPanel, bottomPanel);
+                     assertThat(innerPanel.getChildren()).containsExactly(topPanel, bottomPanel, navigationPanel);
 
                  });
         assertThat(mainPanel.getLayoutManager()).isInstanceOf(BorderLayout.class);
