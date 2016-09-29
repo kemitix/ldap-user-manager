@@ -1,7 +1,6 @@
 package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Border;
-import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -37,7 +36,6 @@ public class BottomPanelTest {
         //when
         bottomPanel.init();
         //then
-        assertThat(bottomPanel.getLayoutData()).isEqualTo(BorderLayout.Location.BOTTOM);
         bottomPanel.getChildren()
                    .forEach(child -> {
                        assertThat(child).isInstanceOf(Border.class);

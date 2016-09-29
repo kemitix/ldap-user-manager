@@ -1,6 +1,5 @@
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Label;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +31,6 @@ public class TopPanelTest {
         //when
         topPanel.init();
         //then
-        assertThat(topPanel.getLayoutData()).isEqualTo(BorderLayout.Location.TOP);
         assertThat(currentOuLabel.isInside(topPanel)).isTrue();
         assertThat(clockLabel.isInside(topPanel)).isTrue();
     }
