@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.then;
 public class AppExitEventConfigurationIT {
 
     @Autowired
-    List<ApplicationListener<AppExitEvent>> appExitListeners;
+    List<ApplicationListener<ApplicationExitRequest.Event>> appExitListeners;
 
     @Autowired
     private Runnable appExitHandler;

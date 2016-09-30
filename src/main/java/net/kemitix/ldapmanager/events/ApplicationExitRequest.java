@@ -24,27 +24,46 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * Application Exit Event Configuration.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Configuration
-class AppExitEventConfiguration {
+@Component
+public class ApplicationExitRequest {
 
     /**
-     * The handler for the exit button, quiting the UI.
+     * Dispatches an event signaling that the application is to exit.
      *
-     * @param publisher The application event publisher
+     * <p>Listeners should release any resources and/or save and data to allow the application to exit.</p>
      *
-     * @return the runnable to perform when triggered
+     * @param publisher The Application Event Publisher.
+     *
+     * @return the event dispatcher
      */
     @Bean
-    public Runnable appExitHandler(final ApplicationEventPublisher publisher) {
-        return () -> publisher.publishEvent(new AppExitEvent(this));
+    @SuppressWarnings("designforextension")
+    public EventDispatcher eventDispatcher(final ApplicationEventPublisher publisher) {
+        return () -> publisher.publishEvent(new Event(this));
+    }
+
+    /**
+     * The Event signalling the Application Exit Request.
+     */
+    public static final class Event extends ApplicationEvent {
+
+        /**
+         * Create a new ApplicationEvent.
+         *
+         * @param source the object on which the event initially occurred (never {@code null})
+         */
+        private Event(final Object source) {
+            super(source);
+        }
     }
 }

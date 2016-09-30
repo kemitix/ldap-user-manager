@@ -24,21 +24,13 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import org.springframework.context.ApplicationEvent;
-
 /**
- * An Event signaling that the application is exiting.
+ * Represents a dispatcher for events within the application.
+ *
+ * <p>The interface primarily exits to differentiate between any non-event {@link Runnable} instances.</p>
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class AppExitEvent extends ApplicationEvent {
+public interface EventDispatcher extends Runnable {
 
-    /**
-     * Create a new ApplicationEvent.
-     *
-     * @param source the object on which the event initially occurred (never {@code null})
-     */
-    public AppExitEvent(final Object source) {
-        super(source);
-    }
 }

@@ -29,6 +29,7 @@ import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
+import net.kemitix.ldapmanager.events.EventDispatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,16 +43,16 @@ import javax.annotation.PostConstruct;
 @Component
 class BottomPanel extends Panel {
 
-    private final Runnable appExitHandler;
+    private final EventDispatcher applicationExitRequest;
 
     /**
      * Constructor.
      *
-     * @param appExitHandler The exit handler
+     * @param applicationExitRequest The exit request dispatcher
      */
     @Autowired
-    BottomPanel(final Runnable appExitHandler) {
-        this.appExitHandler = appExitHandler;
+    BottomPanel(final EventDispatcher applicationExitRequest) {
+        this.applicationExitRequest = applicationExitRequest;
     }
 
     /**
@@ -59,7 +60,7 @@ class BottomPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(new Button("Exit", appExitHandler))
+        val component = new Panel().addComponent(new Button("Exit", applicationExitRequest))
                                    .withBorder(Borders.singleLine());
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
