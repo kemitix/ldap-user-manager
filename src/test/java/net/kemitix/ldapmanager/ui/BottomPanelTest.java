@@ -5,6 +5,7 @@ import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import net.kemitix.ldapmanager.events.EventDispatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,7 +24,7 @@ public class BottomPanelTest {
     private BottomPanel bottomPanel;
 
     @Mock
-    private Runnable appExitHandler;
+    private EventDispatcher appExitHandler;
 
     @Before
     public void setUp() throws Exception {
