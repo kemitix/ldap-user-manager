@@ -42,7 +42,6 @@ import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
 import java.time.LocalTime;
@@ -51,7 +50,6 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.function.Supplier;
 
 /**
@@ -61,8 +59,6 @@ import java.util.function.Supplier;
  */
 @Configuration
 class LanternaConfiguration {
-
-    public static final int CORE_POOL_SIZE = 10;
 
     /**
      * The Lanterna Terminal Factory.
@@ -136,17 +132,6 @@ class LanternaConfiguration {
             final Screen screen, final WindowManager windowManager, final Component background
                           ) {
         return new MultiWindowTextGUI(screen, windowManager, background);
-    }
-
-    /**
-     * Executor Service for scheduled tasks.
-     *
-     * @return the executor service
-     */
-    @Bean
-    @Profile("default")
-    ScheduledExecutorService scheduledExecutorService() {
-        return new ScheduledThreadPoolExecutor(CORE_POOL_SIZE);
     }
 
     /**
