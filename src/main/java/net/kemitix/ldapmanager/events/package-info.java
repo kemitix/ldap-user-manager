@@ -22,23 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui.events;
-
-import org.springframework.context.ApplicationEvent;
-
 /**
- * An Event signaling that the application is exiting.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class AppExitEvent extends ApplicationEvent {
 
-    /**
-     * Create a new ApplicationEvent.
-     *
-     * @param source the object on which the event initially occurred (never {@code null})
-     */
-    public AppExitEvent(final Object source) {
-        super(source);
-    }
-}
+package net.kemitix.ldapmanager.events;

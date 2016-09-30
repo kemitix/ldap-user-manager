@@ -22,10 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+package net.kemitix.ldapmanager.events;
+
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 /**
- * .
+ * Application Exit Event Configuration.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Configuration
+class AppExitEventConfiguration {
 
-package net.kemitix.ldapmanager.ui.events;
+    /**
+     * The handler for the exit button, quiting the UI.
+     *
+     * @param publisher The application event publisher
+     *
+     * @return the runnable to perform when triggered
+     */
+    @Bean
+    public Runnable appExitHandler(final ApplicationEventPublisher publisher) {
+        return () -> publisher.publishEvent(new AppExitEvent(this));
+    }
+}

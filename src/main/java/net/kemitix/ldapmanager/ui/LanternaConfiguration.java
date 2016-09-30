@@ -37,7 +37,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
-import net.kemitix.ldapmanager.ui.events.AppExitEvent;
+import net.kemitix.ldapmanager.events.AppExitEvent;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;

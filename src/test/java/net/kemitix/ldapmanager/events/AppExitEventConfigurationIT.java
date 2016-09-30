@@ -1,4 +1,4 @@
-package net.kemitix.ldapmanager.ui.events;
+package net.kemitix.ldapmanager.events;
 
 import com.googlecode.lanterna.gui2.BasicWindow;
 import org.junit.Before;
@@ -28,6 +28,9 @@ import static org.mockito.BDDMockito.then;
 public class AppExitEventConfigurationIT {
 
     @Autowired
+    List<ApplicationListener<AppExitEvent>> appExitListeners;
+
+    @Autowired
     private Runnable appExitHandler;
 
     @Autowired
@@ -35,9 +38,6 @@ public class AppExitEventConfigurationIT {
 
     @Autowired
     private ScheduledExecutorService scheduledExecutorService;
-
-    @Autowired
-    List<ApplicationListener<AppExitEvent>> appExitListeners;
 
     @Before
     public void setUp() {
