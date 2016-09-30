@@ -27,7 +27,6 @@ package net.kemitix.ldapmanager.util.nameditem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * Tuple of a name ({@link String} and a subject.
@@ -38,7 +37,6 @@ import lombok.NoArgsConstructor;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DefaultNamedItem<T> implements NamedItem<T> {
 
