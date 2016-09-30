@@ -24,50 +24,28 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.DirContextSource;
+import org.springframework.stereotype.Component;
 
 /**
- * Configuration for LDAP connections.
+ * The LDAP Template.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Configuration
-class LdapConfiguration {
+@Profile("default")
+@Component
+class DefaultLdapTemplate extends LdapTemplate {
 
     /**
-     * The LDAP template.
+     * Constructor.
      *
-     * @param contextSource the configuration for connecting to the directory server
-     *
-     * @return the LDAP Template
+     * @param contextSource The LDAP Context Source.
      */
-    @Bean
-    @Profile("default")
-    LdapTemplate ldapTemplate(final ContextSource contextSource) {
-        return new LdapTemplate(contextSource);
-    }
-
-    /**
-     * The Configuration for connecting to the directory server.
-     *
-     * @param ldapOptions     The LDAP server options
-     * @param ldapCredentials The LDAP Credentials
-     *
-     * @return the source for the directory context
-     */
-    @Bean
-    @Profile("default")
-    ContextSource contextSource(final LdapOptions ldapOptions, final LdapCredentials ldapCredentials) {
-        final DirContextSource dirContextSource = new DirContextSource();
-        dirContextSource.setUrls(ldapOptions.getUrls());
-        dirContextSource.setBase(ldapOptions.getBase());
-        dirContextSource.setUserDn(ldapOptions.getUserDn());
-        dirContextSource.setPassword(ldapCredentials.getPassword());
-        return dirContextSource;
+    @Autowired
+    DefaultLdapTemplate(final ContextSource contextSource) {
+        super(contextSource);
     }
 }
