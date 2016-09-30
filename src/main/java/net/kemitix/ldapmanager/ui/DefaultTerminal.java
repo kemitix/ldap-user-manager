@@ -1,0 +1,70 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2016 Paul Campbell
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+package net.kemitix.ldapmanager.ui;
+
+import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.terminal.TerminalFactory;
+import lombok.experimental.Delegate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+
+/**
+ * The Default Terminal.
+ *
+ * @author Paul Campbell (pcampbell@kemitix.net)
+ */
+@Profile("default")
+@Component
+class DefaultTerminal implements Terminal {
+
+    private final TerminalFactory terminalFactory;
+
+    @Delegate
+    private Terminal delegate;
+
+    /**
+     * Constructor.
+     *
+     * @param terminalFactory The Terminal Factory
+     */
+    @Autowired
+    DefaultTerminal(final TerminalFactory terminalFactory) {
+        this.terminalFactory = terminalFactory;
+    }
+
+    /**
+     * Initialize.
+     *
+     * @throws IOException if there is an error creating the terminal.
+     */
+    @PostConstruct
+    public void init() throws IOException {
+        delegate = terminalFactory.createTerminal();
+    }
+}

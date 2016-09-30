@@ -37,8 +37,8 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import net.kemitix.ldapmanager.ui.events.AppExitEvent;
+import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -72,21 +72,6 @@ class LanternaConfiguration {
     @Bean
     TerminalFactory terminalFactory() {
         return new DefaultTerminalFactory();
-    }
-
-    /**
-     * The Lanternal Terminal.
-     *
-     * @param terminalFactory The Lanterna Terminal Factory
-     *
-     * @return the terminal
-     *
-     * @throws IOException if error creating the terminal
-     */
-    @Bean
-    @Profile("default")
-    Terminal terminal(final TerminalFactory terminalFactory) throws IOException {
-        return terminalFactory.createTerminal();
     }
 
     /**
