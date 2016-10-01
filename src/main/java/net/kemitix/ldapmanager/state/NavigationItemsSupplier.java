@@ -22,53 +22,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.state;
 
-import com.googlecode.lanterna.gui2.ActionListBox;
-import com.googlecode.lanterna.gui2.BorderLayout;
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Panel;
-import lombok.val;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * The Left-hand Navigation Panel.
+ * Supplier of navigation action items.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class NavigationPanel extends Panel {
-
-    private static final BorderLayout.Location CENTER = BorderLayout.Location.CENTER;
-
-    private final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
+class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
 
     /**
-     * Constructor.
+     * A dummy list of navigation items.
      *
-     * @param navigationItemsSupplier the supplier of navigation items
+     * @return the list of items
      */
-    @Autowired
-    NavigationPanel(final Supplier<List<NamedItem<Runnable>>> navigationItemsSupplier) {
-        super(new BorderLayout());
-        this.navigationItemSupplier = navigationItemsSupplier;
-    }
-
-    /**
-     * Initializer.
-     */
-    @PostConstruct
-    public void init() {
-        val actionListBox = new ActionListBox();
-        navigationItemSupplier.get()
-                              .forEach(item -> actionListBox.addItem(item.getName(), item.getItem()));
-        addComponent(new Panel().addComponent(actionListBox)
-                                .withBorder(Borders.singleLine("Navigation")), CENTER);
+    @Override
+    public List<NamedItem<Runnable>> get() {
+        final List<NamedItem<Runnable>> list = new ArrayList<>();
+        list.add(NamedItem.of("item 1 - alpha", () -> {
+        }));
+        list.add(NamedItem.of("item 2 - bravo", () -> {
+        }));
+        list.add(NamedItem.of("item 3 - charlie", () -> {
+        }));
+        list.add(NamedItem.of("item 4 - delta", () -> {
+        }));
+        return list;
     }
 }

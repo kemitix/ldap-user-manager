@@ -38,15 +38,11 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
 import net.kemitix.ldapmanager.events.ApplicationExitRequest;
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Configuration for main Lanterna UI.
@@ -140,24 +136,5 @@ class LanternaConfiguration {
     @Bean
     public ApplicationListener<ApplicationExitRequest.Event> mainWindowAppExitListener(final BasicWindow mainWindow) {
         return e -> mainWindow.close();
-    }
-
-    /**
-     * Supplier of navigation action items.
-     *
-     * @return the supplier of navigation items
-     */
-    @Bean
-    public Supplier<List<NamedItem<Runnable>>> navigationItemSupplier() {
-        final List<NamedItem<Runnable>> list = new ArrayList<>();
-        list.add(NamedItem.of("item 1 - alpha", () -> {
-        }));
-        list.add(NamedItem.of("item 2 - bravo", () -> {
-        }));
-        list.add(NamedItem.of("item 3 - charlie", () -> {
-        }));
-        list.add(NamedItem.of("item 4 - delta", () -> {
-        }));
-        return () -> list;
     }
 }
