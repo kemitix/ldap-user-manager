@@ -10,14 +10,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 /**
- * Tests for {@link DefaultScheduledThreadPoolExecutor}.
+ * Tests for {@link DefaultScheduledExecutorService}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class DefaultScheduledThreadPoolExecutorTest {
+public class DefaultScheduledExecutorServiceTest {
 
     @InjectMocks
-    private DefaultScheduledThreadPoolExecutor executor;
+    private DefaultScheduledExecutorService executor;
 
     @Mock
     private UiProperties uiProperties;
@@ -32,7 +32,7 @@ public class DefaultScheduledThreadPoolExecutorTest {
         //given
         given(uiProperties.getScheduledThreadPoolSize()).willReturn(10);
         //when
-        executor = new DefaultScheduledThreadPoolExecutor(uiProperties);
+        executor = new DefaultScheduledExecutorService(uiProperties);
         //then
         assertThat(executor.getCorePoolSize()).isEqualTo(10);
     }

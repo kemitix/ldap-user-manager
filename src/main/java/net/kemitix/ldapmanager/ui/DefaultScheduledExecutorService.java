@@ -40,7 +40,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 @Profile("default")
 @Component
-class DefaultScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
+class DefaultScheduledExecutorService extends ScheduledThreadPoolExecutor {
 
     /**
      * Constructor.
@@ -48,7 +48,7 @@ class DefaultScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
      * @param uiProperties The UI Properties.
      */
     @Autowired
-    DefaultScheduledThreadPoolExecutor(final UiProperties uiProperties) {
+    DefaultScheduledExecutorService(final UiProperties uiProperties) {
         super(uiProperties.getScheduledThreadPoolSize());
     }
 
@@ -58,7 +58,7 @@ class DefaultScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
      * @return the listener
      */
     @Bean
-    public ApplicationListener<ApplicationExitRequest.Event> scheduledExecutorServiceAppExitListener() {
+    public ApplicationListener<ApplicationExitRequest.Event> scheduledExecutorServiceApplicationExitRequestListener() {
         return e -> shutdown();
     }
 }
