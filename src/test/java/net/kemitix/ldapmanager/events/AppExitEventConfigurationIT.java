@@ -1,21 +1,18 @@
 package net.kemitix.ldapmanager.events;
 
 import com.googlecode.lanterna.gui2.BasicWindow;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationListener;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.then;
 
 /**
  * Tests for .
@@ -24,14 +21,14 @@ import static org.mockito.BDDMockito.then;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({"test"})
 public class AppExitEventConfigurationIT {
 
-    @Autowired
-    List<ApplicationListener<ApplicationExitRequest.Event>> appExitListeners;
+    @Autowired(required = false)
+    Set<ApplicationExitRequest.Listener> applicationExitRequestListeners;
 
     @Autowired
-    private Runnable appExitHandler;
+    private EventDispatcher applicationExitRequestDispatcher;
 
     @Autowired
     private BasicWindow mainWindow;
@@ -39,31 +36,30 @@ public class AppExitEventConfigurationIT {
     @Autowired
     private ScheduledExecutorService scheduledExecutorService;
 
-    @Before
-    public void setUp() {
-        Mockito.reset(scheduledExecutorService, mainWindow);
-    }
-
     @Test
     public void checkListeners() {
-        assertThat(appExitListeners).hasSize(2);
+        assertThat(applicationExitRequestListeners).hasSize(2);
     }
 
     @Test
+    @DirtiesContext
+    // dirties context by causing the scheduler to be shutdown before it's own test later
     public void appExitHandlerShouldCloseWindow() {
+        //given
+        assertThat(mainWindow.getComponent()).isNotNull();
         //when
-        appExitHandler.run();
+        applicationExitRequestDispatcher.run();
         //then
-        then(mainWindow).should()
-                        .close();
+        assertThat(mainWindow.getComponent()).isNull();
     }
 
     @Test
-    public void appExitHandlerShouldShutdownExecutorService() {
+    public void appExitHandlerShouldShutdownExecutorService() throws InterruptedException {
+        //given
+        assertThat(scheduledExecutorService.isShutdown()).isFalse();
         //when
-        appExitHandler.run();
+        applicationExitRequestDispatcher.run();
         //then
-        then(scheduledExecutorService).should()
-                                      .shutdown();
+        assertThat(scheduledExecutorService.isShutdown()).isTrue();
     }
 }

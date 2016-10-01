@@ -29,7 +29,6 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
 import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -71,7 +70,7 @@ class MainWindow extends BasicWindow {
      * @return the listener
      */
     @Bean
-    public ApplicationListener<ApplicationExitRequest.Event> mainWindowApplicationExitRequestListener() {
+    public ApplicationExitRequest.Listener mainWindowApplicationExitRequestListener() {
         return e -> close();
     }
 }

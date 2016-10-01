@@ -24,7 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.BasicWindow;
+import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.virtual.DefaultVirtualTerminal;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
-import java.util.concurrent.ScheduledExecutorService;
 
 import static org.mockito.Mockito.mock;
 
@@ -53,12 +52,7 @@ public class LanternaTestConfiguration {
     }
 
     @Bean
-    BasicWindow mainWindow() {
-        return mock(MainWindow.class);
-    }
-
-    @Bean
-    ScheduledExecutorService scheduledExecutorService() {
-        return mock(ScheduledExecutorService.class);
+    Panel mainPanel() {
+        return mock(Panel.class);
     }
 }

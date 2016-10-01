@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.events;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +51,13 @@ public class ApplicationExitRequest {
     @SuppressWarnings("designforextension")
     public EventDispatcher applicationExitRequestDispatcher(final ApplicationEventPublisher publisher) {
         return () -> publisher.publishEvent(new Event(this));
+    }
+
+    /**
+     * Listener for Application Exit Requests.
+     */
+    public interface Listener extends ApplicationListener<Event> {
+
     }
 
     /**

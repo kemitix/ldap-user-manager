@@ -36,12 +36,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "ui")
-@Setter
-@Getter
 class UiProperties {
 
     /**
      * The thread pool size for the {@link DefaultScheduledExecutorService}.
      */
+    @Setter
+    @Getter
     private int scheduledThreadPoolSize;
 }
