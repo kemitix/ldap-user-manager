@@ -23,9 +23,18 @@ SOFTWARE.
 */
 
 /**
- * User Interface.
+ * .
+ *
+ * @author Paul Campbell (pcampbell@kemitix.net)
+ *
+ * Application state.
+ * @author Paul Campbell (pcampbell@kemitix.net)
+ */
+
+/**
+ * Application state.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.state;
