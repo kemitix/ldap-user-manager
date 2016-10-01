@@ -70,7 +70,7 @@ public class ApplicationExitRequest {
          *
          * @param source the object on which the event initially occurred (never {@code null})
          */
-        private Event(final Object source) {
+        public Event(final Object source) {
             super(source);
         }
     }

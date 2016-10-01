@@ -1,13 +1,16 @@
 package net.kemitix.ldapmanager.ui;
 
+import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 /**
  * Tests for {@link DefaultScheduledExecutorService}.
@@ -16,6 +19,7 @@ import static org.mockito.BDDMockito.given;
  */
 public class DefaultScheduledExecutorServiceTest {
 
+    @Spy
     @InjectMocks
     private DefaultScheduledExecutorService executor;
 
@@ -35,5 +39,15 @@ public class DefaultScheduledExecutorServiceTest {
         executor = new DefaultScheduledExecutorService(uiProperties);
         //then
         assertThat(executor.getCorePoolSize()).isEqualTo(10);
+    }
+
+    @Test
+    public void listenerShouldShutdownExecutor() {
+        //when
+        executor.scheduledExecutorServiceApplicationExitRequestListener()
+                .onApplicationEvent(new ApplicationExitRequest.Event(this));
+        //then
+        then(executor).should()
+                      .shutdown();
     }
 }

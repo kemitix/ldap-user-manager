@@ -2,12 +2,15 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
+import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.spy;
 
 /**
  * Tests for {@link MainWindow}.
@@ -24,7 +27,7 @@ public class MainWindowTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mainWindow = new MainWindow(mainPanel);
+        mainWindow = spy(new MainWindow(mainPanel));
     }
 
     @Test
@@ -37,4 +40,13 @@ public class MainWindowTest {
         assertThat(mainWindow.getComponent()).isSameAs(mainPanel);
     }
 
+    @Test
+    public void listenerShouldCloseWindow() {
+        //when
+        mainWindow.mainWindowApplicationExitRequestListener()
+                  .onApplicationEvent(new ApplicationExitRequest.Event(this));
+        //then
+        then(mainWindow).should()
+                        .close();
+    }
 }
