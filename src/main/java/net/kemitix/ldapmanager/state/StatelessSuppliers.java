@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.function.Supplier;
 
 /**
@@ -48,6 +47,7 @@ class StatelessSuppliers {
     @Bean
     public Supplier<String> timeSupplier() {
         return () -> LocalTime.now()
-                              .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));
+                              .format(DateTimeFormatter.ISO_LOCAL_TIME)
+                              .substring(0, 8);
     }
 }
