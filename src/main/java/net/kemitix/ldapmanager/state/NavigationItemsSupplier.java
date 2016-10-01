@@ -40,21 +40,12 @@ import java.util.function.Supplier;
 class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
 
     /**
-     * A dummy list of navigation items.
+     * An empty dummy list of navigation items.
      *
      * @return the list of items
      */
     @Override
     public List<NamedItem<Runnable>> get() {
-        final List<NamedItem<Runnable>> list = new ArrayList<>();
-        list.add(NamedItem.of("item 1 - alpha", () -> {
-        }));
-        list.add(NamedItem.of("item 2 - bravo", () -> {
-        }));
-        list.add(NamedItem.of("item 3 - charlie", () -> {
-        }));
-        list.add(NamedItem.of("item 4 - delta", () -> {
-        }));
-        return list;
+        return new ArrayList<>();
     }
 }
