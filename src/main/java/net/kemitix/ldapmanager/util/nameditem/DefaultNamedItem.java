@@ -22,28 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.util.nameditem;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
- * Main Spring Application Class.
+ * Tuple of a name ({@link String} and a subject.
+ *
+ * <p>This implementation is immutable.</p>
+ *
+ * @param <T> the type of the item
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+class DefaultNamedItem<T> implements NamedItem<T> {
 
-    /**
-     * Main Method.
-     *
-     * @param args The command line arguments to pass to Spring
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
-    }
+    @Getter
+    private String name;
+
+    @Getter
+    private T item;
 }

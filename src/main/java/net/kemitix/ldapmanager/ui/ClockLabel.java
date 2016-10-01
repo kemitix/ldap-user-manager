@@ -22,28 +22,47 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ui;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.googlecode.lanterna.gui2.Label;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.function.Supplier;
 
 /**
- * Main Spring Application Class.
+ * A label that holds the current time.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Component
+class ClockLabel extends Label {
+
+    private static final long ONE_SECOND = 1000L;
+
+    private final Supplier<String> timeSupplier;
 
     /**
-     * Main Method.
+     * Constructor.
      *
-     * @param args The command line arguments to pass to Spring
+     * @param timeSupplier The supplier of the time
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Autowired
+    ClockLabel(final Supplier<String> timeSupplier) {
+        super("");
+        this.timeSupplier = timeSupplier;
+    }
+
+    /**
+     * Update the time in the label once a second.
+     */
+    @Scheduled(fixedRate = ONE_SECOND)
+    public void updateLabel() {
+        setText(getTime());
+    }
+
+    private String getTime() {
+        return timeSupplier.get();
     }
 }

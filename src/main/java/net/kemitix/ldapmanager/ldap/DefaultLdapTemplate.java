@@ -22,28 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ldap;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.ldap.core.ContextSource;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.stereotype.Component;
 
 /**
- * Main Spring Application Class.
+ * The LDAP Template.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Profile("default")
+@Component
+class DefaultLdapTemplate extends LdapTemplate {
 
     /**
-     * Main Method.
+     * Constructor.
      *
-     * @param args The command line arguments to pass to Spring
+     * @param contextSource The LDAP Context Source.
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Autowired
+    DefaultLdapTemplate(final ContextSource contextSource) {
+        super(contextSource);
     }
 }

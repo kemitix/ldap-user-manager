@@ -22,28 +22,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ldap;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.ldap.core.ContextSource;
+import org.springframework.ldap.core.support.DirContextSource;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
- * Main Spring Application Class.
+ * The LDAP Context Source.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Profile("default")
+@Component
+class DefaultContextSource extends DirContextSource implements ContextSource {
+
+    private final LdapOptions ldapOptions;
+
+    private final LdapCredentials ldapCredentials;
 
     /**
-     * Main Method.
+     * Constructor.
      *
-     * @param args The command line arguments to pass to Spring
+     * @param ldapOptions     The LDAP Options.
+     * @param ldapCredentials The LDAP Credentials.
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Autowired
+    DefaultContextSource(final LdapOptions ldapOptions, final LdapCredentials ldapCredentials) {
+        this.ldapOptions = ldapOptions;
+        this.ldapCredentials = ldapCredentials;
+    }
+
+    /**
+     * Initializer.
+     */
+    @PostConstruct
+    public void init() {
+        setUrls(ldapOptions.getUrls());
+        setBase(ldapOptions.getBase());
+        setUserDn(ldapOptions.getUserDn());
+        setPassword(ldapCredentials.getPassword());
     }
 }

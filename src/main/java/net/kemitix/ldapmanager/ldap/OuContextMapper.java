@@ -22,28 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ldap;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import net.kemitix.ldapmanager.domain.OU;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.stereotype.Service;
+
+import javax.naming.NamingException;
 
 /**
- * Main Spring Application Class.
+ * Context Mapper for Users.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Service
+class OuContextMapper implements ContextMapper<OU> {
 
-    /**
-     * Main Method.
-     *
-     * @param args The command line arguments to pass to Spring
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Override
+    public OU mapFromContext(final Object ctx) throws NamingException {
+            final DirContextAdapter adapter = (DirContextAdapter) ctx;
+            return OU.builder()
+                     .dn(adapter.getDn())
+                     .ou(adapter.getStringAttribute(LdapAttribute.OU))
+                     .build();
     }
 }

@@ -22,28 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ui;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
- * Main Spring Application Class.
+ * Property Loader for the UI.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Component
+@ConfigurationProperties(prefix = "ui")
+class UiProperties {
 
     /**
-     * Main Method.
-     *
-     * @param args The command line arguments to pass to Spring
+     * The thread pool size for the {@link DefaultScheduledExecutorService}.
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
-    }
+    @Setter
+    @Getter
+    private int scheduledThreadPoolSize;
 }

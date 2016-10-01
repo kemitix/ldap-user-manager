@@ -22,46 +22,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ldap;
+package net.kemitix.ldapmanager.ui;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.java.Log;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.terminal.TerminalFactory;
+import lombok.experimental.Delegate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
+import java.io.IOException;
 
 /**
- * Loads LDAP Credentials from properties file.
+ * The Default Terminal.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Log
-@Setter
-@Getter
+@Profile("default")
 @Component
-@ConfigurationProperties(prefix = "ldap")
-class LdapCredentialsProperties implements LdapCredentials {
+class DefaultTerminal implements Terminal {
 
-    private String[] urls = new String[0];
+    private final TerminalFactory terminalFactory;
 
-    private String base;
-
-    private String userDn;
-
-    private String password;
+    @Delegate
+    private Terminal delegate;
 
     /**
-     * Logs the values of the properties loaded to debug.
+     * Constructor.
+     *
+     * @param terminalFactory The Terminal Factory
+     */
+    @Autowired
+    DefaultTerminal(final TerminalFactory terminalFactory) {
+        this.terminalFactory = terminalFactory;
+    }
+
+    /**
+     * Initialize.
+     *
+     * @throws IOException if there is an error creating the terminal.
      */
     @PostConstruct
-    public void logProperties() {
-        Arrays.asList(urls)
-              .forEach(url -> log.info(() -> "url: " + url));
-        log.info(() -> "base: " + base);
-        log.info(() -> "userDn: " + userDn);
-        log.info(() -> "password: ****");
+    public void init() throws IOException {
+        delegate = terminalFactory.createTerminal();
     }
 }

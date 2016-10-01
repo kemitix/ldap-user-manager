@@ -22,28 +22,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ui;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.googlecode.lanterna.gui2.BasicWindow;
+import com.googlecode.lanterna.gui2.Panel;
+import com.googlecode.lanterna.gui2.Window;
+import net.kemitix.ldapmanager.events.ApplicationExitRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
 
 /**
- * Main Spring Application Class.
+ * The main application window in the UI.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Component
+class MainWindow extends BasicWindow {
+
+    private final Panel mainPanel;
 
     /**
-     * Main Method.
+     * Constructor.
      *
-     * @param args The command line arguments to pass to Spring
+     * @param mainPanel The main panel
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Autowired
+    MainWindow(final Panel mainPanel) {
+        this.mainPanel = mainPanel;
+    }
+
+    /**
+     * Initializer.
+     */
+    @PostConstruct
+    public void init() {
+        setHints(Arrays.asList(Window.Hint.FULL_SCREEN, Window.Hint.NO_DECORATIONS));
+        setComponent(mainPanel);
+    }
+
+    /**
+     * Listener to close the main UI window.
+     *
+     * @return the listener
+     */
+    @Bean
+    public ApplicationExitRequest.Listener mainWindowApplicationExitRequestListener() {
+        return e -> close();
     }
 }

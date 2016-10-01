@@ -22,28 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ui;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.googlecode.lanterna.gui2.Panel;
+import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.terminal.virtual.DefaultVirtualTerminal;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+
+import java.io.IOException;
+
+import static org.mockito.Mockito.mock;
 
 /**
- * Main Spring Application Class.
+ * Configuration for test.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Configuration
+@Import({LanternaConfiguration.class})
+@Profile("test")
+public class LanternaTestConfiguration {
 
-    /**
-     * Main Method.
-     *
-     * @param args The command line arguments to pass to Spring
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Bean
+    Terminal terminal() throws IOException {
+        return new DefaultVirtualTerminal();
+    }
+
+    @Bean
+    Panel mainPanel() {
+        return mock(Panel.class);
     }
 }

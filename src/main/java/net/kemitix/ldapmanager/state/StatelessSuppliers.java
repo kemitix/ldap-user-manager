@@ -22,28 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.state;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.function.Supplier;
 
 /**
- * Main Spring Application Class.
+ * Suppliers of stateless information.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Configuration
+class StatelessSuppliers {
+
+    private static final int MAX_TIME_WIDTH = 8;
 
     /**
-     * Main Method.
+     * Supplier of the current time.
      *
-     * @param args The command line arguments to pass to Spring
+     * @return a Supplier for the current time
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Bean
+    public Supplier<String> timeSupplier() {
+        return () -> LocalTime.now()
+                              .format(DateTimeFormatter.ISO_LOCAL_TIME)
+                              .substring(0, MAX_TIME_WIDTH);
     }
 }

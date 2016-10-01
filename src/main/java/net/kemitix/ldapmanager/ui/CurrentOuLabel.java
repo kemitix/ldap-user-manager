@@ -22,28 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ui;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.googlecode.lanterna.gui2.Label;
+import net.kemitix.ldapmanager.ldap.LdapOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * Main Spring Application Class.
+ * The current OU Label.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Component
+class CurrentOuLabel extends Label {
 
     /**
-     * Main Method.
+     * Main constructor, creates a new Label displaying a specific text.
      *
-     * @param args The command line arguments to pass to Spring
+     * @param ldapOptions The LDAP connection options
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Autowired
+    CurrentOuLabel(final LdapOptions ldapOptions) {
+        super(ldapOptions.getBase());
     }
 }

@@ -3,6 +3,7 @@ package net.kemitix.ldapmanager.ldap;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
@@ -13,6 +14,7 @@ import org.springframework.security.ldap.authentication.BindAuthenticator;
  *
  * @author Paul Campbell
  */
+@Profile("ldap-connection-it")
 @Configuration
 class LdapTestConfiguration {
 
@@ -38,7 +40,7 @@ class LdapTestConfiguration {
      * @return the LDAP Template
      */
     @Bean
-    LdapTemplate ldapTemplate() {
+    LdapTemplate testLdapTemplate() {
         return new LdapTemplate(contextSource());
     }
 }

@@ -9,11 +9,11 @@ import org.springframework.boot.test.rule.OutputCapture;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link LdapCredentialsProperties}.
+ * Tests for {@link LdapServerProperties}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class LdapCredentialsPropertiesTest {
+public class LdapServerPropertiesTest {
 
     private static final String LDAP_SERVER = "ldap server";
 
@@ -23,14 +23,14 @@ public class LdapCredentialsPropertiesTest {
 
     private static final String PASS = "pass";
 
-    private LdapCredentialsProperties properties;
+    private LdapServerProperties properties;
 
     @Rule
     public OutputCapture outputCapture = new OutputCapture();
 
     @Before
     public void setUp() throws Exception {
-        properties = new LdapCredentialsProperties();
+        properties = new LdapServerProperties();
         properties.setUrls(new String[]{LDAP_SERVER});
         properties.setBase(BASE_OU);
         properties.setUserDn(USER_DN);

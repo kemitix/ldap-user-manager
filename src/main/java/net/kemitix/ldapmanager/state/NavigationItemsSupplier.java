@@ -22,28 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.state;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import net.kemitix.ldapmanager.util.nameditem.NamedItem;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
- * Main Spring Application Class.
+ * Supplier of navigation action items.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Component
+class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
 
     /**
-     * Main Method.
+     * An empty dummy list of navigation items.
      *
-     * @param args The command line arguments to pass to Spring
+     * @return the list of items
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Override
+    public List<NamedItem<Runnable>> get() {
+        return new ArrayList<>();
     }
 }

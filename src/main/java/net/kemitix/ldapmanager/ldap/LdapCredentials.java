@@ -32,27 +32,6 @@ package net.kemitix.ldapmanager.ldap;
 interface LdapCredentials {
 
     /**
-     * Gets the urls of the LDAP servers.
-     *
-     * @return the urls of all servers.
-     */
-    String[] getUrls();
-
-    /**
-     * Gets the base suffix from which all operations should origin.
-     *
-     * @return the base suffix.
-     */
-    String getBase();
-
-    /**
-     * Get the user distinguished name (principal) to use for getting authenticated contexts.
-     *
-     * @return the user distinguished name.
-     */
-    String getUserDn();
-
-    /**
      * Get the password (credentials) to use for getting authenticated contexts.
      *
      * @return the password.

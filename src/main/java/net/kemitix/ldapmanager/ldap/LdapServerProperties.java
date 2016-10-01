@@ -22,28 +22,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ldap;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.java.Log;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
 
 /**
- * Main Spring Application Class.
+ * Loads LDAP Credentials from properties file.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Log
+@Setter
+@Getter
+@Component
+@ConfigurationProperties(prefix = "ldap")
+class LdapServerProperties implements LdapCredentials, LdapOptions {
+
+    private String[] urls = new String[0];
+
+    private String base;
+
+    private String userDn;
+
+    private String password;
 
     /**
-     * Main Method.
-     *
-     * @param args The command line arguments to pass to Spring
+     * Logs the values of the properties loaded to debug.
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @PostConstruct
+    public void logProperties() {
+        Arrays.asList(urls)
+              .forEach(url -> log.info(() -> "url: " + url));
+        log.info(() -> "base: " + base);
+        log.info(() -> "userDn: " + userDn);
+        log.info(() -> "password: ****");
     }
 }

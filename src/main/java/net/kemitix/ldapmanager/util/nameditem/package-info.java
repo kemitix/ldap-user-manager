@@ -22,28 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
 /**
- * Main Spring Application Class.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Named items.
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
 
-    /**
-     * Main Method.
-     *
-     * @param args The command line arguments to pass to Spring
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
-    }
-}
+package net.kemitix.ldapmanager.util.nameditem;

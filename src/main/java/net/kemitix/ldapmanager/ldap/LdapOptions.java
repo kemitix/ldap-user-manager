@@ -22,28 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+package net.kemitix.ldapmanager.ldap;
 
 /**
- * Main Spring Application Class.
+ * Provides access to the LDAP connection options.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+public interface LdapOptions {
 
     /**
-     * Main Method.
+     * Gets the urls of the LDAP servers.
      *
-     * @param args The command line arguments to pass to Spring
+     * @return the urls of all servers.
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
-    }
+    String[] getUrls();
+
+    /**
+     * Gets the base suffix from which all operations should origin.
+     *
+     * @return the base suffix.
+     */
+    String getBase();
+
+    /**
+     * Get the user distinguished name (principal) to use for getting authenticated contexts.
+     *
+     * @return the user distinguished name.
+     */
+    String getUserDn();
 }

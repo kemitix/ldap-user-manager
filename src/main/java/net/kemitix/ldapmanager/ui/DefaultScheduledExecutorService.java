@@ -22,28 +22,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.ui;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import net.kemitix.ldapmanager.events.ApplicationExitRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
- * Main Spring Application Class.
+ * The Default {@link java.util.concurrent.ScheduledThreadPoolExecutor}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@EnableScheduling
-@SpringBootApplication
-@SuppressWarnings("hideutilityclassconstructor")
-public class LdapUserManagerApplication {
+@Component
+class DefaultScheduledExecutorService extends ScheduledThreadPoolExecutor {
 
     /**
-     * Main Method.
+     * Constructor.
      *
-     * @param args The command line arguments to pass to Spring
+     * @param uiProperties The UI Properties.
      */
-    public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+    @Autowired
+    DefaultScheduledExecutorService(final UiProperties uiProperties) {
+        super(uiProperties.getScheduledThreadPoolSize());
+    }
+
+    /**
+     * Listener to shutdown the scheduledExecutorService on application exit.
+     *
+     * @return the listener
+     */
+    @Bean
+    public ApplicationExitRequest.Listener scheduledExecutorServiceApplicationExitRequestListener() {
+        return e -> shutdown();
     }
 }
