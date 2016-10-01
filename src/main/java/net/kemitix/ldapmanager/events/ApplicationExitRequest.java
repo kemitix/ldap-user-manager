@@ -48,7 +48,7 @@ public class ApplicationExitRequest {
      */
     @Bean
     @SuppressWarnings("designforextension")
-    public EventDispatcher eventDispatcher(final ApplicationEventPublisher publisher) {
+    public EventDispatcher applicationExitRequestDispatcher(final ApplicationEventPublisher publisher) {
         return () -> publisher.publishEvent(new Event(this));
     }
 
