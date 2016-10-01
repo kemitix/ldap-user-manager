@@ -46,7 +46,6 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Supplier;
 
 /**
@@ -129,20 +128,6 @@ class LanternaConfiguration {
             final Screen screen, final WindowManager windowManager, final Component background
                           ) {
         return new MultiWindowTextGUI(screen, windowManager, background);
-    }
-
-    /**
-     * Listener to shutdown the scheduledExecutorService on application exit.
-     *
-     * @param scheduledExecutorService The scheduled executor service
-     *
-     * @return the listener
-     */
-    @Bean
-    public ApplicationListener<ApplicationExitRequest.Event> scheduledExecutorServiceAppExitListener(
-            final ScheduledExecutorService scheduledExecutorService
-                                                                                                    ) {
-        return e -> scheduledExecutorService.shutdown();
     }
 
     /**
