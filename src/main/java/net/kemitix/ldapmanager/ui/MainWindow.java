@@ -27,7 +27,10 @@ package net.kemitix.ldapmanager.ui;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
+import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -60,5 +63,15 @@ class MainWindow extends BasicWindow {
     public void init() {
         setHints(Arrays.asList(Window.Hint.FULL_SCREEN, Window.Hint.NO_DECORATIONS));
         setComponent(mainPanel);
+    }
+
+    /**
+     * Listener to close the main UI window.
+     *
+     * @return the listener
+     */
+    @Bean
+    public ApplicationListener<ApplicationExitRequest.Event> mainWindowApplicationExitRequestListener() {
+        return e -> close();
     }
 }

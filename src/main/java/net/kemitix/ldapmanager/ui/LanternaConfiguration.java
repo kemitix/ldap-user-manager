@@ -126,15 +126,4 @@ class LanternaConfiguration {
         return new MultiWindowTextGUI(screen, windowManager, background);
     }
 
-    /**
-     * Listener to close the main UI window.
-     *
-     * @param mainWindow The main window
-     *
-     * @return the listener
-     */
-    @Bean
-    public ApplicationListener<ApplicationExitRequest.Event> mainWindowAppExitListener(final BasicWindow mainWindow) {
-        return e -> mainWindow.close();
-    }
 }
