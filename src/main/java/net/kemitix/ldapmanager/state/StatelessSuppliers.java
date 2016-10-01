@@ -39,6 +39,8 @@ import java.util.function.Supplier;
 @Configuration
 class StatelessSuppliers {
 
+    private static final int MAX_TIME_WIDTH = 8;
+
     /**
      * Supplier of the current time.
      *
@@ -48,6 +50,6 @@ class StatelessSuppliers {
     public Supplier<String> timeSupplier() {
         return () -> LocalTime.now()
                               .format(DateTimeFormatter.ISO_LOCAL_TIME)
-                              .substring(0, 8);
+                              .substring(0, MAX_TIME_WIDTH);
     }
 }
