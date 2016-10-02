@@ -35,6 +35,10 @@ import java.util.List;
 /**
  * A container in an LDAP directory.
  *
+ * <p>Contains {@link LdapEntity} objects.</p>
+ *
+ * <p>This class is immutable.</p>
+ *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
