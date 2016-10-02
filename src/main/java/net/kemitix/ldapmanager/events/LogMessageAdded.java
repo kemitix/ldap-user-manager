@@ -22,47 +22,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.events;
 
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
-import com.googlecode.lanterna.gui2.LinearLayout;
-import com.googlecode.lanterna.gui2.Panel;
-import lombok.val;
-import net.kemitix.ldapmanager.events.EventDispatcher;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 /**
- * The bottom panel of the UI, containing the exit button.
+ * Log message added.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class BottomPanel extends Panel {
-
-    private final EventDispatcher applicationExitRequest;
+public class LogMessageAdded {
 
     /**
-     * Constructor.
+     * Dispatches an event signaling that a new log message has been added.
      *
-     * @param applicationExitRequestDispatcher The exit request dispatcher
+     * @param publisher The Application Event Publisher.
+     *
+     * @return the event dispatcher
      */
-    @Autowired
-    BottomPanel(final EventDispatcher applicationExitRequestDispatcher) {
-        this.applicationExitRequest = applicationExitRequestDispatcher;
+    @Bean
+    @SuppressWarnings("designforextension")
+    public EventDispatcher logMessageAddedDispatcher(final ApplicationEventPublisher publisher) {
+        return () -> publisher.publishEvent(new Event(this));
     }
 
     /**
-     * Initializer.
+     * Listener for Log Message Added.
      */
-    @PostConstruct
-    public void init() {
-        val component = new Panel().addComponent(new Button("Exit", applicationExitRequest))
-                                   .withBorder(Borders.singleLine());
-        component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        addComponent(component);
+    public interface Listener extends ApplicationListener<Event> {
+
+    }
+
+    /**
+     * The Event signalling that a new log message has been added.
+     */
+    public static final class Event extends ApplicationEvent {
+
+        /**
+         * Create a new ApplicationEvent.
+         *
+         * @param source the object on which the event initially occurred (never {@code null})
+         */
+        public Event(final Object source) {
+            super(source);
+        }
     }
 }

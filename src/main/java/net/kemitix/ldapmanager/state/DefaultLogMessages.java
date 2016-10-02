@@ -22,37 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.state;
 
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
-import com.googlecode.lanterna.gui2.LinearLayout;
-import com.googlecode.lanterna.gui2.Panel;
-import lombok.val;
 import net.kemitix.ldapmanager.events.EventDispatcher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * The bottom panel of the UI, containing the exit button.
+ * A list of log messages recorded.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class BottomPanel extends Panel {
+class DefaultLogMessages implements LogMessages {
 
-    private final EventDispatcher applicationExitRequest;
+    private final EventDispatcher logMessageAddedDispatcher;
+
+    private final List<String> messages = new ArrayList<>();
 
     /**
      * Constructor.
      *
-     * @param applicationExitRequestDispatcher The exit request dispatcher
+     * @param logMessageAddedDispatcher The Log message added dispatcher
      */
-    @Autowired
-    BottomPanel(final EventDispatcher applicationExitRequestDispatcher) {
-        this.applicationExitRequest = applicationExitRequestDispatcher;
+    DefaultLogMessages(final EventDispatcher logMessageAddedDispatcher) {
+        this.logMessageAddedDispatcher = logMessageAddedDispatcher;
     }
 
     /**
@@ -60,9 +57,17 @@ class BottomPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(new Button("Exit", applicationExitRequest))
-                                   .withBorder(Borders.singleLine());
-        component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        addComponent(component);
+        add("Message Log initialised");
+    }
+
+    @Override
+    public void add(final String message) {
+        messages.add(message);
+        logMessageAddedDispatcher.run();
+    }
+
+    @Override
+    public List<String> getMessages() {
+        return new ArrayList<>(messages);
     }
 }

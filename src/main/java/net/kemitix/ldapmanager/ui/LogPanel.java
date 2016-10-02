@@ -25,34 +25,43 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
+import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
+import lombok.Getter;
 import lombok.val;
-import net.kemitix.ldapmanager.events.EventDispatcher;
+import net.kemitix.ldapmanager.events.LogMessageAdded;
+import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.stream.Collectors;
 
 /**
- * The bottom panel of the UI, containing the exit button.
+ * UI Panel for displaying log messages.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class BottomPanel extends Panel {
+class LogPanel extends Panel {
 
-    private final EventDispatcher applicationExitRequest;
+    private static final int LINES_TO_SHOW = 10;
+
+    private final LogMessages logMessages;
+
+    @Getter
+    private final Label messageLabel = new Label("");
 
     /**
      * Constructor.
      *
-     * @param applicationExitRequestDispatcher The exit request dispatcher
+     * @param logMessages The message log
      */
     @Autowired
-    BottomPanel(final EventDispatcher applicationExitRequestDispatcher) {
-        this.applicationExitRequest = applicationExitRequestDispatcher;
+    LogPanel(final LogMessages logMessages) {
+        this.logMessages = logMessages;
     }
 
     /**
@@ -60,9 +69,21 @@ class BottomPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(new Button("Exit", applicationExitRequest))
-                                   .withBorder(Borders.singleLine());
+        val component = new Panel().addComponent(this.messageLabel)
+                                   .withBorder(Borders.singleLine("Log"));
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
+        update();
+    }
+
+    /**
+     * Update the portion of the log shown.
+     */
+    @EventListener(LogMessageAdded.Event.class)
+    public void update() {
+        val messages = logMessages.getMessages();
+        messageLabel.setText(messages.stream()
+                                     .skip(Math.max(messages.size() - LINES_TO_SHOW, 0))
+                                     .collect(Collectors.joining("\n")));
     }
 }

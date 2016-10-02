@@ -26,7 +26,9 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
+import com.googlecode.lanterna.gui2.LayoutData;
 import com.googlecode.lanterna.gui2.LayoutManager;
+import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +44,15 @@ import javax.annotation.PostConstruct;
 @Component
 class MainPanel extends Panel {
 
+    private static final LayoutData FILL = LinearLayout.createLayoutData(LinearLayout.Alignment.Fill);
+
     private final Panel topPanel;
 
     private final Panel bottomPanel;
 
     private final Panel navigationPanel;
+
+    private final Panel logPanel;
 
     private final LayoutManager layoutManager = new BorderLayout();
 
@@ -56,12 +62,14 @@ class MainPanel extends Panel {
      * @param topPanel        The top panel
      * @param bottomPanel     The bottom panel
      * @param navigationPanel The navigation panel
+     * @param logPanel        The log panel
      */
     @Autowired
-    MainPanel(final Panel topPanel, final Panel bottomPanel, final Panel navigationPanel) {
+    MainPanel(final Panel topPanel, final Panel bottomPanel, final Panel navigationPanel, final Panel logPanel) {
         this.topPanel = topPanel;
         this.bottomPanel = bottomPanel;
         this.navigationPanel = navigationPanel;
+        this.logPanel = logPanel;
     }
 
     /**
@@ -73,10 +81,15 @@ class MainPanel extends Panel {
         innerPanel.setLayoutManager(layoutManager);
         innerPanel.setLayoutData(BorderLayout.Location.CENTER);
         innerPanel.addComponent(topPanel, BorderLayout.Location.TOP);
-        innerPanel.addComponent(bottomPanel, BorderLayout.Location.BOTTOM);
+        innerPanel.addComponent(getBottomPanel(), BorderLayout.Location.BOTTOM);
         innerPanel.addComponent(navigationPanel, BorderLayout.Location.LEFT);
         addComponent(innerPanel.withBorder(Borders.singleLine("LDAP User Manager")));
         setLayoutManager(layoutManager);
         setLayoutData(BorderLayout.Location.CENTER);
+    }
+
+    private Panel getBottomPanel() {
+        return new Panel(new LinearLayout()).addComponent(logPanel, FILL)
+                                            .addComponent(bottomPanel, FILL);
     }
 }
