@@ -48,11 +48,11 @@ class BottomPanel extends Panel {
     /**
      * Constructor.
      *
-     * @param applicationExitRequest The exit request dispatcher
+     * @param applicationExitRequestDispatcher The exit request dispatcher
      */
     @Autowired
-    BottomPanel(final EventDispatcher applicationExitRequest) {
-        this.applicationExitRequest = applicationExitRequest;
+    BottomPanel(final EventDispatcher applicationExitRequestDispatcher) {
+        this.applicationExitRequest = applicationExitRequestDispatcher;
     }
 
     /**
