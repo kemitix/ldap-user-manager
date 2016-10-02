@@ -1,4 +1,4 @@
-package net.kemitix.ldapmanager.state;
+package net.kemitix.ldapmanager.suppliers;
 
 import org.junit.Before;
 import org.junit.Test;

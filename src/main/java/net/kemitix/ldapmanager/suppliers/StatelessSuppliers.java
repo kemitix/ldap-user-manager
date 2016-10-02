@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.state;
+package net.kemitix.ldapmanager.suppliers;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
