@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.function.Supplier;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -21,11 +23,14 @@ public class CurrentOuLabelTest {
     @Mock
     private LdapOptions ldapOptions;
 
+    @Mock
+    private Supplier<String> currentOuSupplier;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        given(ldapOptions.getBase()).willReturn("ou=base");
-        currentOuLabel = new CurrentOuLabel(ldapOptions);
+        given(currentOuSupplier.get()).willReturn("ou=base");
+        currentOuLabel = new CurrentOuLabel(currentOuSupplier);
     }
 
     @Test

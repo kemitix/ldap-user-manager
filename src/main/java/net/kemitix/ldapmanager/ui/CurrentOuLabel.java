@@ -25,9 +25,10 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Label;
-import net.kemitix.ldapmanager.ldap.LdapOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.function.Supplier;
 
 /**
  * The current OU Label.
@@ -37,13 +38,16 @@ import org.springframework.stereotype.Component;
 @Component
 class CurrentOuLabel extends Label {
 
+    private final Supplier<String> currentOuSupplier;
+
     /**
      * Main constructor, creates a new Label displaying a specific text.
      *
-     * @param ldapOptions The LDAP connection options
+     * @param currentOuSupplier The supplier of the current OU
      */
     @Autowired
-    CurrentOuLabel(final LdapOptions ldapOptions) {
-        super(ldapOptions.getBase());
+    CurrentOuLabel(final Supplier<String> currentOuSupplier) {
+        super(currentOuSupplier.get());
+        this.currentOuSupplier = currentOuSupplier;
     }
 }
