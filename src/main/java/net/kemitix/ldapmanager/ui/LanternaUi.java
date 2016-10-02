@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -42,6 +43,8 @@ import java.io.IOException;
 @Component
 class LanternaUi implements CommandLineRunner {
 
+    private final LogMessages logMessages;
+
     private final BasicWindow mainWindow;
 
     private final WindowBasedTextGUI gui;
@@ -49,13 +52,15 @@ class LanternaUi implements CommandLineRunner {
     /**
      * Constructor.
      *
-     * @param mainWindow The main UI windows
-     * @param gui        The Lanterna UI
+     * @param logMessages The Log Messages
+     * @param mainWindow  The main UI windows
+     * @param gui         The Lanterna UI
      */
     @Autowired
     LanternaUi(
-            final BasicWindow mainWindow, final WindowBasedTextGUI gui
+            final LogMessages logMessages, final BasicWindow mainWindow, final WindowBasedTextGUI gui
               ) {
+        this.logMessages = logMessages;
         this.mainWindow = mainWindow;
         this.gui = gui;
     }
@@ -69,7 +74,9 @@ class LanternaUi implements CommandLineRunner {
      */
     @Override
     public void run(final String... args) throws IOException {
+        logMessages.add("Starting Lanterna UI...adding main window");
         gui.addWindow(mainWindow);
+        logMessages.add("Entering main loop...");
         gui.waitForWindowToClose(mainWindow);
     }
 }
