@@ -22,30 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.state;
-
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
 /**
- * Supplier of navigation action items.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
+ *
+ * Information suppliers.
  */
-@Component
-class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
 
-    /**
-     * An empty dummy list of navigation items.
-     *
-     * @return the list of items
-     */
-    @Override
-    public List<NamedItem<Runnable>> get() {
-        return new ArrayList<>();
-    }
-}
+/**
+ * Information suppliers.
+ */
+
+package net.kemitix.ldapmanager.suppliers;
