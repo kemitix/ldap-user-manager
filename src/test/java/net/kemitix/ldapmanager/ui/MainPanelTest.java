@@ -1,12 +1,9 @@
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.Border;
 import com.googlecode.lanterna.gui2.BorderLayout;
-import com.googlecode.lanterna.gui2.Component;
 import com.googlecode.lanterna.gui2.Panel;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,19 +17,19 @@ public class MainPanelTest {
 
     private MainPanel mainPanel;
 
-    @Mock
-    private Panel topPanel;
 
-    @Mock
-    private Panel bottomPanel;
+    private Panel topPanel = new Panel();
 
-    @Mock
-    private Panel navigationPanel;
+    private Panel bottomPanel = new Panel();
+
+    private Panel navigationPanel = new Panel();
+
+    private Panel logPanel = new Panel();
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mainPanel = new MainPanel(topPanel, bottomPanel, navigationPanel);
+        mainPanel = new MainPanel(topPanel, bottomPanel, navigationPanel, logPanel);
     }
 
     @Test
@@ -40,19 +37,10 @@ public class MainPanelTest {
         //when
         mainPanel.init();
         //then
-        mainPanel.getChildren()
-                 .forEach(child -> {
-                     assertThat(child).isInstanceOf(Border.class);
-                     final Border border = (Border) child;
-                     assertThat(border.getParent()).isSameAs(mainPanel);
-                     final Component innerComponent = border.getComponent();
-                     assertThat(innerComponent).isInstanceOf(Panel.class);
-                     final Panel innerPanel = (Panel) innerComponent;
-                     assertThat(innerPanel.getLayoutManager()).isInstanceOf(BorderLayout.class);
-                     assertThat(innerPanel.getLayoutData()).isEqualTo(BorderLayout.Location.CENTER);
-                     assertThat(innerPanel.getChildren()).containsExactly(topPanel, bottomPanel, navigationPanel);
-
-                 });
+        assertThat(topPanel.isInside(mainPanel)).isTrue();
+        assertThat(bottomPanel.isInside(mainPanel)).isTrue();
+        assertThat(navigationPanel.isInside(mainPanel)).isTrue();
+        assertThat(logPanel.isInside(mainPanel)).isTrue();
         assertThat(mainPanel.getLayoutManager()).isInstanceOf(BorderLayout.class);
         assertThat(mainPanel.getLayoutData()).isEqualTo(BorderLayout.Location.CENTER);
     }
