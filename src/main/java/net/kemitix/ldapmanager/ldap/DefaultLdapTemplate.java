@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Profile("default")
+@Profile("!test")
 @Component
 class DefaultLdapTemplate extends LdapTemplate {
 
