@@ -24,8 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -44,6 +44,9 @@ public class LdapUserManagerApplication {
      * @param args The command line arguments to pass to Spring
      */
     public static void main(final String[] args) {
-        SpringApplication.run(LdapUserManagerApplication.class, args);
+        new SpringApplicationBuilder(LdapUserManagerApplication.class).headless(false)
+                                                                      .web(false)
+                                                                      .build()
+                                                                      .run(args);
     }
 }
