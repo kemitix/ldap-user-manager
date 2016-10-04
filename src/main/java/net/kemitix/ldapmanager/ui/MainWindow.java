@@ -29,10 +29,12 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
 import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -67,10 +69,11 @@ class MainWindow extends BasicWindow {
     /**
      * Listener to close the main UI window.
      *
-     * @return the listener
+     * @throws IOException if error stopping terminal screen
      */
-    @Bean
-    public ApplicationExitRequest.Listener mainWindowApplicationExitRequestListener() {
-        return e -> close();
+    @EventListener(ApplicationExitRequest.Event.class)
+    @Order(1)
+    public void onApplicationExit() throws IOException {
+        close();
     }
 }
