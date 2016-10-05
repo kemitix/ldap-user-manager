@@ -37,7 +37,7 @@ import javax.annotation.PostConstruct;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Profile("default")
+@Profile("!test")
 @Component
 class DefaultContextSource extends DirContextSource implements ContextSource {
 

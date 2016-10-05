@@ -32,14 +32,10 @@ import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.WindowManager;
 import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.io.IOException;
 
 /**
  * Configuration for main Lanterna UI.
@@ -57,22 +53,6 @@ class LanternaConfiguration {
     @Bean
     TerminalFactory terminalFactory() {
         return new DefaultTerminalFactory();
-    }
-
-    /**
-     * The Lanterna Terminal Screen.
-     *
-     * @param terminal The Lanterna Terminal
-     *
-     * @return the terminal screen
-     *
-     * @throws IOException if error creating or starting the terminal screen
-     */
-    @Bean
-    TerminalScreen terminalScreen(final Terminal terminal) throws IOException {
-        final TerminalScreen screen = new TerminalScreen(terminal);
-        screen.startScreen();
-        return screen;
     }
 
     /**
@@ -122,5 +102,4 @@ class LanternaConfiguration {
                           ) {
         return new MultiWindowTextGUI(screen, windowManager, background);
     }
-
 }

@@ -22,30 +22,59 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ldap;
+package net.kemitix.ldapmanager.ui;
 
+import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.Terminal;
+import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.ldap.core.ContextSource;
-import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+
 /**
- * The LDAP Template.
+ * The TerminalScreen.
  *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * @author Paul Campbell (paul.campbell@hubio.com)
  */
-@Profile("!test")
 @Component
-class DefaultLdapTemplate extends LdapTemplate {
+public class DefaultTerminalScreen extends TerminalScreen {
 
     /**
      * Constructor.
      *
-     * @param contextSource The LDAP Context Source.
+     * @param terminal The Terminal
+     *
+     * @throws IOException if there is an error creating the terminal screen
      */
     @Autowired
-    DefaultLdapTemplate(final ContextSource contextSource) {
-        super(contextSource);
+    public DefaultTerminalScreen(final Terminal terminal) throws IOException {
+        super(terminal);
+    }
+
+    /**
+     * Initializer.
+     *
+     * <p>Start the screen.</p>
+     *
+     * @throws IOException if error starting screen
+     */
+    @PostConstruct
+    public final void init() throws IOException {
+        startScreen();
+    }
+
+    /**
+     * Listener to stop the screen.
+     *
+     * @throws IOException if error stopping terminal screen
+     */
+    @EventListener(ApplicationExitRequest.Event.class)
+    @Order(2)
+    public final void onApplicationExit() throws IOException {
+        stopScreen();
     }
 }
