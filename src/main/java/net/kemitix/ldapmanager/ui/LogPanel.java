@@ -30,7 +30,7 @@ import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
 import lombok.val;
-import net.kemitix.ldapmanager.events.LogMessageAdded;
+import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Component
 class LogPanel extends Panel {
 
-    private static final int LINES_TO_SHOW = 10;
+    private static final int LINES_TO_SHOW = 5;
 
     private final LogMessages logMessages;
 
@@ -79,7 +79,7 @@ class LogPanel extends Panel {
     /**
      * Update the portion of the log shown.
      */
-    @EventListener(LogMessageAdded.Event.class)
+    @EventListener(LogMessageAddedEvent.class)
     public void update() {
         val messages = logMessages.getMessages();
         messageLabel.setText(messages.stream()

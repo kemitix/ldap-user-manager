@@ -24,7 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
-import net.kemitix.ldapmanager.events.EventDispatcher;
+import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -39,17 +40,17 @@ import java.util.List;
 @Component
 class DefaultLogMessages implements LogMessages {
 
-    private final EventDispatcher logMessageAddedDispatcher;
-
     private final List<String> messages = new ArrayList<>();
+
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * Constructor.
      *
-     * @param logMessageAddedDispatcher The Log message added dispatcher
+     * @param eventPublisher The event publisher
      */
-    DefaultLogMessages(final EventDispatcher logMessageAddedDispatcher) {
-        this.logMessageAddedDispatcher = logMessageAddedDispatcher;
+    DefaultLogMessages(final ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -63,7 +64,7 @@ class DefaultLogMessages implements LogMessages {
     @Override
     public void add(final String message) {
         messages.add(message);
-        logMessageAddedDispatcher.run();
+        eventPublisher.publishEvent(new LogMessageAddedEvent(message));
     }
 
     @Override

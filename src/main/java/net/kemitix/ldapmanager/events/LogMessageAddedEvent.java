@@ -25,51 +25,20 @@ SOFTWARE.
 package net.kemitix.ldapmanager.events;
 
 import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 /**
  * Log message added.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-public class LogMessageAdded {
+public class LogMessageAddedEvent extends ApplicationEvent {
 
     /**
-     * Dispatches an event signaling that a new log message has been added.
+     * Create a new ApplicationEvent.
      *
-     * @param publisher The Application Event Publisher.
-     *
-     * @return the event dispatcher
+     * @param source the object on which the event initially occurred (never {@code null})
      */
-    @Bean
-    @SuppressWarnings("designforextension")
-    public EventDispatcher logMessageAddedDispatcher(final ApplicationEventPublisher publisher) {
-        return () -> publisher.publishEvent(new Event(this));
-    }
-
-    /**
-     * Listener for Log Message Added.
-     */
-    public interface Listener extends ApplicationListener<Event> {
-
-    }
-
-    /**
-     * The Event signalling that a new log message has been added.
-     */
-    public static final class Event extends ApplicationEvent {
-
-        /**
-         * Create a new ApplicationEvent.
-         *
-         * @param source the object on which the event initially occurred (never {@code null})
-         */
-        public Event(final Object source) {
-            super(source);
-        }
+    public LogMessageAddedEvent(final Object source) {
+        super(source);
     }
 }

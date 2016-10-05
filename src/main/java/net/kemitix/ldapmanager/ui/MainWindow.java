@@ -27,7 +27,7 @@ package net.kemitix.ldapmanager.ui;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
-import net.kemitix.ldapmanager.events.ApplicationExitRequest;
+import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -71,7 +71,7 @@ class MainWindow extends BasicWindow {
      *
      * @throws IOException if error stopping terminal screen
      */
-    @EventListener(ApplicationExitRequest.Event.class)
+    @EventListener(ApplicationExitEvent.class)
     @Order(1)
     public void onApplicationExit() throws IOException {
         close();

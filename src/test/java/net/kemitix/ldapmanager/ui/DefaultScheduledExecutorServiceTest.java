@@ -1,6 +1,5 @@
 package net.kemitix.ldapmanager.ui;
 
-import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -44,8 +43,7 @@ public class DefaultScheduledExecutorServiceTest {
     @Test
     public void listenerShouldShutdownExecutor() {
         //when
-        executor.scheduledExecutorServiceApplicationExitRequestListener()
-                .onApplicationEvent(new ApplicationExitRequest.Event(this));
+        executor.onApplicationExit();
         //then
         then(executor).should()
                       .shutdown();
