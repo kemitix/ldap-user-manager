@@ -24,9 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import net.kemitix.ldapmanager.events.ApplicationExitRequest;
+import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -50,12 +50,10 @@ class DefaultScheduledExecutorService extends ScheduledThreadPoolExecutor {
     }
 
     /**
-     * Listener to shutdown the scheduledExecutorService on application exit.
-     *
-     * @return the listener
+     * Shutdown the scheduledExecutorService on application exit.
      */
-    @Bean
-    public ApplicationExitRequest.Listener scheduledExecutorServiceApplicationExitRequestListener() {
-        return e -> shutdown();
+    @EventListener(ApplicationExitEvent.class)
+    public void onApplicationExit() {
+        shutdown();
     }
 }

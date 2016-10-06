@@ -28,9 +28,11 @@ import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
+import lombok.Getter;
 import lombok.val;
-import net.kemitix.ldapmanager.events.EventDispatcher;
+import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -43,16 +45,20 @@ import javax.annotation.PostConstruct;
 @Component
 class BottomPanel extends Panel {
 
-    private final EventDispatcher applicationExitRequest;
+    private final ApplicationEventPublisher eventPublisher;
+
+    @Getter
+    private final Button exitButton;
 
     /**
      * Constructor.
      *
-     * @param applicationExitRequestDispatcher The exit request dispatcher
+     * @param eventPublisher The event publisher
      */
     @Autowired
-    BottomPanel(final EventDispatcher applicationExitRequestDispatcher) {
-        this.applicationExitRequest = applicationExitRequestDispatcher;
+    BottomPanel(final ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+        this.exitButton = new Button("Exit", sendApplicationExitEvent());
     }
 
     /**
@@ -60,9 +66,12 @@ class BottomPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(new Button("Exit", applicationExitRequest))
-                                   .withBorder(Borders.singleLine());
+        val component = new Panel().addComponent(exitButton).withBorder(Borders.singleLine());
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
+    }
+
+    private Runnable sendApplicationExitEvent() {
+        return () -> eventPublisher.publishEvent(new ApplicationExitEvent(this));
     }
 }

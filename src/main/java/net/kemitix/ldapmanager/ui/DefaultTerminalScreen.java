@@ -26,7 +26,7 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.Terminal;
-import net.kemitix.ldapmanager.events.ApplicationExitRequest;
+import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -72,7 +72,7 @@ public class DefaultTerminalScreen extends TerminalScreen {
      *
      * @throws IOException if error stopping terminal screen
      */
-    @EventListener(ApplicationExitRequest.Event.class)
+    @EventListener(ApplicationExitEvent.class)
     @Order(2)
     public final void onApplicationExit() throws IOException {
         stopScreen();

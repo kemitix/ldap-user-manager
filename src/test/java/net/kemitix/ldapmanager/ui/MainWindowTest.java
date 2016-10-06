@@ -2,11 +2,12 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
-import net.kemitix.ldapmanager.events.ApplicationExitRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
@@ -41,10 +42,9 @@ public class MainWindowTest {
     }
 
     @Test
-    public void listenerShouldCloseWindow() {
+    public void listenerShouldCloseWindow() throws IOException {
         //when
-        mainWindow.mainWindowApplicationExitRequestListener()
-                  .onApplicationEvent(new ApplicationExitRequest.Event(this));
+        mainWindow.onApplicationExit();
         //then
         then(mainWindow).should()
                         .close();

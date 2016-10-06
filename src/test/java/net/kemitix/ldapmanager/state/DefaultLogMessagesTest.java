@@ -1,15 +1,16 @@
 package net.kemitix.ldapmanager.state;
 
 import lombok.val;
-import net.kemitix.ldapmanager.events.EventDispatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationEventPublisher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.reset;
 
 /**
@@ -23,13 +24,13 @@ public class DefaultLogMessagesTest {
     private DefaultLogMessages logMessages;
 
     @Mock
-    private EventDispatcher logMessageAddedDispatcher;
+    private ApplicationEventPublisher eventPublisher;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         logMessages.init();
-        reset(logMessageAddedDispatcher);
+        reset(eventPublisher);
     }
 
     @Test
@@ -38,8 +39,8 @@ public class DefaultLogMessagesTest {
         logMessages.add("redrum");
         //then
         assertThat(logMessages.getMessages()).contains("redrum");
-        then(logMessageAddedDispatcher).should()
-                                       .run();
+        then(eventPublisher).should()
+                            .publishEvent(anyObject());
     }
 
     @Test
