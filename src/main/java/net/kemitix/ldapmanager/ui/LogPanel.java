@@ -69,7 +69,7 @@ class LogPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(this.messageLabel)
+        val component = new Panel().addComponent(messageLabel)
                                    .withBorder(Borders.singleLine("Log"));
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
@@ -82,6 +82,9 @@ class LogPanel extends Panel {
     @EventListener(LogMessageAddedEvent.class)
     public void update() {
         val messages = logMessages.getMessages();
+        while (messages.size() < LINES_TO_SHOW) {
+            messages.add(0, "");
+        }
         messageLabel.setText(messages.stream()
                                      .skip(Math.max(messages.size() - LINES_TO_SHOW, 0))
                                      .collect(Collectors.joining("\n")));
