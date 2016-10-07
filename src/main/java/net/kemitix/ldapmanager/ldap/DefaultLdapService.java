@@ -71,10 +71,9 @@ class DefaultLdapService implements LdapService {
                                     .isPresent();
         val ouList = ldapTemplate.find(query, OU.class);
         val userList = ldapTemplate.find(query, User.class);
-        final LdapEntityContainer ldapEntityContainer = LdapEntityContainer.of(
-                Stream.of(ouList.stream(), userList.stream())
-                      .flatMap(Function.identity())
-                      .collect(Collectors.toList()));
+        val ldapEntityContainer = LdapEntityContainer.of(Stream.of(ouList.stream(), userList.stream())
+                                                               .flatMap(Function.identity())
+                                                               .collect(Collectors.toList()));
         logMessages.add(String.format("Loaded container: %d OU(s) and %d user(s)", ouList.size(), userList.size()));
         return ldapEntityContainer;
     }
