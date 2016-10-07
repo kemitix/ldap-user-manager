@@ -29,6 +29,8 @@ import org.springframework.stereotype.Component;
 import javax.naming.Name;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Map of LdapEntity containers by their DN name.
@@ -41,12 +43,24 @@ class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
     private final Map<Name, LdapEntityContainer> containerMap = new HashMap<>();
 
     @Override
-    public LdapEntityContainer findOrDefault(final Name key, final LdapEntityContainer defaultValue) {
-        return containerMap.getOrDefault(key, defaultValue);
+    public Optional<LdapEntityContainer> get(final Name dn) {
+        return Optional.ofNullable(containerMap.get(dn));
+    }
+
+    @Override
+    public LdapEntityContainer getOrCreate(
+            final Name dn, final Function<Name, LdapEntityContainer> mappingFunction
+                                          ) {
+        return containerMap.computeIfAbsent(dn, mappingFunction);
     }
 
     @Override
     public void put(final Name key, final LdapEntityContainer newValue) {
         containerMap.put(key, newValue);
+    }
+
+    @Override
+    public void clear() {
+        containerMap.clear();
     }
 }
