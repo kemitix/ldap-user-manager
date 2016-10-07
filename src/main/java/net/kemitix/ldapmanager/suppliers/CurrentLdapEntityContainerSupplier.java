@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.suppliers;
 
+import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
@@ -44,22 +45,27 @@ class CurrentLdapEntityContainerSupplier implements Supplier<LdapEntityContainer
 
     private final LdapEntityContainerMap containerMap;
 
+    private final LdapService ldapService;
+
     /**
      * Constructor.
      *
      * @param currentContainer The current container.
      * @param containerMap     The lookup map of LdapEntity containers.
+     * @param ldapService      The LDAP Service.
      */
     @Autowired
     CurrentLdapEntityContainerSupplier(
-            final CurrentContainer currentContainer, final LdapEntityContainerMap containerMap
+            final CurrentContainer currentContainer, final LdapEntityContainerMap containerMap,
+            final LdapService ldapService
                                       ) {
         this.currentContainer = currentContainer;
         this.containerMap = containerMap;
+        this.ldapService = ldapService;
     }
 
     @Override
     public LdapEntityContainer get() {
-        return containerMap.findOrDefault(currentContainer.getDn(), LdapEntityContainer.empty());
+        return containerMap.getOrCreate(currentContainer.getDn(), ldapService::getLdapEntityContainer);
     }
 }

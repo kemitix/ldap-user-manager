@@ -1,12 +1,12 @@
 package net.kemitix.ldapmanager.suppliers;
 
 import lombok.val;
+import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -14,6 +14,8 @@ import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 
 /**
  * Tests for {@link CurrentLdapEntityContainerSupplier}.
@@ -22,7 +24,6 @@ import static org.mockito.BDDMockito.given;
  */
 public class CurrentLdapEntityContainerSupplierTest {
 
-    @InjectMocks
     private CurrentLdapEntityContainerSupplier supplier;
 
     @Mock
@@ -37,16 +38,20 @@ public class CurrentLdapEntityContainerSupplierTest {
     @Mock
     private LdapEntityContainer container;
 
+    @Mock
+    private LdapService ldapService;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        supplier = new CurrentLdapEntityContainerSupplier(currentContainer, containerMap, ldapService);
     }
 
     @Test
     public void shouldGet() throws Exception {
         //given
         given(currentContainer.getDn()).willReturn(name);
-        given(containerMap.findOrDefault(name, LdapEntityContainer.empty())).willReturn(container);
+        given(containerMap.getOrCreate(eq(name), any())).willReturn(container);
         //when
         val result = supplier.get();
         //then
