@@ -57,7 +57,7 @@ class CurrentOuLabel extends Label {
      * Update the label when the current container changes.
      */
     @EventListener(CurrentContainerChangedEvent.class)
-    public void update() {
+    public void onCurrentContainerChangerEventUpdateUiLabel() {
         setText(currentOuSupplier.get());
     }
 }

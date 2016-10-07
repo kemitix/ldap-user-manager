@@ -51,7 +51,7 @@ public class CurrentOuLabelTest {
         //given
         given(currentOuSupplier.get()).willReturn("new label");
         //when
-        currentOuLabel.update();
+        currentOuLabel.onCurrentContainerChangerEventUpdateUiLabel();
         //then
         assertThat(currentOuLabel.getText()).isEqualTo("new label");
     }
