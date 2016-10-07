@@ -24,20 +24,13 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
-import lombok.val;
-import net.kemitix.ldapmanager.domain.OU;
-import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
+import net.kemitix.ldapmanager.ldap.LdapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import javax.naming.Name;
 
 /**
  * Loads and updates the contents of the current container from the LDAP server.
@@ -47,9 +40,9 @@ import java.util.stream.Stream;
 @Component
 class CurrentContainerLoader {
 
-    private final LdapTemplate ldapTemplate;
+    private final LdapService ldapService;
 
-    private final LdapEntityContainerMap containerMap;
+    private final LdapEntityContainerMap ldapEntityContainerMap;
 
     private final CurrentContainer currentContainer;
 
@@ -58,18 +51,18 @@ class CurrentContainerLoader {
     /**
      * Constructor.
      *
-     * @param ldapTemplate     The LDAP Template.
-     * @param containerMap     The Map to LdapEntity containers
-     * @param currentContainer The current container
-     * @param logMessages      The Log messages
+     * @param ldapService            The LDAP Service
+     * @param ldapEntityContainerMap The Map to LdapEntity containers
+     * @param currentContainer       The current container
+     * @param logMessages            The Log messages
      */
     @Autowired
     CurrentContainerLoader(
-            final LdapTemplate ldapTemplate, final LdapEntityContainerMap containerMap,
+            final LdapService ldapService, final LdapEntityContainerMap ldapEntityContainerMap,
             final CurrentContainer currentContainer, final LogMessages logMessages
                           ) {
-        this.ldapTemplate = ldapTemplate;
-        this.containerMap = containerMap;
+        this.ldapService = ldapService;
+        this.ldapEntityContainerMap = ldapEntityContainerMap;
         this.currentContainer = currentContainer;
         this.logMessages = logMessages;
     }
@@ -78,17 +71,11 @@ class CurrentContainerLoader {
      * Load the contents of the container from the LDAP server.
      */
     @EventListener(CurrentContainerChangedEvent.class)
-    public void loadContainer() {
-        val dn = currentContainer.getDn();
-        logMessages.add("Loading container: " + dn.toString());
-        val whereObjectClass = LdapQueryBuilder.query()
-                                               .base(dn)
-                                               .where("objectclass");
-        val ouList = ldapTemplate.find(whereObjectClass.is(ObjectClass.ORGANIZATIONAL_UNIT), OU.class);
-        val userList = ldapTemplate.find(whereObjectClass.is(ObjectClass.INET_ORG_PERSON), User.class);
-        containerMap.put(dn, LdapEntityContainer.of(Stream.of(ouList.stream(), userList.stream())
-                                                          .flatMap(Function.identity())
-                                                          .collect(Collectors.toList())));
-        logMessages.add(String.format("Loaded container: %d OUs and %d users", ouList.size(), userList.size()));
+    public void onCurrentContainerChangedEventLoadLdapContainer() {
+        logMessages.add("Updating current container...");
+        final Name dn = currentContainer.getDn();
+        ldapEntityContainerMap.put(dn, ldapEntityContainerMap.get(dn)
+                                                             .orElseGet(() -> ldapService.getLdapEntityContainer(dn)));
+        logMessages.add("Current container updated.");
     }
 }
