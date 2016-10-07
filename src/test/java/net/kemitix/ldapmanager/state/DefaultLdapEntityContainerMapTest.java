@@ -32,7 +32,7 @@ public class DefaultLdapEntityContainerMapTest {
         val name = LdapNameBuilder.newInstance("ou=users")
                                   .build();
         //when
-        val result = containerMap.findOrDefault(name, LdapEntityContainer.empty());
+        val result = containerMap.getOrCreate(name, key -> LdapEntityContainer.empty());
         //then
         assertThat(result).isSameAs(LdapEntityContainer.empty());
     }
@@ -45,7 +45,7 @@ public class DefaultLdapEntityContainerMapTest {
         val container = LdapEntityContainer.of(new ArrayList<>());
         containerMap.put(name, container);
         //when
-        val result = containerMap.findOrDefault(name, LdapEntityContainer.empty());
+        val result = containerMap.getOrCreate(name, key -> LdapEntityContainer.empty());
         //then
         assertThat(result).isSameAs(container);
     }
