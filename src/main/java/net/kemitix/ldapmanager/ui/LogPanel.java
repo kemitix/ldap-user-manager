@@ -37,6 +37,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -47,21 +49,23 @@ import java.util.stream.Collectors;
 @Component
 class LogPanel extends Panel {
 
-    private static final int LINES_TO_SHOW = 5;
-
     private final LogMessages logMessages;
 
     @Getter
     private final Label messageLabel = new Label("");
 
+    private int linesToShow;
+
     /**
      * Constructor.
      *
-     * @param logMessages The message log
+     * @param logMessages  The message log
+     * @param uiProperties The UI Properties
      */
     @Autowired
-    LogPanel(final LogMessages logMessages) {
+    LogPanel(final LogMessages logMessages, final UiProperties uiProperties) {
         this.logMessages = logMessages;
+        this.linesToShow = uiProperties.getLogLinesToShow();
     }
 
     /**
@@ -81,12 +85,13 @@ class LogPanel extends Panel {
      */
     @EventListener(LogMessageAddedEvent.class)
     public void update() {
-        val messages = logMessages.getMessages();
-        while (messages.size() < LINES_TO_SHOW) {
-            messages.add(0, "");
+        final List<String> messages = logMessages.getMessages();
+        final int logSize = messages.size();
+        val selectedMessages = new ArrayList<String>(messages.subList(Math.max(logSize - linesToShow, 0), logSize));
+        while (selectedMessages.size() < linesToShow) {
+            selectedMessages.add(0, "");
         }
-        messageLabel.setText(messages.stream()
-                                     .skip(Math.max(messages.size() - LINES_TO_SHOW, 0))
-                                     .collect(Collectors.joining("\n")));
+        messageLabel.setText(selectedMessages.stream()
+                                             .collect(Collectors.joining("\n")));
     }
 }
