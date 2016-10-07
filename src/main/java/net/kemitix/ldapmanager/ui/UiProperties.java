@@ -44,4 +44,11 @@ class UiProperties {
     @Setter
     @Getter
     private int scheduledThreadPoolSize;
+
+    /**
+     * The number of lines to show of the log.
+     */
+    @Setter
+    @Getter
+    private int logLinesToShow;
 }
