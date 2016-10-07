@@ -74,8 +74,7 @@ class CurrentContainerLoader {
     public void onCurrentContainerChangedEventLoadLdapContainer() {
         logMessages.add("Updating current container...");
         final Name dn = currentContainer.getDn();
-        ldapEntityContainerMap.put(dn, ldapEntityContainerMap.get(dn)
-                                                             .orElseGet(() -> ldapService.getLdapEntityContainer(dn)));
+        ldapEntityContainerMap.put(dn, ldapService.getLdapEntityContainer(dn));
         logMessages.add("Current container updated.");
     }
 }
