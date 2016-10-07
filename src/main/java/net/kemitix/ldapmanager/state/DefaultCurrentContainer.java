@@ -26,8 +26,10 @@ package net.kemitix.ldapmanager.state;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +46,8 @@ class DefaultCurrentContainer implements CurrentContainer {
 
     private final LdapOptions ldapOptions;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Setter
     @Getter
     private Name dn;
@@ -51,11 +55,13 @@ class DefaultCurrentContainer implements CurrentContainer {
     /**
      * Constructor.
      *
-     * @param ldapOptions The LDAP Options to provide the initial container
+     * @param ldapOptions    The LDAP Options to provide the initial container
+     * @param eventPublisher The Application Event Publisher
      */
     @Autowired
-    DefaultCurrentContainer(final LdapOptions ldapOptions) {
+    DefaultCurrentContainer(final LdapOptions ldapOptions, final ApplicationEventPublisher eventPublisher) {
         this.ldapOptions = ldapOptions;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -65,5 +71,6 @@ class DefaultCurrentContainer implements CurrentContainer {
     public void init() {
         dn = LdapNameBuilder.newInstance(ldapOptions.getBase())
                             .build();
+        eventPublisher.publishEvent(CurrentContainerChangedEvent.of(dn));
     }
 }

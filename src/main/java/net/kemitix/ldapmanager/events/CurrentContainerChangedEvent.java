@@ -22,42 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.events;
 
-import com.googlecode.lanterna.gui2.Label;
-import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationEvent;
 
-import java.util.function.Supplier;
+import javax.naming.Name;
 
 /**
- * The current OU Label.
+ * Notification of a change to the current container.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class CurrentOuLabel extends Label {
-
-    private final Supplier<String> currentOuSupplier;
+public final class CurrentContainerChangedEvent extends ApplicationEvent {
 
     /**
-     * Main constructor, creates a new Label displaying a specific text.
+     * Constructor.
      *
-     * @param currentOuSupplier The supplier of the current OU
+     * @param newContainer The name of the new container.
      */
-    @Autowired
-    CurrentOuLabel(final Supplier<String> currentOuSupplier) {
-        super(currentOuSupplier.get());
-        this.currentOuSupplier = currentOuSupplier;
+    private CurrentContainerChangedEvent(final Name newContainer) {
+        super(newContainer);
     }
 
     /**
-     * Update the label when the current container changes.
+     * Creates a new {@link CurrentContainerChangedEvent}.
+     *
+     * @param newContainer The name of the new container.
+     *
+     * @return the event
      */
-    @EventListener(CurrentContainerChangedEvent.class)
-    public void update() {
-        setText(currentOuSupplier.get());
+    public static CurrentContainerChangedEvent of(final Name newContainer) {
+        return new CurrentContainerChangedEvent(newContainer);
     }
 }

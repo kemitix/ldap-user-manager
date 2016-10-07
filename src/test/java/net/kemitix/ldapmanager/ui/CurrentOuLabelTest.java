@@ -45,4 +45,14 @@ public class CurrentOuLabelTest {
         //then
         assertThat(currentOuLabel.getText()).isEqualTo("new ou");
     }
+
+    @Test
+    public void shouldSetTextWhenUpdate() {
+        //given
+        given(currentOuSupplier.get()).willReturn("new label");
+        //when
+        currentOuLabel.update();
+        //then
+        assertThat(currentOuLabel.getText()).isEqualTo("new label");
+    }
 }

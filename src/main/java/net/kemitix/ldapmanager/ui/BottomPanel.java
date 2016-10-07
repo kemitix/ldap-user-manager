@@ -57,8 +57,8 @@ class BottomPanel extends Panel {
      */
     @Autowired
     BottomPanel(final ApplicationEventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
         this.exitButton = new Button("Exit", sendApplicationExitEvent());
+        this.eventPublisher = eventPublisher;
     }
 
     /**
