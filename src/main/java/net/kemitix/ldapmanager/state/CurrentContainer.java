@@ -24,6 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
+import javax.naming.Name;
+
 /**
  * Holds the name of the current container.
  *
@@ -36,12 +38,12 @@ public interface CurrentContainer {
      *
      * @return the name of the current container
      */
-    javax.naming.Name getDn();
+    Name getDn();
 
     /**
      * Sets the name of the current container.
      *
      * @param dn the name of the current container
      */
-    void setDn(javax.naming.Name dn);
+    void setDn(Name dn);
 }
