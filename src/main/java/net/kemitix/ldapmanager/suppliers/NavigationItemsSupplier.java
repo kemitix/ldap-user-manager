@@ -24,7 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.suppliers;
 
+import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
+import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,14 +46,20 @@ class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
 
     private final Supplier<LdapEntityContainer> currentLdapContainerSupplier;
 
+    private final LogMessages logMessages;
+
     /**
      * Constructor.
      *
      * @param currentLdapContainerSupplier The supplier of the node for the current LdapEntityContainer.
+     * @param logMessages                  The Log Messages.
      */
     @Autowired
-    NavigationItemsSupplier(final Supplier<LdapEntityContainer> currentLdapContainerSupplier) {
+    NavigationItemsSupplier(
+            final Supplier<LdapEntityContainer> currentLdapContainerSupplier, final LogMessages logMessages
+                           ) {
         this.currentLdapContainerSupplier = currentLdapContainerSupplier;
+        this.logMessages = logMessages;
     }
 
     /**
@@ -64,13 +72,16 @@ class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
         return new ArrayList<>(currentLdapContainerSupplier.get()
                                                            .getContents()
                                                            .stream()
-                                                           .map(ldapEntity -> NamedItem.of(ldapEntity.name(),
-                                                                                           (Runnable) () -> {
-                                                                                               // dispatch:
-                                                                                               // select item
-                                                                                               // message
-                                                                                           }
-                                                                                          ))
+                                                           .map(this::getNamedItem)
                                                            .collect(Collectors.toList()));
     }
+
+    private NamedItem<Runnable> getNamedItem(final LdapEntity ldapEntity) {
+        return NamedItem.of(ldapEntity.name(), () -> doAction(ldapEntity));
+    }
+
+    private void doAction(final LdapEntity ldapEntity) {
+        logMessages.add(String.format("Selected:" + " %s", ldapEntity.name()));
+    }
+
 }
