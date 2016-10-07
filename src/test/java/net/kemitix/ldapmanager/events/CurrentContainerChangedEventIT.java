@@ -29,8 +29,8 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.state.CurrentContainer;
-import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -48,11 +47,11 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 
 /**
- * Tests for the {@link CurrentContainerChanged} event.
+ * Tests for the {@link CurrentContainerChangedEvent} event.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
@@ -74,23 +73,28 @@ public class CurrentContainerChangedEventIT {
     private LdapTemplate ldapTemplate;
 
     @Autowired
-    private LdapEntityContainerMap containerMap;
+    private LdapEntityContainerMap ldapEntityContainerMap;
 
-    private LdapName newContainer;
+    private LdapName ldapName;
 
     @Before
     public void setUp() {
-        newContainer = LdapNameBuilder.newInstance("ou=new")
-                                      .build();
-        currentContainer.setDn(newContainer);
+        ldapName = LdapNameBuilder.newInstance("ou=new")
+                                  .build();
+        currentContainer.setDn(ldapName);
+    }
+
+    @After
+    public void tearDown() {
+        ldapEntityContainerMap.clear();
     }
 
     @Test
     public void shouldUpdateCurrentUiLabel() {
         //when
-        eventPublisher.publishEvent(CurrentContainerChangedEvent.of(newContainer));
+        eventPublisher.publishEvent(CurrentContainerChangedEvent.of(ldapName));
         //then
-        assertThat(currentOuLabel.getText()).isEqualTo(newContainer.toString());
+        assertThat(currentOuLabel.getText()).isEqualTo(ldapName.toString());
     }
 
     @Test
@@ -100,12 +104,14 @@ public class CurrentContainerChangedEventIT {
                    .build();
         val user = User.builder()
                        .build();
-        given(ldapTemplate.find(any(LdapQuery.class), eq(OU.class))).willReturn(Collections.singletonList(ou));
-        given(ldapTemplate.find(any(LdapQuery.class), eq(User.class))).willReturn(Collections.singletonList(user));
+        given(ldapTemplate.find(anyObject(), eq(OU.class))).willReturn(Collections.singletonList(ou));
+        given(ldapTemplate.find(anyObject(), eq(User.class))).willReturn(Collections.singletonList(user));
         //when
-        eventPublisher.publishEvent(CurrentContainerChangedEvent.of(newContainer));
+        eventPublisher.publishEvent(CurrentContainerChangedEvent.of(ldapName));
         //then
-        assertThat(containerMap.findOrDefault(newContainer, LdapEntityContainer.empty())
-                               .getContents()).containsExactlyInAnyOrder(ou, user);
+        val ldapEntityContainer = ldapEntityContainerMap.get(ldapName);
+        assertThat(ldapEntityContainer).isNotEmpty();
+        ldapEntityContainer.ifPresent(
+                container -> assertThat(container.getContents()).containsExactlyInAnyOrder(ou, user));
     }
 }
