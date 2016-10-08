@@ -31,6 +31,7 @@ import com.googlecode.lanterna.gui2.EmptySpace;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.WindowManager;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.TerminalFactory;
@@ -101,5 +102,15 @@ class LanternaConfiguration {
             final Screen screen, final WindowManager windowManager, final Component background
                           ) {
         return new MultiWindowTextGUI(screen, windowManager, background);
+    }
+
+    /**
+     * The Lanterna Message Dialog Builder.
+     *
+     * @return the message dialog builder
+     */
+    @Bean
+    MessageDialogBuilder messageDialogBuilder() {
+        return new MessageDialogBuilder();
     }
 }
