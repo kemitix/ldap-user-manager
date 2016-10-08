@@ -25,7 +25,7 @@
         <lanterna.version>3.0.0-beta3</lanterna.version>
         <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
         <assertj.version>3.5.2</assertj.version>
-        <apacheds.version>1.5.5</apacheds.version>
+        <unboundid.version>3.2.0</unboundid.version>
         <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
     </properties>
 
@@ -93,9 +93,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.directory.server</groupId>
-            <artifactId>apacheds-core</artifactId>
-            <version>${apacheds.version}</version>
+            <groupId>com.unboundid</groupId>
+            <artifactId>unboundid-ldapsdk</artifactId>
+            <version>${unboundid.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
