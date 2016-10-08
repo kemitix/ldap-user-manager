@@ -24,13 +24,13 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
+import net.kemitix.ldapmanager.ldap.LdapService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Map of LdapEntity containers by their DN name.
@@ -40,23 +40,23 @@ import java.util.function.Function;
 @Component
 class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
 
+    private final LdapService ldapService;
+
     private final Map<Name, LdapEntityContainer> containerMap = new HashMap<>();
 
-    @Override
-    public Optional<LdapEntityContainer> get(final Name dn) {
-        return Optional.ofNullable(containerMap.get(dn));
+    /**
+     * Constructor.
+     *
+     * @param ldapService The LDAP Service
+     */
+    @Autowired
+    DefaultLdapEntityContainerMap(final LdapService ldapService) {
+        this.ldapService = ldapService;
     }
 
     @Override
-    public LdapEntityContainer getOrCreate(
-            final Name dn, final Function<Name, LdapEntityContainer> mappingFunction
-                                          ) {
-        return containerMap.computeIfAbsent(dn, mappingFunction);
-    }
-
-    @Override
-    public void put(final Name key, final LdapEntityContainer newValue) {
-        containerMap.put(key, newValue);
+    public LdapEntityContainer get(final Name dn) {
+        return containerMap.computeIfAbsent(dn, ldapService::getLdapEntityContainer);
     }
 
     @Override

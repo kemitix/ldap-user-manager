@@ -25,8 +25,6 @@ SOFTWARE.
 package net.kemitix.ldapmanager.state;
 
 import javax.naming.Name;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Interface for mapping a {@link Name} to an {@link LdapEntityContainer}.
@@ -36,31 +34,13 @@ import java.util.function.Function;
 public interface LdapEntityContainerMap {
 
     /**
-     * Search for an LdapEntity container for the dn, returning in an Optional.
+     * Search for an LdapEntity container for the dn, if none is found then the LDAP server will be queried.
      *
      * @param dn The container's DN attribute
      *
-     * @return an optional containing the container, or empty if none found.
+     * @return the container.
      */
-    Optional<LdapEntityContainer> get(Name dn);
-
-    /**
-     * Searches for an LdapEntity container for the dn, returning it, or else the default value.
-     *
-     * @param key             The name of the LdapEntity container
-     * @param mappingFunction The function to create the value if one doesn't already exist
-     *
-     * @return the existing or newly created container
-     */
-    LdapEntityContainer getOrCreate(Name key, Function<Name, LdapEntityContainer> mappingFunction);
-
-    /**
-     * Places the LdapEntity container into the map for the given key, discarding any previous value.
-     *
-     * @param key      The name of the LdapEntity container
-     * @param newValue The value to place in the map
-     */
-    void put(Name key, LdapEntityContainer newValue);
+    LdapEntityContainer get(Name dn);
 
     /**
      * Removes all of the mappings from this map (optional operation).

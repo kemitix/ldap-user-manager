@@ -115,8 +115,6 @@ public class CurrentContainerChangedEventIT {
         eventPublisher.publishEvent(CurrentContainerChangedEvent.of(ldapName));
         //then
         val ldapEntityContainer = ldapEntityContainerMap.get(ldapName);
-        assertThat(ldapEntityContainer).isNotEmpty();
-        ldapEntityContainer.ifPresent(
-                container -> assertThat(container.getContents()).containsExactlyInAnyOrder(ou, user));
+        assertThat(ldapEntityContainer.getContents()).containsExactlyInAnyOrder(ou, user);
     }
 }
