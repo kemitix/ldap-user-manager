@@ -22,42 +22,53 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager.state;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+import net.kemitix.ldapmanager.domain.LdapEntity;
 
-import javax.naming.Name;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * A user.
+ * A container in an LDAP directory.
+ *
+ * <p>Contains {@link LdapEntity} objects.</p>
+ *
+ * <p>This class is immutable.</p>
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+public class LdapEntityContainer {
 
-    @Id
-    private Name dn;
+    private static LdapEntityContainer empty = LdapEntityContainer.of(Collections.emptyList());
 
-    private String cn;
+    private final List<LdapEntity> contents;
 
-    private String sn;
+    /**
+     * Creates an LDAP Container with the given contents.
+     *
+     * @param contents The contents of the container
+     *
+     * @return the container
+     */
+    public static LdapEntityContainer of(final List<LdapEntity> contents) {
+        return new LdapEntityContainer(new ArrayList<>(contents));
+    }
 
-    @Override
-    public String name() {
-        return cn;
+    /**
+     * Returns an empty LDAP Container.
+     *
+     * @return the empty container
+     */
+    public static LdapEntityContainer empty() {
+        return empty;
+    }
+
+    public final List<LdapEntity> getContents() {
+        return new ArrayList<>(contents);
     }
 }

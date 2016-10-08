@@ -22,42 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager.ldap;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+import net.kemitix.ldapmanager.state.LdapEntityContainer;
 
 import javax.naming.Name;
 
 /**
- * A user.
+ * Service for high level access to the LDAP server.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+public interface LdapService {
 
-    @Id
-    private Name dn;
-
-    private String cn;
-
-    private String sn;
-
-    @Override
-    public String name() {
-        return cn;
-    }
+    /**
+     * Creates and populates an {@link LdapEntityContainer} for the named container.
+     *
+     * @param dn The DN of the container
+     *
+     * @return the container
+     */
+    LdapEntityContainer getLdapEntityContainer(Name dn);
 }

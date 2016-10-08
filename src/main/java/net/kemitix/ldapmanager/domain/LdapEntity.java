@@ -24,40 +24,19 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
-
-import javax.naming.Name;
-
 /**
- * A user.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+public interface LdapEntity {
 
-    @Id
-    private Name dn;
-
-    private String cn;
-
-    private String sn;
-
-    @Override
-    public String name() {
-        return cn;
-    }
+    /**
+     * Returns the name of an entity.
+     *
+     * <p>For Users this would the 'cn', for OUs this would the 'ou' value.</p>
+     *
+     * @return the name of the entity
+     */
+    String name();
 }

@@ -45,10 +45,15 @@ import javax.naming.Name;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Entry(objectClasses = {ObjectClass.ORGANIZATIONAL_UNIT, ObjectClass.TOP})
-public final class OU {
+public final class OU implements LdapEntity {
 
     @Id
     private Name dn;
 
     private String ou;
+
+    @Override
+    public String name() {
+        return ou;
+    }
 }

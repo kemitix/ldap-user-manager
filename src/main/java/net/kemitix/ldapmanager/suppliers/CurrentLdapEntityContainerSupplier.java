@@ -22,56 +22,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.suppliers;
 
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
-import com.googlecode.lanterna.gui2.LinearLayout;
-import com.googlecode.lanterna.gui2.Panel;
-import lombok.Getter;
-import lombok.val;
-import net.kemitix.ldapmanager.events.ApplicationExitEvent;
+import net.kemitix.ldapmanager.ldap.LdapService;
+import net.kemitix.ldapmanager.state.CurrentContainer;
+import net.kemitix.ldapmanager.state.LdapEntityContainer;
+import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import java.util.function.Supplier;
 
 /**
- * The bottom panel of the UI, containing the exit button.
+ * Supplier for the {@link LdapEntityContainer} for the current container.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class BottomPanel extends Panel {
+class CurrentLdapEntityContainerSupplier implements Supplier<LdapEntityContainer> {
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final CurrentContainer currentContainer;
 
-    @Getter
-    private final Button exitButton;
+    private final LdapEntityContainerMap containerMap;
+
+    private final LdapService ldapService;
 
     /**
      * Constructor.
      *
-     * @param eventPublisher The event publisher
+     * @param currentContainer The current container.
+     * @param containerMap     The lookup map of LdapEntity containers.
+     * @param ldapService      The LDAP Service.
      */
     @Autowired
-    BottomPanel(final ApplicationEventPublisher eventPublisher) {
-        this.exitButton = new Button("Exit", sendApplicationExitEvent());
-        this.eventPublisher = eventPublisher;
+    CurrentLdapEntityContainerSupplier(
+            final CurrentContainer currentContainer, final LdapEntityContainerMap containerMap,
+            final LdapService ldapService
+                                      ) {
+        this.currentContainer = currentContainer;
+        this.containerMap = containerMap;
+        this.ldapService = ldapService;
     }
 
-    /**
-     * Initializer.
-     */
-    @PostConstruct
-    public void init() {
-        val component = new Panel().addComponent(exitButton).withBorder(Borders.singleLine());
-        component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        addComponent(component);
-    }
-
-    private Runnable sendApplicationExitEvent() {
-        return () -> eventPublisher.publishEvent(new ApplicationExitEvent(this));
+    @Override
+    public LdapEntityContainer get() {
+        return containerMap.getOrCreate(currentContainer.getDn(), ldapService::getLdapEntityContainer);
     }
 }

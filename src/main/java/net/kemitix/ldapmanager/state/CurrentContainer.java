@@ -22,42 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+package net.kemitix.ldapmanager.state;
 
 import javax.naming.Name;
 
 /**
- * A user.
+ * Holds the name of the current container.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+public interface CurrentContainer {
 
-    @Id
-    private Name dn;
+    /**
+     * Get the name of the current container.
+     *
+     * @return the name of the current container
+     */
+    Name getDn();
 
-    private String cn;
-
-    private String sn;
-
-    @Override
-    public String name() {
-        return cn;
-    }
+    /**
+     * Sets the name of the current container.
+     *
+     * @param dn the name of the current container
+     */
+    void setDn(Name dn);
 }

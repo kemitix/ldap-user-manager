@@ -22,42 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager.events;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+import org.springframework.context.ApplicationEvent;
 
 import javax.naming.Name;
 
 /**
- * A user.
+ * Notification of a change to the current container.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+public final class CurrentContainerChangedEvent extends ApplicationEvent {
 
-    @Id
-    private Name dn;
+    /**
+     * Constructor.
+     *
+     * @param newContainer The name of the new container.
+     */
+    private CurrentContainerChangedEvent(final Name newContainer) {
+        super(newContainer);
+    }
 
-    private String cn;
-
-    private String sn;
-
-    @Override
-    public String name() {
-        return cn;
+    /**
+     * Creates a new {@link CurrentContainerChangedEvent}.
+     *
+     * @param newContainer The name of the new container.
+     *
+     * @return the event
+     */
+    public static CurrentContainerChangedEvent of(final Name newContainer) {
+        return new CurrentContainerChangedEvent(newContainer);
     }
 }

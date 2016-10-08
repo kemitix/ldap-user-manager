@@ -22,42 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager.suppliers;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+import net.kemitix.ldapmanager.state.CurrentContainer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.naming.Name;
+import java.util.function.Supplier;
 
 /**
- * A user.
+ * Supplier for the name of the currently OU.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+@Component
+class CurrentOuSupplier implements Supplier<String> {
 
-    @Id
-    private Name dn;
+    private final CurrentContainer currentContainer;
 
-    private String cn;
-
-    private String sn;
+    /**
+     * Constructor.
+     *
+     * @param currentContainer The current container
+     */
+    @Autowired
+    CurrentOuSupplier(final CurrentContainer currentContainer) {
+        this.currentContainer = currentContainer;
+    }
 
     @Override
-    public String name() {
-        return cn;
+    public String get() {
+        return currentContainer.getDn()
+                               .toString();
     }
 }

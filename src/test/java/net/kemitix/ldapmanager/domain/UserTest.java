@@ -54,4 +54,18 @@ public class UserTest {
               .isEqualTo("surname");
         softly.assertAll();
     }
+
+    @Test
+    public void shouldGetCnForName() {
+        //given
+        val user = User.builder()
+                       .dn(LdapNameBuilder.newInstance("cn=name")
+                                          .build())
+                       .cn("name")
+                       .sn("surname")
+                       .build();
+        //then
+        assertThat(user.name())
+              .isEqualTo("name");
+    }
 }

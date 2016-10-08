@@ -22,42 +22,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.state;
 
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
-import com.googlecode.lanterna.gui2.LinearLayout;
-import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
-import lombok.val;
-import net.kemitix.ldapmanager.events.ApplicationExitEvent;
+import lombok.Setter;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.ldap.LdapOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.naming.Name;
 
 /**
- * The bottom panel of the UI, containing the exit button.
+ * Contains the DN of the current container.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class BottomPanel extends Panel {
+class DefaultCurrentContainer implements CurrentContainer {
+
+    private final LdapOptions ldapOptions;
 
     private final ApplicationEventPublisher eventPublisher;
 
+    @Setter
     @Getter
-    private final Button exitButton;
+    private Name dn;
 
     /**
      * Constructor.
      *
-     * @param eventPublisher The event publisher
+     * @param ldapOptions    The LDAP Options to provide the initial container
+     * @param eventPublisher The Application Event Publisher
      */
     @Autowired
-    BottomPanel(final ApplicationEventPublisher eventPublisher) {
-        this.exitButton = new Button("Exit", sendApplicationExitEvent());
+    DefaultCurrentContainer(final LdapOptions ldapOptions, final ApplicationEventPublisher eventPublisher) {
+        this.ldapOptions = ldapOptions;
         this.eventPublisher = eventPublisher;
     }
 
@@ -66,12 +69,8 @@ class BottomPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(exitButton).withBorder(Borders.singleLine());
-        component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        addComponent(component);
-    }
-
-    private Runnable sendApplicationExitEvent() {
-        return () -> eventPublisher.publishEvent(new ApplicationExitEvent(this));
+        dn = LdapNameBuilder.newInstance(ldapOptions.getBase())
+                            .build();
+        eventPublisher.publishEvent(CurrentContainerChangedEvent.of(dn));
     }
 }

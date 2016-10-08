@@ -22,42 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.ldap.core.LdapTemplate;
 
-import javax.naming.Name;
+import static org.mockito.Mockito.mock;
 
 /**
- * A user.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+@Profile("test")
+@Configuration
+class TestConfiguration {
 
-    @Id
-    private Name dn;
-
-    private String cn;
-
-    private String sn;
-
-    @Override
-    public String name() {
-        return cn;
+    /**
+     * Mock LDAP Template.
+     *
+     * @return the LDAP Template
+     */
+    @Bean
+    LdapTemplate testLdapTemplate() {
+        return mock(LdapTemplate.class);
     }
 }

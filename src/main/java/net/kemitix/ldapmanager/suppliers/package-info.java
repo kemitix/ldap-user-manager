@@ -22,34 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.state;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.function.Supplier;
-
 /**
- * Suppliers of stateless information.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
+ *
+ * Information suppliers.
  */
-@Configuration
-class StatelessSuppliers {
 
-    private static final int MAX_TIME_WIDTH = 8;
+/**
+ * Information suppliers.
+ */
 
-    /**
-     * Supplier of the current time.
-     *
-     * @return a Supplier for the current time
-     */
-    @Bean
-    public Supplier<String> timeSupplier() {
-        return () -> LocalTime.now()
-                              .format(DateTimeFormatter.ISO_LOCAL_TIME)
-                              .substring(0, MAX_TIME_WIDTH);
-    }
-}
+package net.kemitix.ldapmanager.suppliers;

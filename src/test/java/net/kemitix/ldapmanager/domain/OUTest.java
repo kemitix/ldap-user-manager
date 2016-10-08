@@ -50,4 +50,15 @@ public class OUTest {
         softly.assertAll();
     }
 
+    @Test
+    public void shouldGetOuForName() {
+        //given
+        val user = OU.builder()
+                     .dn(LdapNameBuilder.newInstance("ou=name")
+                                        .build())
+                     .ou("name")
+                     .build();
+        //then
+        assertThat(user.name()).isEqualTo("name");
+    }
 }

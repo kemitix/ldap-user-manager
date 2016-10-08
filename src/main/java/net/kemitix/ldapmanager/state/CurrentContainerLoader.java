@@ -22,42 +22,59 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.state;
 
-import com.googlecode.lanterna.gui2.Label;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.ldap.LdapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.function.Supplier;
+import javax.naming.Name;
 
 /**
- * The current OU Label.
+ * Loads and updates the contents of the current container from the LDAP server.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class CurrentOuLabel extends Label {
+class CurrentContainerLoader {
 
-    private final Supplier<String> currentOuSupplier;
+    private final LdapService ldapService;
+
+    private final LdapEntityContainerMap ldapEntityContainerMap;
+
+    private final CurrentContainer currentContainer;
+
+    private final LogMessages logMessages;
 
     /**
-     * Main constructor, creates a new Label displaying a specific text.
+     * Constructor.
      *
-     * @param currentOuSupplier The supplier of the current OU
+     * @param ldapService            The LDAP Service
+     * @param ldapEntityContainerMap The Map to LdapEntity containers
+     * @param currentContainer       The current container
+     * @param logMessages            The Log messages
      */
     @Autowired
-    CurrentOuLabel(final Supplier<String> currentOuSupplier) {
-        super(currentOuSupplier.get());
-        this.currentOuSupplier = currentOuSupplier;
+    CurrentContainerLoader(
+            final LdapService ldapService, final LdapEntityContainerMap ldapEntityContainerMap,
+            final CurrentContainer currentContainer, final LogMessages logMessages
+                          ) {
+        this.ldapService = ldapService;
+        this.ldapEntityContainerMap = ldapEntityContainerMap;
+        this.currentContainer = currentContainer;
+        this.logMessages = logMessages;
     }
 
     /**
-     * Update the label when the current container changes.
+     * Load the contents of the container from the LDAP server.
      */
     @EventListener(CurrentContainerChangedEvent.class)
-    public void onCurrentContainerChangerEventUpdateUiLabel() {
-        setText(currentOuSupplier.get());
+    public void onCurrentContainerChangedEventLoadLdapContainer() {
+        logMessages.add("Updating current container...");
+        final Name dn = currentContainer.getDn();
+        ldapEntityContainerMap.put(dn, ldapService.getLdapEntityContainer(dn));
+        logMessages.add("Current container updated.");
     }
 }

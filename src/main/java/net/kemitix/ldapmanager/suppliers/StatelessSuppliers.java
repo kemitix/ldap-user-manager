@@ -22,30 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.state;
+package net.kemitix.ldapmanager.suppliers;
 
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.function.Supplier;
 
 /**
- * Supplier of navigation action items.
+ * Suppliers of stateless information.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
+@Configuration
+class StatelessSuppliers {
+
+    private static final int MAX_TIME_WIDTH = 8;
 
     /**
-     * An empty dummy list of navigation items.
+     * Supplier of the current time.
      *
-     * @return the list of items
+     * @return a Supplier for the current time
      */
-    @Override
-    public List<NamedItem<Runnable>> get() {
-        return new ArrayList<>();
+    @Bean
+    public Supplier<String> timeSupplier() {
+        return () -> LocalTime.now()
+                              .format(DateTimeFormatter.ISO_LOCAL_TIME)
+                              .substring(0, MAX_TIME_WIDTH);
     }
 }

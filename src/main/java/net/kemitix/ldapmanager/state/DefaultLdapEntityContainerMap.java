@@ -22,42 +22,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager.state;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
- * A user.
+ * Map of LdapEntity containers by their DN name.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {
-        ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
-})
-public final class User implements LdapEntity {
+@Component
+class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
 
-    @Id
-    private Name dn;
-
-    private String cn;
-
-    private String sn;
+    private final Map<Name, LdapEntityContainer> containerMap = new HashMap<>();
 
     @Override
-    public String name() {
-        return cn;
+    public Optional<LdapEntityContainer> get(final Name dn) {
+        return Optional.ofNullable(containerMap.get(dn));
+    }
+
+    @Override
+    public LdapEntityContainer getOrCreate(
+            final Name dn, final Function<Name, LdapEntityContainer> mappingFunction
+                                          ) {
+        return containerMap.computeIfAbsent(dn, mappingFunction);
+    }
+
+    @Override
+    public void put(final Name key, final LdapEntityContainer newValue) {
+        containerMap.put(key, newValue);
+    }
+
+    @Override
+    public void clear() {
+        containerMap.clear();
     }
 }
