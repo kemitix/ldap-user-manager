@@ -22,12 +22,12 @@ objectClass: inetOrgPerson
 cn: gary
 sn: Jones
 
-dn: ou=users,dc=kemitix,dc=net
+dn: ou=test1,dc=kemitix,dc=net
 objectClass: top
 objectClass: organizationalUnit
-ou: users
+ou: test1
 
-dn: cn=alice,ou=users,dc=kemitix,dc=net
+dn: cn=alice,ou=test1,dc=kemitix,dc=net
 objectClass: top
 objectClass: person
 objectClass: organizationalPerson
