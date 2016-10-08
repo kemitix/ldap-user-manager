@@ -28,6 +28,7 @@ import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Panel;
+import lombok.Getter;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ class NavigationPanel extends Panel {
 
     private final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
 
+    @Getter
     private ActionListBox actionListBox;
 
     /**
