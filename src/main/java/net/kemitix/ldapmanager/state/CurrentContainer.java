@@ -27,21 +27,21 @@ package net.kemitix.ldapmanager.state;
 import javax.naming.Name;
 
 /**
- * Holds the name of the current container.
+ * Holds the name of the current container relative to the base DN.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 public interface CurrentContainer {
 
     /**
-     * Get the name of the current container.
+     * Get the name of the current container relative to the base DN.
      *
      * @return the name of the current container
      */
     Name getDn();
 
     /**
-     * Sets the name of the current container.
+     * Sets the name of the current container relative to the base DN.
      *
      * @param dn the name of the current container
      */

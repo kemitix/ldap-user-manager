@@ -67,6 +67,7 @@ class DefaultLdapService implements LdapService {
     public LdapEntityContainer getLdapEntityContainer(final Name dn) {
         logMessages.add("Loading container: " + dn.toString());
         val query = LdapQueryBuilder.query()
+                                    .base(dn)
                                     .where("objectclass")
                                     .isPresent();
         val ouList = ldapTemplate.find(query, OU.class);

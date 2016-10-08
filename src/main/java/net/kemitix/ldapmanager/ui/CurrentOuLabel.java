@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Label;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.ldap.LdapOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -40,16 +41,20 @@ import java.util.function.Supplier;
 @Component
 class CurrentOuLabel extends Label {
 
+    private final String baseDn;
+
     private final Supplier<String> currentOuSupplier;
 
     /**
      * Main constructor, creates a new Label displaying a specific text.
      *
+     * @param ldapOptions The LDAP Options
      * @param currentOuSupplier The supplier of the current OU
      */
     @Autowired
-    CurrentOuLabel(final Supplier<String> currentOuSupplier) {
-        super(currentOuSupplier.get());
+    CurrentOuLabel(final LdapOptions ldapOptions, final Supplier<String> currentOuSupplier) {
+        super(ldapOptions.getBase());
+        this.baseDn = ldapOptions.getBase();
         this.currentOuSupplier = currentOuSupplier;
     }
 
@@ -58,6 +63,6 @@ class CurrentOuLabel extends Label {
      */
     @EventListener(CurrentContainerChangedEvent.class)
     public void onCurrentContainerChangerEventUpdateUiLabel() {
-        setText(currentOuSupplier.get());
+        setText(String.join(",", currentOuSupplier.get(), baseDn));
     }
 }

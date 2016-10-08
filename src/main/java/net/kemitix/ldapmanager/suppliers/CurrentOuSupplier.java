@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Supplier;
 
 /**
- * Supplier for the name of the currently OU.
+ * Supplier for the name of the currently OU relative to the base DN.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */

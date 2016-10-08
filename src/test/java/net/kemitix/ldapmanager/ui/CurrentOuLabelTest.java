@@ -29,30 +29,23 @@ public class CurrentOuLabelTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        given(currentOuSupplier.get()).willReturn("ou=base");
-        currentOuLabel = new CurrentOuLabel(currentOuSupplier);
+        given(ldapOptions.getBase()).willReturn("dc=base");
+        given(currentOuSupplier.get()).willReturn("");
+        currentOuLabel = new CurrentOuLabel(ldapOptions, currentOuSupplier);
     }
 
     @Test
     public void shouldSetLabelFromLdapOptions() {
-        assertThat(currentOuLabel.getText()).isEqualTo("ou=base");
-    }
-
-    @Test
-    public void shouldBeAbleToChangeLabel() {
-        //when
-        currentOuLabel.setText("new ou");
-        //then
-        assertThat(currentOuLabel.getText()).isEqualTo("new ou");
+        assertThat(currentOuLabel.getText()).isEqualTo("dc=base");
     }
 
     @Test
     public void shouldSetTextWhenUpdate() {
         //given
-        given(currentOuSupplier.get()).willReturn("new label");
+        given(currentOuSupplier.get()).willReturn("ou=users");
         //when
         currentOuLabel.onCurrentContainerChangerEventUpdateUiLabel();
         //then
-        assertThat(currentOuLabel.getText()).isEqualTo("new label");
+        assertThat(currentOuLabel.getText()).isEqualTo("ou=users,dc=base");
     }
 }
