@@ -25,10 +25,11 @@ SOFTWARE.
 package net.kemitix.ldapmanager.suppliers;
 
 import net.kemitix.ldapmanager.domain.LdapEntity;
+import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
-import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -46,20 +47,21 @@ class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
 
     private final Supplier<LdapEntityContainer> currentLdapContainerSupplier;
 
-    private final LogMessages logMessages;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * Constructor.
      *
      * @param currentLdapContainerSupplier The supplier of the node for the current LdapEntityContainer.
-     * @param logMessages                  The Log Messages.
+     * @param eventPublisher               The Application Event Publisher.
      */
     @Autowired
     NavigationItemsSupplier(
-            final Supplier<LdapEntityContainer> currentLdapContainerSupplier, final LogMessages logMessages
+            final Supplier<LdapEntityContainer> currentLdapContainerSupplier,
+            final ApplicationEventPublisher eventPublisher
                            ) {
         this.currentLdapContainerSupplier = currentLdapContainerSupplier;
-        this.logMessages = logMessages;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -81,7 +83,6 @@ class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
     }
 
     private void doAction(final LdapEntity ldapEntity) {
-        logMessages.add(String.format("Selected:" + " %s", ldapEntity.name()));
+        eventPublisher.publishEvent(NavigationItemSelectedEvent.of(ldapEntity));
     }
-
 }
