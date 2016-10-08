@@ -66,6 +66,6 @@ class CurrentLdapEntityContainerSupplier implements Supplier<LdapEntityContainer
 
     @Override
     public LdapEntityContainer get() {
-        return containerMap.getOrCreate(currentContainer.getDn(), ldapService::getLdapEntityContainer);
+        return containerMap.get(currentContainer.getDn());
     }
 }
