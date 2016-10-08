@@ -27,6 +27,7 @@ package net.kemitix.ldapmanager.ui;
 import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.val;
 import net.kemitix.ldapmanager.ldap.AbstractLdapConnectionIntegrationTest;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import org.junit.Before;
@@ -47,7 +48,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles({"test", "ldap-connection-it"})
-public class ChangeToUsersOuIT extends AbstractLdapConnectionIntegrationTest {
+public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
+
+    private static final String OU_NAME = "test1";
 
     @Autowired
     private CurrentOuLabel currentOuLabel;
@@ -60,26 +63,32 @@ public class ChangeToUsersOuIT extends AbstractLdapConnectionIntegrationTest {
     @Autowired
     private LdapOptions ldapOptions;
 
+
     @Before
     public void setUp() {
         actionListBox = navigationPanel.getActionListBox();
+        assertThat(currentOuLabel.getText()).isEqualTo(ldapOptions.getBase());
+        navigationPanel.onCurrentContainerChangedEventUpdateNavigationItems();
     }
 
     @Test
     public void navigateToUsers() {
         //given
-        currentOuLabel.setText("unchanged");
-        navigationPanel.onCurrentContainerChangedEventUpdateNavigationItems();
-        assertThat(actionListBox.getItemCount()).as("users is listed and ready")
-                                                .isGreaterThan(0);
-        actionListBox.getItems()
-                     .forEach(item -> System.out.println("item = " + item));
-        assertThat(actionListBox.getItemAt(0)
-                                .toString()).isEqualTo("users");
+        val items = actionListBox.getItems();
+        assertThat(items.stream()
+                        .map(Runnable::toString)).as("Target OU is listed as a navigation item")
+                                                 .contains("test1", "gary");
+        int select = 0;
+        for (Runnable runnable : items) {
+            if (OU_NAME.equals(runnable.toString())) {
+                break;
+            }
+            select++;
+        }
+        actionListBox.setSelectedIndex(select);
         //when
-        actionListBox.setSelectedIndex(0);
         actionListBox.handleKeyStroke(new KeyStroke(KeyType.Enter));
         //then
-        assertThat(currentOuLabel.getText()).isEqualTo("ou=users," + ldapOptions.getBase());
+        assertThat(currentOuLabel.getText()).isEqualTo("ou=" + OU_NAME + "," + ldapOptions.getBase());
     }
 }
