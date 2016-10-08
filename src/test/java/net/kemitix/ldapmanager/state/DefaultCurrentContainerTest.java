@@ -1,7 +1,9 @@
 package net.kemitix.ldapmanager.state;
 
 import lombok.val;
+import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,6 +14,8 @@ import org.springframework.ldap.support.LdapNameBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 
 /**
  * Tests for {@link DefaultCurrentContainer}.
@@ -55,5 +59,21 @@ public class DefaultCurrentContainerTest {
         //then
         assertThat(container.getDn()
                             .toString()).isEqualTo("ou=users");
+    }
+
+    @Test
+    public void updateShouldNotPropagateIfOldEqualsNew() {
+        //given
+        val dn = LdapNameBuilder.newInstance("ou=users")
+                                .build();
+        container.setDn(dn);
+        reset(eventPublisher);
+        //when
+        container.onNavigationItemSelectedOu(NavigationItemSelectedEvent.of(OU.builder()
+                                                                              .dn(dn)
+                                                                              .build()));
+        //then
+        then(eventPublisher).should(never())
+                            .publishEvent(any(CurrentContainerChangedEvent.class));
     }
 }

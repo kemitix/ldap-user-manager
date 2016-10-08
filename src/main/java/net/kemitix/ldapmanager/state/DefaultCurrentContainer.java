@@ -70,7 +70,7 @@ class DefaultCurrentContainer implements CurrentContainer {
     public void init() {
         dn = LdapNameBuilder.newInstance()
                             .build();
-        publishChange();
+        publishCurrentContainer();
     }
 
     /**
@@ -84,12 +84,13 @@ class DefaultCurrentContainer implements CurrentContainer {
             val newDn = ((OU) event.getSelected()).getDn();
             if (!newDn.equals(dn)) {
                 this.dn = newDn;
-                publishChange();
+                publishCurrentContainer();
             }
         }
     }
 
-    private void publishChange() {
+    @Override
+    public void publishCurrentContainer() {
         eventPublisher.publishEvent(CurrentContainerChangedEvent.of(dn));
     }
 }

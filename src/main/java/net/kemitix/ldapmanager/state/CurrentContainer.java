@@ -46,4 +46,9 @@ public interface CurrentContainer {
      * @param dn the name of the current container
      */
     void setDn(Name dn);
+
+    /**
+     * Notify the application of the current container.
+     */
+    void publishCurrentContainer();
 }
