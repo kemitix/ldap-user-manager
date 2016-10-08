@@ -28,9 +28,10 @@ import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Panel;
-import lombok.val;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -49,6 +50,8 @@ class NavigationPanel extends Panel {
 
     private final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
 
+    private ActionListBox actionListBox;
+
     /**
      * Constructor.
      *
@@ -58,6 +61,7 @@ class NavigationPanel extends Panel {
     NavigationPanel(final Supplier<List<NamedItem<Runnable>>> navigationItemsSupplier) {
         super(new BorderLayout());
         this.navigationItemSupplier = navigationItemsSupplier;
+        actionListBox = new ActionListBox();
     }
 
     /**
@@ -65,10 +69,22 @@ class NavigationPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val actionListBox = new ActionListBox();
-        navigationItemSupplier.get()
-                              .forEach(item -> actionListBox.addItem(item.getName(), item.getItem()));
+        populateActionListBox();
         addComponent(new Panel().addComponent(actionListBox)
                                 .withBorder(Borders.singleLine("Navigation")), CENTER);
+    }
+
+    private void populateActionListBox() {
+        actionListBox.clearItems();
+        navigationItemSupplier.get()
+                              .forEach(item -> actionListBox.addItem(item.getName(), item.getItem()));
+    }
+
+    /**
+     * Update the contents of the action list box with the contents of the current OU.
+     */
+    @EventListener(CurrentContainerChangedEvent.class)
+    public void onCurrentContainerChangedEventUpdateNavigationItems() {
+        populateActionListBox();
     }
 }
