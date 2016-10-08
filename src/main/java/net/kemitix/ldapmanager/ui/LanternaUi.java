@@ -26,9 +26,14 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
+import net.kemitix.ldapmanager.LdapUserManagerException;
+import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -49,20 +54,29 @@ class LanternaUi implements CommandLineRunner {
 
     private final WindowBasedTextGUI gui;
 
+    private final ApplicationEventPublisher eventPublisher;
+
+    private final MessageDialogBuilder messageDialogBuilder;
+
     /**
      * Constructor.
      *
-     * @param logMessages The Log Messages
-     * @param mainWindow  The main UI windows
-     * @param gui         The Lanterna UI
+     * @param logMessages          The Log Messages
+     * @param mainWindow           The main UI windows
+     * @param gui                  The Lanterna UI
+     * @param eventPublisher       The Application Event Publisher
+     * @param messageDialogBuilder The Message Dialog Builder
      */
     @Autowired
     LanternaUi(
-            final LogMessages logMessages, final BasicWindow mainWindow, final WindowBasedTextGUI gui
+            final LogMessages logMessages, final BasicWindow mainWindow, final WindowBasedTextGUI gui,
+            final ApplicationEventPublisher eventPublisher, final MessageDialogBuilder messageDialogBuilder
               ) {
         this.logMessages = logMessages;
         this.mainWindow = mainWindow;
         this.gui = gui;
+        this.eventPublisher = eventPublisher;
+        this.messageDialogBuilder = messageDialogBuilder;
     }
 
     /**
@@ -74,9 +88,21 @@ class LanternaUi implements CommandLineRunner {
      */
     @Override
     public void run(final String... args) throws IOException {
-        logMessages.add("Starting Lanterna UI...adding main window");
-        gui.addWindow(mainWindow);
-        logMessages.add("Entering main loop...");
-        gui.waitForWindowToClose(mainWindow);
+        try {
+            logMessages.add("Starting Lanterna UI...adding main window");
+            gui.addWindow(mainWindow);
+            logMessages.add("Entering main loop...");
+            gui.waitForWindowToClose(mainWindow);
+        } catch (LdapUserManagerException e) {
+            exceptionMessageDialog(e).showDialog(gui);
+            eventPublisher.publishEvent(new ApplicationExitEvent(this));
+        }
+    }
+
+    private MessageDialog exceptionMessageDialog(final LdapUserManagerException e) {
+        return messageDialogBuilder.setTitle("Unhandled Error")
+                                   .setText(e.getMessage() + "\n" + e.getCause()
+                                                                     .toString())
+                                   .build();
     }
 }
