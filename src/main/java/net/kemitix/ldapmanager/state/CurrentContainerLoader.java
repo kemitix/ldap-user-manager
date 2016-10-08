@@ -28,6 +28,7 @@ import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
@@ -71,6 +72,7 @@ class CurrentContainerLoader {
      * Load the contents of the container from the LDAP server.
      */
     @EventListener(CurrentContainerChangedEvent.class)
+    @Order(1)
     public void onCurrentContainerChangedEventLoadLdapContainer() {
         logMessages.add("Updating current container...");
         final Name dn = currentContainer.getDn();
