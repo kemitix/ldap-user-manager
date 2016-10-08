@@ -48,7 +48,7 @@ class CurrentOuLabel extends Label {
     /**
      * Main constructor, creates a new Label displaying a specific text.
      *
-     * @param ldapOptions The LDAP Options
+     * @param ldapOptions       The LDAP Options
      * @param currentOuSupplier The supplier of the current OU
      */
     @Autowired
@@ -63,6 +63,11 @@ class CurrentOuLabel extends Label {
      */
     @EventListener(CurrentContainerChangedEvent.class)
     public void onCurrentContainerChangerEventUpdateUiLabel() {
-        setText(String.join(",", currentOuSupplier.get(), baseDn));
+        final String dn = currentOuSupplier.get();
+        if (dn.isEmpty()) {
+            setText(baseDn);
+        } else {
+            setText(String.join(",", dn, baseDn));
+        }
     }
 }

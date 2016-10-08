@@ -35,12 +35,17 @@ public class CurrentOuLabelTest {
     }
 
     @Test
-    public void shouldSetLabelFromLdapOptions() {
+    public void updateShouldIncludeBaseWithoutLeadingCommaWhenInRoot() {
+        //given
+        given(currentOuSupplier.get()).willReturn("");
+        //when
+        currentOuLabel.onCurrentContainerChangerEventUpdateUiLabel();
+        //then
         assertThat(currentOuLabel.getText()).isEqualTo("dc=base");
     }
 
     @Test
-    public void shouldSetTextWhenUpdate() {
+    public void updateShouldIncludeBaseWithCommaWhenNotInRoot() {
         //given
         given(currentOuSupplier.get()).willReturn("ou=users");
         //when
