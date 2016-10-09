@@ -96,4 +96,19 @@ public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
         assertThat(currentOuLabel.getText()).as("Current OU label remains unchanged")
                                             .isEqualTo(ldapOptions.getBase());
     }
+
+    @Test
+    public void navigateToTest1OuThenToParent() {
+        //given
+        assertThat(navigationPanel.findAndSelectItemByName(OU_NAME)).as("Select the OU")
+                                                                    .isNotEmpty();
+        navigationPanel.performSelectedItem();
+        assertThat(navigationPanel.findAndSelectItemByName("..")).as("Select the OU")
+                                                                 .isNotEmpty();
+        //when
+        navigationPanel.performSelectedItem();
+        //then
+        assertThat(currentOuLabel.getText()).as("Current OU label is updated")
+                                            .isEqualTo(ldapOptions.getBase());
+    }
 }
