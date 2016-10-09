@@ -4,13 +4,13 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.ldap.support.LdapNameBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
@@ -53,8 +53,7 @@ public class DefaultCurrentContainerTest {
     @Test
     public void shouldSetAndGetDn() throws Exception {
         //given
-        val dn = LdapNameBuilder.newInstance("ou=users")
-                                .build();
+        val dn = LdapNameUtil.parse("ou=users");
         //when
         container.setDn(dn);
         //then
@@ -65,10 +64,8 @@ public class DefaultCurrentContainerTest {
     @Test
     public void updateShouldPropagateIfOldNotEqualsNew() {
         //given
-        val dnOld = LdapNameBuilder.newInstance("ou=old")
-                                   .build();
-        val dnNew = LdapNameBuilder.newInstance("ou=new")
-                                   .build();
+        val dnOld = LdapNameUtil.parse("ou=old");
+        val dnNew = LdapNameUtil.parse("ou=new");
         container.setDn(dnOld);
         reset(eventPublisher);
         //when
@@ -88,8 +85,7 @@ public class DefaultCurrentContainerTest {
     @Test
     public void updateShouldNotPropagateIfOldEqualsNew() {
         //given
-        val dn = LdapNameBuilder.newInstance("ou=users")
-                                .build();
+        val dn = LdapNameUtil.parse("ou=users");
         container.setDn(dn);
         reset(eventPublisher);
         //when

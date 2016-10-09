@@ -1,9 +1,9 @@
 package net.kemitix.ldapmanager.domain;
 
 import lombok.val;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
-import org.springframework.ldap.support.LdapNameBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,8 +18,7 @@ public class OUTest {
     public void shouldBuilder() throws Exception {
         //given
         val ouToString = OU.builder()
-                           .dn(LdapNameBuilder.newInstance("ou=the-name")
-                                              .build())
+                           .dn(LdapNameUtil.parse("ou=the-name"))
                            .ou("name")
                            .toString();
         //then
@@ -36,8 +35,7 @@ public class OUTest {
     public void shouldGetCn() throws Exception {
         //given
         val user = OU.builder()
-                     .dn(LdapNameBuilder.newInstance("ou=name")
-                                        .build())
+                     .dn(LdapNameUtil.parse("ou=name"))
                      .ou("name")
                      .build();
         //then
@@ -54,8 +52,7 @@ public class OUTest {
     public void shouldGetOuForName() {
         //given
         val user = OU.builder()
-                     .dn(LdapNameBuilder.newInstance("ou=name")
-                                        .build())
+                     .dn(LdapNameUtil.parse("ou=name"))
                      .ou("name")
                      .build();
         //then

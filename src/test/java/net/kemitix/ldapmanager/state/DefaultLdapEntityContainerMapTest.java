@@ -1,14 +1,14 @@
 package net.kemitix.ldapmanager.state;
 
 import lombok.val;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.ldap.support.LdapNameBuilder;
 
-import javax.naming.ldap.LdapName;
+import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -23,7 +23,7 @@ public class DefaultLdapEntityContainerMapTest {
 
     private DefaultLdapEntityContainerMap containerMap;
 
-    private LdapName dn;
+    private Name dn;
 
     @Mock
     private LdapService ldapService;
@@ -35,8 +35,7 @@ public class DefaultLdapEntityContainerMapTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         containerMap = new DefaultLdapEntityContainerMap(ldapService);
-        dn = LdapNameBuilder.newInstance("ou=users")
-                            .build();
+        dn = LdapNameUtil.parse("ou=users");
     }
 
     @Test

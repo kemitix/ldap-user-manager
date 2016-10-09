@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQueryBuilder;
-import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.ldap.authentication.BindAuthenticator;
 import org.springframework.test.context.ActiveProfiles;
@@ -51,8 +50,7 @@ public class LdapConnectionIT extends AbstractLdapConnectionIntegrationTest {
     public void ldapTemplateCanFindAUser() throws InvalidNameException {
         //given
         ldapTemplate.create(User.builder()
-                                .dn(LdapNameBuilder.newInstance("cn=bob")
-                                                   .build())
+                                .dn(LdapNameUtil.parse("cn=bob"))
                                 .cn("bob")
                                 .sn("smith")
                                 .build());

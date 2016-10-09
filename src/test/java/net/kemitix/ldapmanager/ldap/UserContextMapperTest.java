@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ldap.core.DirContextAdapter;
-import org.springframework.ldap.support.LdapNameBuilder;
 
 import javax.naming.Name;
 
@@ -31,8 +30,7 @@ public class UserContextMapperTest {
     public void shouldMapFromContext() throws Exception {
         //given
         DirContextAdapter ctx = new DirContextAdapter();
-        final Name dn = LdapNameBuilder.newInstance("dn=cn=name")
-                                       .build();
+        final Name dn = LdapNameUtil.parse("dn=cn=name");
         final String cn = "common name";
         final String sn = "surname";
         ctx.setDn(dn);

@@ -26,7 +26,9 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Label;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
+import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -45,17 +47,23 @@ class CurrentOuLabel extends Label {
 
     private final Supplier<String> currentOuSupplier;
 
+    private final LogMessages logMessages;
+
     /**
      * Main constructor, creates a new Label displaying a specific text.
      *
      * @param ldapOptions       The LDAP Options
      * @param currentOuSupplier The supplier of the current OU
+     * @param logMessages       The Log Messages
      */
     @Autowired
-    CurrentOuLabel(final LdapOptions ldapOptions, final Supplier<String> currentOuSupplier) {
+    CurrentOuLabel(
+            final LdapOptions ldapOptions, final Supplier<String> currentOuSupplier, final LogMessages logMessages
+                  ) {
         super(ldapOptions.getBase());
         this.baseDn = ldapOptions.getBase();
         this.currentOuSupplier = currentOuSupplier;
+        this.logMessages = logMessages;
     }
 
     /**
@@ -64,10 +72,8 @@ class CurrentOuLabel extends Label {
     @EventListener(CurrentContainerChangedEvent.class)
     public void onCurrentContainerChangerEventUpdateUiLabel() {
         final String dn = currentOuSupplier.get();
-        if (dn.isEmpty()) {
-            setText(baseDn);
-        } else {
-            setText(String.join(",", dn, baseDn));
-        }
+        logMessages.add("Changed to container: " + dn);
+        setText(LdapNameUtil.join(dn, baseDn)
+                            .toString());
     }
 }

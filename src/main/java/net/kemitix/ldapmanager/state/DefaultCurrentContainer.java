@@ -30,10 +30,10 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -68,8 +68,7 @@ class DefaultCurrentContainer implements CurrentContainer {
      */
     @PostConstruct
     public void init() {
-        dn = LdapNameBuilder.newInstance()
-                            .build();
+        dn = LdapNameUtil.empty();
         publishCurrentContainer();
     }
 

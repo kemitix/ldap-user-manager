@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.ui;
 
 import net.kemitix.ldapmanager.ldap.LdapOptions;
+import net.kemitix.ldapmanager.state.LogMessages;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,12 +27,15 @@ public class CurrentOuLabelTest {
     @Mock
     private Supplier<String> currentOuSupplier;
 
+    @Mock
+    private LogMessages logMessages;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         given(ldapOptions.getBase()).willReturn("dc=base");
         given(currentOuSupplier.get()).willReturn("");
-        currentOuLabel = new CurrentOuLabel(ldapOptions, currentOuSupplier);
+        currentOuLabel = new CurrentOuLabel(ldapOptions, currentOuSupplier, logMessages);
     }
 
     @Test
