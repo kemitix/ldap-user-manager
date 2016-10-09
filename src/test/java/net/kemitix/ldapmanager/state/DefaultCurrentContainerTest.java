@@ -6,6 +6,7 @@ import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
@@ -59,6 +60,29 @@ public class DefaultCurrentContainerTest {
         //then
         assertThat(container.getDn()
                             .toString()).isEqualTo("ou=users");
+    }
+
+    @Test
+    public void updateShouldPropagateIfOldNotEqualsNew() {
+        //given
+        val dnOld = LdapNameBuilder.newInstance("ou=old")
+                                   .build();
+        val dnNew = LdapNameBuilder.newInstance("ou=new")
+                                   .build();
+        container.setDn(dnOld);
+        reset(eventPublisher);
+        //when
+        container.onNavigationItemSelectedOu(NavigationItemSelectedEvent.of(OU.builder()
+                                                                              .dn(dnNew)
+                                                                              .build()));
+        //then
+        ArgumentCaptor<CurrentContainerChangedEvent> eventArgumentCaptor =
+                ArgumentCaptor.forClass(CurrentContainerChangedEvent.class);
+        then(eventPublisher).should()
+                            .publishEvent(eventArgumentCaptor.capture());
+        assertThat(eventArgumentCaptor.getValue()
+                                      .getSource()
+                                      .toString()).isEqualTo(dnNew.toString());
     }
 
     @Test
