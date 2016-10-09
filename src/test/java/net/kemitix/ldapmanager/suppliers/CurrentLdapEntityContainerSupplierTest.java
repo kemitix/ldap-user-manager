@@ -1,7 +1,6 @@
 package net.kemitix.ldapmanager.suppliers;
 
 import lombok.val;
-import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
@@ -38,13 +37,10 @@ public class CurrentLdapEntityContainerSupplierTest {
     @Mock
     private LdapEntityContainer container;
 
-    @Mock
-    private LdapService ldapService;
-
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        supplier = new CurrentLdapEntityContainerSupplier(currentContainer, containerMap, ldapService);
+        supplier = new CurrentLdapEntityContainerSupplier(currentContainer, containerMap);
     }
 
     @Test
