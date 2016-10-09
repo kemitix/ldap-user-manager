@@ -1,11 +1,11 @@
 package net.kemitix.ldapmanager.suppliers;
 
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.ldap.support.LdapNameBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -31,8 +31,7 @@ public class CurrentOuSupplierTest {
     @Test
     public void shouldGet() throws Exception {
         //given
-        given(currentContainer.getDn()).willReturn(LdapNameBuilder.newInstance("ou=container")
-                                                                  .build());
+        given(currentContainer.getDn()).willReturn(LdapNameUtil.parse("ou=container"));
         //when
         final String result = currentOuSupplier.get();
         //then

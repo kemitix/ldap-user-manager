@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ldap.core.DirContextAdapter;
-import org.springframework.ldap.support.LdapNameBuilder;
 
 import javax.naming.Name;
 
@@ -31,8 +30,7 @@ public class OuContextMapperTest {
     public void shouldMapFromContext() throws Exception {
         //given
         DirContextAdapter ctx = new DirContextAdapter();
-        final Name dn = LdapNameBuilder.newInstance("dn=ou=container")
-                                       .build();
+        final Name dn = LdapNameUtil.parse("dn=ou=container");
         final String name = "container";
         ctx.setDn(dn);
         ctx.setAttributeValue(LdapAttribute.OU, name);

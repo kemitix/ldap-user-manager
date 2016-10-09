@@ -1,9 +1,9 @@
 package net.kemitix.ldapmanager.domain;
 
 import lombok.val;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
-import org.springframework.ldap.support.LdapNameBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,8 +18,7 @@ public class UserTest {
     public void shouldBuilder() throws Exception {
         //given
         val userToString = User.builder()
-                               .dn(LdapNameBuilder.newInstance("cn=the-name")
-                                                  .build())
+                               .dn(LdapNameUtil.parse("cn=the-name"))
                                .cn("name")
                                .sn("surname")
                                .toString();
@@ -38,8 +37,7 @@ public class UserTest {
     public void shouldGet() throws Exception {
         //given
         val user = User.builder()
-                       .dn(LdapNameBuilder.newInstance("cn=name")
-                                          .build())
+                       .dn(LdapNameUtil.parse("cn=name"))
                        .cn("name")
                        .sn("surname")
                        .build();
@@ -59,13 +57,11 @@ public class UserTest {
     public void shouldGetCnForName() {
         //given
         val user = User.builder()
-                       .dn(LdapNameBuilder.newInstance("cn=name")
-                                          .build())
+                       .dn(LdapNameUtil.parse("cn=name"))
                        .cn("name")
                        .sn("surname")
                        .build();
         //then
-        assertThat(user.name())
-              .isEqualTo("name");
+        assertThat(user.name()).isEqualTo("name");
     }
 }

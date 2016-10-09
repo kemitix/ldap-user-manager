@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.support.LdapNameBuilder;
 
 import javax.naming.Name;
 import java.util.Collections;
@@ -49,7 +48,7 @@ public class DefaultLdapServiceTest {
     @Test
     public void shouldGetLdapEntityContainer() throws Exception {
         //given
-        dn = LdapNameBuilder.newInstance().build();
+        dn = LdapNameUtil.empty();
         ou = OU.builder()
                .build();
         user = User.builder()

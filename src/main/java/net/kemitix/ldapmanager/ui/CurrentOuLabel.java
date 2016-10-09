@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Label;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -64,10 +65,7 @@ class CurrentOuLabel extends Label {
     @EventListener(CurrentContainerChangedEvent.class)
     public void onCurrentContainerChangerEventUpdateUiLabel() {
         final String dn = currentOuSupplier.get();
-        if (dn.isEmpty()) {
-            setText(baseDn);
-        } else {
-            setText(String.join(",", dn, baseDn));
-        }
+        setText(LdapNameUtil.join(dn, baseDn)
+                            .toString());
     }
 }

@@ -25,6 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ui;
 
 import net.kemitix.ldapmanager.ldap.AbstractLdapConnectionIntegrationTest;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import org.junit.Before;
@@ -32,7 +33,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -67,8 +67,7 @@ public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
 
     @Before
     public void setUp() {
-        currentContainer.setDn(LdapNameBuilder.newInstance()
-                                              .build());
+        currentContainer.setDn(LdapNameUtil.empty());
         currentContainer.publishCurrentContainer();
         navigationPanel.onCurrentContainerChangedEventUpdateNavigationItems();
         assertThat(currentOuLabel.getText()).isEqualTo(ldapOptions.getBase());

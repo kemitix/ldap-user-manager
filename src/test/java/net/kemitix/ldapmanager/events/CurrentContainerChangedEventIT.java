@@ -28,6 +28,7 @@ import com.googlecode.lanterna.gui2.Label;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
@@ -39,11 +40,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.naming.ldap.LdapName;
+import javax.naming.Name;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,12 +79,11 @@ public class CurrentContainerChangedEventIT {
     @Autowired
     private LdapOptions ldapOptions;
 
-    private LdapName ldapName;
+    private Name ldapName;
 
     @Before
     public void setUp() {
-        ldapName = LdapNameBuilder.newInstance("ou=new")
-                                  .build();
+        ldapName = LdapNameUtil.parse("ou=new");
         currentContainer.setDn(ldapName);
     }
 
