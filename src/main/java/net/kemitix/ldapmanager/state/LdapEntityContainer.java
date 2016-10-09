@@ -29,7 +29,6 @@ import lombok.AllArgsConstructor;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,8 +43,6 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LdapEntityContainer {
 
-    private static LdapEntityContainer empty = LdapEntityContainer.of(Collections.emptyList());
-
     private final List<LdapEntity> contents;
 
     /**
@@ -57,15 +54,6 @@ public class LdapEntityContainer {
      */
     public static LdapEntityContainer of(final List<LdapEntity> contents) {
         return new LdapEntityContainer(new ArrayList<>(contents));
-    }
-
-    /**
-     * Returns an empty LDAP Container.
-     *
-     * @return the empty container
-     */
-    public static LdapEntityContainer empty() {
-        return empty;
     }
 
     public final List<LdapEntity> getContents() {
