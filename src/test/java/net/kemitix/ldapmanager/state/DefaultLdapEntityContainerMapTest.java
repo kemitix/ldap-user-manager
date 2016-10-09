@@ -1,16 +1,18 @@
 package net.kemitix.ldapmanager.state;
 
 import lombok.val;
+import net.kemitix.ldapmanager.ldap.LdapService;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ldap.support.LdapNameBuilder;
 
 import javax.naming.ldap.LdapName;
-import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 /**
  * Tests for {@link DefaultLdapEntityContainerMap}.
@@ -19,64 +21,53 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class DefaultLdapEntityContainerMapTest {
 
-    @InjectMocks
     private DefaultLdapEntityContainerMap containerMap;
 
     private LdapName dn;
 
+    @Mock
+    private LdapService ldapService;
+
+    @Mock
+    private LdapEntityContainer container;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        containerMap = new DefaultLdapEntityContainerMap(ldapService);
         dn = LdapNameBuilder.newInstance("ou=users")
                             .build();
     }
 
     @Test
-    public void getShouldReturnEmptyIfNotFound() {
+    public void getShouldQueryLdapServiceIfNotFound() {
+        //given
+        containerMap.clear();
+        //when
+        containerMap.get(dn);
+        //then
+        then(ldapService).should()
+                         .getLdapEntityContainer(dn);
+    }
+
+    @Test
+    public void getShouldReturnItemLdapServiceProvides() {
+        //given
+        given(ldapService.getLdapEntityContainer(dn)).willReturn(container);
         //when
         val result = containerMap.get(dn);
-        //then
-        assertThat(result).isEmpty();
-    }
-
-    @Test
-    public void getShouldReturnItemIfFound() {
-        //given
-        containerMap.put(dn, LdapEntityContainer.empty());
-        //when
-        val result = containerMap.get(dn);
-        //then
-        assertThat(result).isNotEmpty();
-        result.ifPresent(item -> assertThat(item).isSameAs(LdapEntityContainer.empty()));
-    }
-
-    @Test
-    public void getOrCreateShouldCreateWhenNotFound() throws Exception {
-        //when
-        val result = containerMap.getOrCreate(dn, key -> LdapEntityContainer.empty());
-        //then
-        assertThat(result).isSameAs(LdapEntityContainer.empty());
-    }
-
-    @Test
-    public void getOrCreateShouldFindWhenPut() throws Exception {
-        //given
-        val container = LdapEntityContainer.of(new ArrayList<>());
-        containerMap.put(dn, container);
-        //when
-        val result = containerMap.getOrCreate(dn, key -> LdapEntityContainer.empty());
         //then
         assertThat(result).isSameAs(container);
     }
 
     @Test
-    public void clearShouldRemoveAll() throws Exception {
+    public void getShouldReturnSameItemOnSubsequentCall() throws Exception {
         //given
-        containerMap.put(dn, LdapEntityContainer.empty());
-        assertThat(containerMap.get(dn)).isNotEmpty();
+        given(ldapService.getLdapEntityContainer(dn)).willReturn(container);
+        containerMap.get(dn);
         //when
-        containerMap.clear();
+        val result = containerMap.get(dn);
         //then
-        assertThat(containerMap.get(dn)).isEmpty();
+        assertThat(result).isSameAs(container);
     }
 }

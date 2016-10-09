@@ -24,11 +24,14 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.suppliers;
 
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Supplier;
@@ -66,6 +69,15 @@ class CurrentLdapEntityContainerSupplier implements Supplier<LdapEntityContainer
 
     @Override
     public LdapEntityContainer get() {
-        return containerMap.getOrCreate(currentContainer.getDn(), ldapService::getLdapEntityContainer);
+        return containerMap.get(currentContainer.getDn());
+    }
+
+    /**
+     * Load the contents of the container from the LDAP server.
+     */
+    @EventListener(CurrentContainerChangedEvent.class)
+    @Order(1)
+    public void onCurrentContainerChangedEventLoadLdapContainer() {
+        get();
     }
 }

@@ -1,18 +1,14 @@
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.ActionListBox;
-import com.googlecode.lanterna.gui2.Border;
-import com.googlecode.lanterna.gui2.Component;
-import com.googlecode.lanterna.gui2.Panel;
+import lombok.val;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,43 +21,82 @@ public class NavigationPanelTest {
 
     private NavigationPanel navigationPanel;
 
-    private Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
-
     private ArrayList<NamedItem<Runnable>> namedItems;
+
+    private AtomicReference<String> selectedItem = new AtomicReference<>("unselected");
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
         namedItems = new ArrayList<>();
-        navigationItemSupplier = () -> namedItems;
-        navigationPanel = new NavigationPanel(navigationItemSupplier);
+        navigationPanel = new NavigationPanel(() -> namedItems);
+        navigationPanel.init();
     }
 
     @Test
-    public void shouldInit() throws Exception {
+    public void findItemPositionByNameShouldFindItemWhenPresent() {
         //given
-        final AtomicBoolean flag = new AtomicBoolean(false);
-        namedItems.add(NamedItem.of("bob", () -> flag.getAndSet(true)));
+        givenPopulatedList();
         //when
-        navigationPanel.init();
+        val result = navigationPanel.findItemPositionByName("beta");
         //then
-        final Collection<Component> children = navigationPanel.getChildren();
-        assertThat(children).hasSize(1);
-        children.forEach(child -> {
-            assertThat(child).isInstanceOf(Border.class);
-            Component component = ((Border) child).getComponent();
-            assertThat(component).isInstanceOf(Panel.class);
-            final Collection<Component> innerChildren = ((Panel) component).getChildren();
-            assertThat(innerChildren).hasSize(1);
-            innerChildren.forEach(innerChild -> {
-                assertThat(innerChild).isInstanceOf(ActionListBox.class);
-                final List<Runnable> runnableList = ((ActionListBox) innerChild).getItems();
-                assertThat(runnableList).hasSize(1);
-                assertThat(flag.get()).isFalse();
-                runnableList.get(0)
-                         .run();
-                assertThat(flag.get()).isTrue();
-            });
-        });
+        assertThat(result).contains(1);
     }
 
+    @Test
+    public void findItemPositionByNameShouldFindNothingWhenNotPresent() {
+        //given
+        givenPopulatedList();
+        //when
+        val result = navigationPanel.findItemPositionByName("gamma");
+        //then
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void findAndSelectItemByNameShouldSelectItemWhenPresent() {
+        //given
+        givenPopulatedList();
+        //when
+        val result = navigationPanel.findAndSelectItemByName("beta");
+        //then
+        assertThat(result.map(Runnable::toString)).contains("beta");
+        result.ifPresent(a -> navigationPanel.performSelectedItem());
+        assertThat(selectedItem.get()).isEqualTo("beta");
+    }
+
+    @Test
+    public void findAndSelectItemByNameShouldLeaveSelectionAlonItemWhenNotPresent() {
+        //given
+        givenPopulatedList();
+        //when
+        val result = navigationPanel.findAndSelectItemByName("gamma");
+        //then
+        assertThat(result).isEmpty();
+        assertThat(selectedItem.get()).isEqualTo("unselected");
+    }
+
+    @Test
+    public void findAndSelectItemByNameWithNullShouldThrowNPE() {
+        //given
+        exception.expect(NullPointerException.class);
+        //when
+        navigationPanel.findAndSelectItemByName(null);
+    }
+
+    @Test
+    public void findItemPositionByNameWithNullShouldThrowNPE() {
+        //given
+        exception.expect(NullPointerException.class);
+        //when
+        navigationPanel.findItemPositionByName(null);
+    }
+
+    private void givenPopulatedList() {
+        namedItems.add(0, NamedItem.of("alpha", () -> selectedItem.getAndSet("alpha")));
+        namedItems.add(1, NamedItem.of("beta", () -> selectedItem.getAndSet("beta")));
+        navigationPanel.onCurrentContainerChangedEventUpdateNavigationItems();
+    }
 }

@@ -22,45 +22,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.state;
+package net.kemitix.ldapmanager.events;
 
-import net.kemitix.ldapmanager.ldap.LdapService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.naming.Name;
-import java.util.HashMap;
-import java.util.Map;
+import lombok.Getter;
+import net.kemitix.ldapmanager.domain.LdapEntity;
+import org.springframework.context.ApplicationEvent;
 
 /**
- * Map of LdapEntity containers by their DN name.
+ * Raised when a Navigation Item is selected.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
+public final class NavigationItemSelectedEvent extends ApplicationEvent {
 
-    private final LdapService ldapService;
-
-    private final Map<Name, LdapEntityContainer> containerMap = new HashMap<>();
+    @Getter
+    private final LdapEntity selected;
 
     /**
-     * Constructor.
+     * Create a new ApplicationEvent.
      *
-     * @param ldapService The LDAP Service
+     * @param source the object on which the event initially occurred (never {@code null})
      */
-    @Autowired
-    DefaultLdapEntityContainerMap(final LdapService ldapService) {
-        this.ldapService = ldapService;
+    private NavigationItemSelectedEvent(final LdapEntity source) {
+        super(source);
+        this.selected = source;
     }
 
-    @Override
-    public LdapEntityContainer get(final Name dn) {
-        return containerMap.computeIfAbsent(dn, ldapService::getLdapEntityContainer);
-    }
-
-    @Override
-    public void clear() {
-        containerMap.clear();
+    /**
+     * Creates a new {@link NavigationItemSelectedEvent}.
+     *
+     * @param item the LdapEntity selected
+     *
+     * @return the event
+     */
+    public static NavigationItemSelectedEvent of(final LdapEntity item) {
+        return new NavigationItemSelectedEvent(item);
     }
 }

@@ -32,6 +32,7 @@ import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQueryBuilder;
+import org.springframework.ldap.query.SearchScope;
 import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
@@ -67,6 +68,8 @@ class DefaultLdapService implements LdapService {
     public LdapEntityContainer getLdapEntityContainer(final Name dn) {
         logMessages.add("Loading container: " + dn.toString());
         val query = LdapQueryBuilder.query()
+                                    .base(dn)
+                                    .searchScope(SearchScope.ONELEVEL)
                                     .where("objectclass")
                                     .isPresent();
         val ouList = ldapTemplate.find(query, OU.class);

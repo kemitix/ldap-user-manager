@@ -2,13 +2,14 @@ package net.kemitix.ldapmanager.suppliers;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
-import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 
 /**
  * Tests for {@link NavigationItemsSupplier}.
@@ -31,12 +33,12 @@ public class NavigationItemsSupplierTest {
     private Supplier<LdapEntityContainer> currentLdapContainerSupplier;
 
     @Mock
-    private LogMessages logMessages;
+    private ApplicationEventPublisher eventPublisher;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        supplier = new NavigationItemsSupplier(currentLdapContainerSupplier, logMessages);
+        supplier = new NavigationItemsSupplier(currentLdapContainerSupplier, eventPublisher);
     }
 
     @Test
@@ -55,7 +57,7 @@ public class NavigationItemsSupplierTest {
     }
 
     @Test
-    public void shouldLogMessageWhenItemSelected() {
+    public void shouldPublishNavigationItemSelectedEventWhenItemSelected() {
         //given
         given(currentLdapContainerSupplier.get()).willReturn(LdapEntityContainer.of(Collections.singletonList(
                 User.builder()
@@ -67,7 +69,7 @@ public class NavigationItemsSupplierTest {
                   .map(NamedItem::getItem)
                   .forEach(Runnable::run);
         //then
-        then(logMessages).should()
-                         .add("Selected: user name");
+        then(eventPublisher).should()
+                            .publishEvent(any(NavigationItemSelectedEvent.class));
     }
 }

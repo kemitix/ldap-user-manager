@@ -1,20 +1,22 @@
 package net.kemitix.ldapmanager.state;
 
 import lombok.val;
+import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
-import net.kemitix.ldapmanager.ldap.LdapOptions;
+import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.support.LdapNameBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 
 /**
  * Tests for {@link DefaultCurrentContainer}.
@@ -23,21 +25,15 @@ import static org.mockito.Matchers.any;
  */
 public class DefaultCurrentContainerTest {
 
-    @InjectMocks
     private DefaultCurrentContainer container;
-
-    @Mock
-    private LdapOptions ldapOptions;
 
     @Mock
     private ApplicationEventPublisher eventPublisher;
 
-    private String base = "ou=base";
-
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        given(ldapOptions.getBase()).willReturn(base);
+        container = new DefaultCurrentContainer(eventPublisher);
         container.init();
     }
 
@@ -48,13 +44,14 @@ public class DefaultCurrentContainerTest {
     }
 
     @Test
-    public void shouldGetDn() throws Exception {
+    public void initShouldSetDnToEmpty() {
+        // the initial DN is empty as it is equal to the base DN and is relative to it
         assertThat(container.getDn()
-                            .toString()).isEqualTo(base);
+                            .isEmpty());
     }
 
     @Test
-    public void shouldSetDn() throws Exception {
+    public void shouldSetAndGetDn() throws Exception {
         //given
         val dn = LdapNameBuilder.newInstance("ou=users")
                                 .build();
@@ -63,5 +60,44 @@ public class DefaultCurrentContainerTest {
         //then
         assertThat(container.getDn()
                             .toString()).isEqualTo("ou=users");
+    }
+
+    @Test
+    public void updateShouldPropagateIfOldNotEqualsNew() {
+        //given
+        val dnOld = LdapNameBuilder.newInstance("ou=old")
+                                   .build();
+        val dnNew = LdapNameBuilder.newInstance("ou=new")
+                                   .build();
+        container.setDn(dnOld);
+        reset(eventPublisher);
+        //when
+        container.onNavigationItemSelectedOu(NavigationItemSelectedEvent.of(OU.builder()
+                                                                              .dn(dnNew)
+                                                                              .build()));
+        //then
+        ArgumentCaptor<CurrentContainerChangedEvent> eventArgumentCaptor =
+                ArgumentCaptor.forClass(CurrentContainerChangedEvent.class);
+        then(eventPublisher).should()
+                            .publishEvent(eventArgumentCaptor.capture());
+        assertThat(eventArgumentCaptor.getValue()
+                                      .getSource()
+                                      .toString()).isEqualTo(dnNew.toString());
+    }
+
+    @Test
+    public void updateShouldNotPropagateIfOldEqualsNew() {
+        //given
+        val dn = LdapNameBuilder.newInstance("ou=users")
+                                .build();
+        container.setDn(dn);
+        reset(eventPublisher);
+        //when
+        container.onNavigationItemSelectedOu(NavigationItemSelectedEvent.of(OU.builder()
+                                                                              .dn(dn)
+                                                                              .build()));
+        //then
+        then(eventPublisher).should(never())
+                            .publishEvent(any(CurrentContainerChangedEvent.class));
     }
 }

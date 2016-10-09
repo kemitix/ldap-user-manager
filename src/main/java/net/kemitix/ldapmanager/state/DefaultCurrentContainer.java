@@ -26,10 +26,13 @@ package net.kemitix.ldapmanager.state;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
+import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
-import net.kemitix.ldapmanager.ldap.LdapOptions;
+import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.stereotype.Component;
 
@@ -37,14 +40,12 @@ import javax.annotation.PostConstruct;
 import javax.naming.Name;
 
 /**
- * Contains the DN of the current container.
+ * Contains the DN of the current container relative to the base DN.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
 class DefaultCurrentContainer implements CurrentContainer {
-
-    private final LdapOptions ldapOptions;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -55,12 +56,10 @@ class DefaultCurrentContainer implements CurrentContainer {
     /**
      * Constructor.
      *
-     * @param ldapOptions    The LDAP Options to provide the initial container
      * @param eventPublisher The Application Event Publisher
      */
     @Autowired
-    DefaultCurrentContainer(final LdapOptions ldapOptions, final ApplicationEventPublisher eventPublisher) {
-        this.ldapOptions = ldapOptions;
+    DefaultCurrentContainer(final ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 
@@ -69,8 +68,29 @@ class DefaultCurrentContainer implements CurrentContainer {
      */
     @PostConstruct
     public void init() {
-        dn = LdapNameBuilder.newInstance(ldapOptions.getBase())
+        dn = LdapNameBuilder.newInstance()
                             .build();
+        publishCurrentContainer();
+    }
+
+    /**
+     * Updates the DN when a navigation item for an OU is selected, then publishes that the OU has changed.
+     *
+     * @param event the event containing the {@link net.kemitix.ldapmanager.domain.LdapEntity} for the item selected.
+     */
+    @EventListener(NavigationItemSelectedEvent.class)
+    public void onNavigationItemSelectedOu(final NavigationItemSelectedEvent event) {
+        if (event.getSelected() instanceof OU) {
+            val newDn = ((OU) event.getSelected()).getDn();
+            if (!newDn.equals(dn)) {
+                this.dn = newDn;
+                publishCurrentContainer();
+            }
+        }
+    }
+
+    @Override
+    public void publishCurrentContainer() {
         eventPublisher.publishEvent(CurrentContainerChangedEvent.of(dn));
     }
 }

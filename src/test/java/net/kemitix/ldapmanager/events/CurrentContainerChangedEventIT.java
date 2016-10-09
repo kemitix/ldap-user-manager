@@ -28,6 +28,7 @@ import com.googlecode.lanterna.gui2.Label;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
 import org.junit.After;
@@ -75,6 +76,9 @@ public class CurrentContainerChangedEventIT {
     @Autowired
     private LdapEntityContainerMap ldapEntityContainerMap;
 
+    @Autowired
+    private LdapOptions ldapOptions;
+
     private LdapName ldapName;
 
     @Before
@@ -94,7 +98,8 @@ public class CurrentContainerChangedEventIT {
         //when
         eventPublisher.publishEvent(CurrentContainerChangedEvent.of(ldapName));
         //then
-        assertThat(currentOuLabel.getText()).isEqualTo(ldapName.toString());
+        assertThat(currentOuLabel.getText()).startsWith(ldapName.toString());
+        assertThat(currentOuLabel.getText()).endsWith(ldapOptions.getBase());
     }
 
     @Test
@@ -110,8 +115,6 @@ public class CurrentContainerChangedEventIT {
         eventPublisher.publishEvent(CurrentContainerChangedEvent.of(ldapName));
         //then
         val ldapEntityContainer = ldapEntityContainerMap.get(ldapName);
-        assertThat(ldapEntityContainer).isNotEmpty();
-        ldapEntityContainer.ifPresent(
-                container -> assertThat(container.getContents()).containsExactlyInAnyOrder(ou, user));
+        assertThat(ldapEntityContainer.getContents()).containsExactlyInAnyOrder(ou, user);
     }
 }
