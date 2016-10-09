@@ -14,6 +14,7 @@ import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.eq;
 
 /**
@@ -55,5 +56,15 @@ public class CurrentLdapEntityContainerSupplierTest {
         val result = supplier.get();
         //then
         assertThat(result).isSameAs(container);
+    }
+
+    @Test
+    public void onCurrentContainerChangedEventShouldPromptContainerMapToLoadContainer() {
+        //given
+        given(currentContainer.getDn()).willReturn(name);
+        //when
+        supplier.onCurrentContainerChangedEventLoadLdapContainer();
+        //then
+        then(containerMap).should().get(name);
     }
 }
