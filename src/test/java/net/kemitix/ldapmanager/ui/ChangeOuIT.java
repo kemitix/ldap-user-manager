@@ -24,10 +24,6 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.ActionListBox;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
-import lombok.val;
 import net.kemitix.ldapmanager.ldap.AbstractLdapConnectionIntegrationTest;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.state.CurrentContainer;
@@ -65,15 +61,12 @@ public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
     @Autowired
     private NavigationPanel navigationPanel;
 
-    private ActionListBox actionListBox;
-
     @Autowired
     private LdapOptions ldapOptions;
 
 
     @Before
     public void setUp() {
-        actionListBox = navigationPanel.getActionListBox();
         currentContainer.setDn(LdapNameBuilder.newInstance()
                                               .build());
         currentContainer.publishCurrentContainer();
@@ -84,42 +77,24 @@ public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
     @Test
     public void navigateToTest1Ou() {
         //given
-        val items = actionListBox.getItems();
-        assertThat(items.stream()
-                        .map(Runnable::toString)).as("Target OU is listed as a navigation item")
-                                                 .contains("test1", "gary");
-        int select = 0;
-        for (Runnable runnable : items) {
-            if (OU_NAME.equals(runnable.toString())) {
-                break;
-            }
-            select++;
-        }
-        actionListBox.setSelectedIndex(select);
+        assertThat(navigationPanel.findAndSelectItemByName(OU_NAME)).as("Select the OU")
+                                                                    .isNotEmpty();
         //when
-        actionListBox.handleKeyStroke(new KeyStroke(KeyType.Enter));
+        navigationPanel.performSelectedItem();
         //then
-        assertThat(currentOuLabel.getText()).isEqualTo("ou=" + OU_NAME + "," + ldapOptions.getBase());
+        assertThat(currentOuLabel.getText()).as("Current OU label is updated")
+                                            .isEqualTo("ou=" + OU_NAME + "," + ldapOptions.getBase());
     }
 
     @Test
     public void selectingAUserDoesNotChangeOu() {
         //given
-        val items = actionListBox.getItems();
-        assertThat(items.stream()
-                        .map(Runnable::toString)).as("Target OU is listed as a navigation item")
-                                                 .contains("test1", "gary");
-        int select = 0;
-        for (Runnable runnable : items) {
-            if (USER_NAME.equals(runnable.toString())) {
-                break;
-            }
-            select++;
-        }
-        actionListBox.setSelectedIndex(select);
+        assertThat(navigationPanel.findAndSelectItemByName(USER_NAME)).as("Select the user")
+                                                                      .isNotEmpty();
         //when
-        actionListBox.handleKeyStroke(new KeyStroke(KeyType.Enter));
+        navigationPanel.performSelectedItem();
         //then
-        assertThat(currentOuLabel.getText()).isEqualTo(ldapOptions.getBase());
+        assertThat(currentOuLabel.getText()).as("Current OU label remains unchanged")
+                                            .isEqualTo(ldapOptions.getBase());
     }
 }

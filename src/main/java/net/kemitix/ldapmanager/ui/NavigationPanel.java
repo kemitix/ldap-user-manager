@@ -28,7 +28,9 @@ import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Panel;
-import lombok.Getter;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
+import lombok.NonNull;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -51,7 +54,6 @@ class NavigationPanel extends Panel {
 
     private final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
 
-    @Getter
     private ActionListBox actionListBox;
 
     /**
@@ -76,6 +78,14 @@ class NavigationPanel extends Panel {
                                 .withBorder(Borders.singleLine("Navigation")), CENTER);
     }
 
+    /**
+     * Update the contents of the action list box with the contents of the current OU.
+     */
+    @EventListener(CurrentContainerChangedEvent.class)
+    public void onCurrentContainerChangedEventUpdateNavigationItems() {
+        populateActionListBox();
+    }
+
     private void populateActionListBox() {
         actionListBox.clearItems();
         navigationItemSupplier.get()
@@ -83,10 +93,43 @@ class NavigationPanel extends Panel {
     }
 
     /**
-     * Update the contents of the action list box with the contents of the current OU.
+     * Searches the action list box for an action with the given name, selects it and returns it.
+     *
+     * <p>If no match is found then the currently selected item is left unchanged.</p>
+     *
+     * @param name the name of the action to find
+     *
+     * @return the action in an optional, or an empty optional if no matches found
      */
-    @EventListener(CurrentContainerChangedEvent.class)
-    public void onCurrentContainerChangedEventUpdateNavigationItems() {
-        populateActionListBox();
+    public Optional<Runnable> findAndSelectItemByName(@NonNull final String name) {
+        return findItemPositionByName(name).map(pos -> {
+            actionListBox.setSelectedIndex(pos);
+            return actionListBox.getItemAt(pos);
+        });
+    }
+
+    /**
+     * Searches the action list box for the first action with the given name and returns it's index position.
+     *
+     * @param name the name of the action to find.
+     *
+     * @return an optional containing the index, or empty if no matches found.
+     */
+    public Optional<Integer> findItemPositionByName(@NonNull final String name) {
+        int selected = 0;
+        for (Runnable runnable : actionListBox.getItems()) {
+            if (name.equals(runnable.toString())) {
+                return Optional.of(selected);
+            }
+            selected++;
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Sends an ENTER keystroke to the action list box to trigger the currently selected item.
+     */
+    public void performSelectedItem() {
+        actionListBox.handleKeyStroke(new KeyStroke(KeyType.Enter));
     }
 }
