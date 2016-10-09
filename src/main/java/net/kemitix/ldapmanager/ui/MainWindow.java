@@ -27,8 +27,11 @@ package net.kemitix.ldapmanager.ui;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -47,14 +50,18 @@ class MainWindow extends BasicWindow {
 
     private final Panel mainPanel;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     /**
      * Constructor.
      *
-     * @param mainPanel The main panel
+     * @param mainPanel      The main panel
+     * @param eventPublisher The Application Event Publisher.
      */
     @Autowired
-    MainWindow(final Panel mainPanel) {
+    MainWindow(final Panel mainPanel, ApplicationEventPublisher eventPublisher) {
         this.mainPanel = mainPanel;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -75,5 +82,15 @@ class MainWindow extends BasicWindow {
     @Order(1)
     public void onApplicationExit() throws IOException {
         close();
+    }
+
+    @Override
+    public boolean handleInput(KeyStroke key) {
+        if (key.getKeyType()
+               .equals(KeyType.Escape)) {
+            eventPublisher.publishEvent(new ApplicationExitEvent(key));
+            return true;
+        }
+        return false;
     }
 }
