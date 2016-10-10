@@ -25,17 +25,19 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.Button;
+import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
-import lombok.Getter;
 import lombok.val;
-import net.kemitix.ldapmanager.events.ApplicationExitEvent;
+import net.kemitix.ldapmanager.events.KeyStrokeHandlerUpdateEvent;
+import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
+import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.stream.Collectors;
 
 /**
  * The bottom panel of the UI, containing the exit button.
@@ -45,20 +47,19 @@ import javax.annotation.PostConstruct;
 @Component
 class BottomPanel extends Panel {
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final Label statusBarLabel;
 
-    @Getter
-    private final Button exitButton;
+    private final KeyStrokeHandlers keyStrokeHandlers;
 
     /**
      * Constructor.
      *
-     * @param eventPublisher The event publisher
+     * @param keyStrokeHandlers The Keystroke handlers
      */
     @Autowired
-    BottomPanel(final ApplicationEventPublisher eventPublisher) {
-        this.exitButton = new Button("Exit", sendApplicationExitEvent());
-        this.eventPublisher = eventPublisher;
+    BottomPanel(final KeyStrokeHandlers keyStrokeHandlers) {
+        this.keyStrokeHandlers = keyStrokeHandlers;
+        this.statusBarLabel = new Label("");
     }
 
     /**
@@ -66,12 +67,20 @@ class BottomPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(exitButton).withBorder(Borders.singleLine());
+        val component = new Panel().addComponent(statusBarLabel)
+                                   .withBorder(Borders.singleLine());
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
+        onKeyStrokeHandlerUpdate();
     }
 
-    private Runnable sendApplicationExitEvent() {
-        return () -> eventPublisher.publishEvent(new ApplicationExitEvent(this));
+    @EventListener(KeyStrokeHandlerUpdateEvent.class)
+    private void onKeyStrokeHandlerUpdate() {
+        statusBarLabel.setText(keyStrokeHandlers.getKeyStrokeHandlers()
+                                                .stream()
+                                                .filter(KeyStrokeHandler::isActive)
+                                                //.sorted()
+                                                .map(KeyStrokeHandler::getPrompt)
+                                                .collect(Collectors.joining(" | ")));
     }
 }
