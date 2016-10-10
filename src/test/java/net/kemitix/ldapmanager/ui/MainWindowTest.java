@@ -4,7 +4,8 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-import net.kemitix.ldapmanager.events.ApplicationExitEvent;
+import lombok.val;
+import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.spy;
 
 /**
@@ -33,10 +34,13 @@ public class MainWindowTest {
     @Mock
     private ApplicationEventPublisher eventPublisher;
 
+    @Mock
+    private KeyStrokeHandlers keyStrokeHandlers;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mainWindow = spy(new MainWindow(mainPanel, eventPublisher));
+        mainWindow = spy(new MainWindow(mainPanel, eventPublisher, keyStrokeHandlers));
     }
 
     @Test
@@ -59,11 +63,13 @@ public class MainWindowTest {
     }
 
     @Test
-    public void pressingEscapeWillExitTheApplication() throws Exception {
+    public void pressingEscapeIsPassedToKeyStrokeHandlers() throws Exception {
+        //given
+        val keyStroke = new KeyStroke(KeyType.Escape);
         //when
-        mainWindow.handleInput(new KeyStroke(KeyType.Escape));
+        mainWindow.handleInput(keyStroke);
         //then
-        then(eventPublisher).should()
-                            .publishEvent(any(ApplicationExitEvent.class));
+        then(keyStrokeHandlers).should()
+                               .handleInput(eq(keyStroke));
     }
 }

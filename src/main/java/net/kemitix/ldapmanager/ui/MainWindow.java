@@ -28,8 +28,8 @@ import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
+import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -52,16 +52,23 @@ class MainWindow extends BasicWindow {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    private final KeyStrokeHandlers keyStrokeHandlers;
+
     /**
      * Constructor.
      *
-     * @param mainPanel      The main panel
-     * @param eventPublisher The Application Event Publisher.
+     * @param mainPanel         The main panel
+     * @param eventPublisher    The Application Event Publisher.
+     * @param keyStrokeHandlers The KeyStroke Handlers
      */
     @Autowired
-    MainWindow(final Panel mainPanel, ApplicationEventPublisher eventPublisher) {
+    MainWindow(
+            final Panel mainPanel, final ApplicationEventPublisher eventPublisher,
+            final KeyStrokeHandlers keyStrokeHandlers
+              ) {
         this.mainPanel = mainPanel;
         this.eventPublisher = eventPublisher;
+        this.keyStrokeHandlers = keyStrokeHandlers;
     }
 
     /**
@@ -85,12 +92,7 @@ class MainWindow extends BasicWindow {
     }
 
     @Override
-    public boolean handleInput(KeyStroke key) {
-        if (key.getKeyType()
-               .equals(KeyType.Escape)) {
-            eventPublisher.publishEvent(new ApplicationExitEvent(key));
-            return true;
-        }
-        return false;
+    public boolean handleInput(final KeyStroke key) {
+        return super.handleInput(key) || keyStrokeHandlers.handleInput(key);
     }
 }
