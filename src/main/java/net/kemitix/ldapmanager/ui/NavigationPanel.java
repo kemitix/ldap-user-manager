@@ -31,22 +31,26 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.ldap.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 /**
  * The Left-hand Navigation Panel.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Log
 @Component
 class NavigationPanel extends Panel {
 
@@ -54,17 +58,25 @@ class NavigationPanel extends Panel {
 
     private final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
 
-    private ActionListBox actionListBox;
+    private final StartupExceptionsCollector startupExceptionsCollector;
+
+    private final ActionListBox actionListBox;
+
 
     /**
      * Constructor.
      *
-     * @param navigationItemsSupplier the supplier of navigation items
+     * @param navigationItemsSupplier    The supplier of navigation items.
+     * @param startupExceptionsCollector The LDAP Server Status.
      */
     @Autowired
-    NavigationPanel(final Supplier<List<NamedItem<Runnable>>> navigationItemsSupplier) {
+    NavigationPanel(
+            final Supplier<List<NamedItem<Runnable>>> navigationItemsSupplier,
+            final StartupExceptionsCollector startupExceptionsCollector
+                   ) {
         super(new BorderLayout());
         this.navigationItemSupplier = navigationItemsSupplier;
+        this.startupExceptionsCollector = startupExceptionsCollector;
         actionListBox = new ActionListBox();
     }
 
@@ -72,21 +84,23 @@ class NavigationPanel extends Panel {
      * Initializer.
      */
     @PostConstruct
-    public void init() {
-        populateActionListBox();
-        addComponent(new Panel().addComponent(actionListBox)
-                                .withBorder(Borders.singleLine("Navigation")), CENTER);
+    public final void init() {
+        log.log(Level.FINEST, "init()");
+        try {
+            updateNavigationItems();
+            addComponent(new Panel().addComponent(actionListBox)
+                                    .withBorder(Borders.singleLine("Navigation")), CENTER);
+        } catch (final AuthenticationException e) {
+            startupExceptionsCollector.addException("Authentication error", e);
+        }
     }
 
     /**
      * Update the contents of the action list box with the contents of the current OU.
      */
     @EventListener(CurrentContainerChangedEvent.class)
-    public void onCurrentContainerChangedEventUpdateNavigationItems() {
-        populateActionListBox();
-    }
-
-    private void populateActionListBox() {
+    public final void updateNavigationItems() {
+        log.log(Level.FINEST, "updateNavigationItems()");
         actionListBox.clearItems();
         navigationItemSupplier.get()
                               .forEach(item -> actionListBox.addItem(item.getName(), item.getItem()));
@@ -101,7 +115,7 @@ class NavigationPanel extends Panel {
      *
      * @return the action in an optional, or an empty optional if no matches found
      */
-    public Optional<Runnable> findAndSelectItemByName(@NonNull final String name) {
+    final Optional<Runnable> findAndSelectItemByName(@NonNull final String name) {
         return findItemPositionByName(name).map(pos -> {
             actionListBox.setSelectedIndex(pos);
             return actionListBox.getItemAt(pos);
@@ -115,9 +129,9 @@ class NavigationPanel extends Panel {
      *
      * @return an optional containing the index, or empty if no matches found.
      */
-    public Optional<Integer> findItemPositionByName(@NonNull final String name) {
+    final Optional<Integer> findItemPositionByName(@NonNull final String name) {
         int selected = 0;
-        for (Runnable runnable : actionListBox.getItems()) {
+        for (final Runnable runnable : actionListBox.getItems()) {
             if (name.equals(runnable.toString())) {
                 return Optional.of(selected);
             }
@@ -129,7 +143,7 @@ class NavigationPanel extends Panel {
     /**
      * Sends an ENTER keystroke to the action list box to trigger the currently selected item.
      */
-    public void performSelectedItem() {
+    final void performSelectedItem() {
         actionListBox.handleKeyStroke(new KeyStroke(KeyType.Enter));
     }
 }
