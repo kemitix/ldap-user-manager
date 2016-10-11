@@ -1,0 +1,60 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2016 Paul Campbell
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+package net.kemitix.ldapmanager.ui;
+
+import lombok.NonNull;
+import lombok.extern.java.Log;
+import net.kemitix.ldapmanager.LdapUserManagerException;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+
+/**
+ * The status of the LDAP server.
+ *
+ * @author Paul Campbell (paul.campbell@hubuio.com)
+ */
+@Log
+@Component
+class DefaultStartupExceptionsCollector implements StartupExceptionsCollector {
+
+    private final List<LdapUserManagerException> exceptions = new ArrayList<>();
+
+    @Override
+    public final void addException(@NonNull final String message, @NonNull final Exception cause) {
+        log.log(Level.FINEST, "addException(%1, %2): %3",
+                new Object[]{message, cause.getClass().getCanonicalName(), cause.toString()}
+               );
+        exceptions.add(new LdapUserManagerException(message, cause));
+    }
+
+    @Override
+    public final List<LdapUserManagerException> getExceptions() {
+        log.log(Level.FINEST, "getExceptions(): %1", exceptions.size());
+        return new ArrayList<>(exceptions);
+    }
+}
