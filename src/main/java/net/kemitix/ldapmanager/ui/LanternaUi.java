@@ -28,9 +28,12 @@ import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
+import lombok.extern.java.Log;
+import lombok.val;
 import net.kemitix.ldapmanager.LdapUserManagerException;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
+import org.apache.commons.lang.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,15 +41,21 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.logging.Level;
 
 /**
  * The Lanterna UI.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Log
 @Profile("default")
 @Component
 class LanternaUi implements CommandLineRunner {
+
+    private static final String NEWLINE = System.getProperty("line.separator");
 
     private final LogMessages logMessages;
 
@@ -58,51 +67,73 @@ class LanternaUi implements CommandLineRunner {
 
     private final MessageDialogBuilder messageDialogBuilder;
 
+    private final StartupExceptionsCollector startupExceptionsCollector;
+
     /**
      * Constructor.
      *
-     * @param logMessages          The Log Messages
-     * @param mainWindow           The main UI windows
-     * @param gui                  The Lanterna UI
-     * @param eventPublisher       The Application Event Publisher
-     * @param messageDialogBuilder The Message Dialog Builder
+     * @param logMessages                The Log Messages
+     * @param mainWindow                 The main UI windows
+     * @param gui                        The Lanterna UI
+     * @param eventPublisher             The Application Event Publisher
+     * @param messageDialogBuilder       The Message Dialog Builder
+     * @param startupExceptionsCollector The LDAP Server Status.
      */
     @Autowired
     LanternaUi(
             final LogMessages logMessages, final BasicWindow mainWindow, final WindowBasedTextGUI gui,
-            final ApplicationEventPublisher eventPublisher, final MessageDialogBuilder messageDialogBuilder
+            final ApplicationEventPublisher eventPublisher, final MessageDialogBuilder messageDialogBuilder,
+            final StartupExceptionsCollector startupExceptionsCollector
               ) {
         this.logMessages = logMessages;
         this.mainWindow = mainWindow;
         this.gui = gui;
         this.eventPublisher = eventPublisher;
         this.messageDialogBuilder = messageDialogBuilder;
+        this.startupExceptionsCollector = startupExceptionsCollector;
     }
 
     /**
      * Display the Lanterna UI.
      *
-     * @param args The command line arguments - ignored
+     * @param strings The command line arguments - ignored
      *
      * @throws IOException if there is an error starting the screen
      */
     @Override
-    public void run(final String... args) throws IOException {
+    public final void run(final String... strings) throws IOException {
+        log.log(Level.FINEST, "run(%1)", strings);
         try {
             logMessages.add("Starting Lanterna UI...adding main window");
             gui.addWindow(mainWindow);
-            logMessages.add("Entering main loop...");
-            gui.waitForWindowToClose(mainWindow);
-        } catch (LdapUserManagerException e) {
+            val startupExceptions = startupExceptionsCollector.getExceptions();
+            if (startupExceptions.isEmpty()) {
+                logMessages.add("Entering main loop...");
+                gui.waitForWindowToClose(mainWindow);
+            } else {
+                startupExceptions.forEach(e -> {
+                    exceptionMessageDialog(e).showDialog(gui);
+                });
+            }
+        } catch (final LdapUserManagerException e) {
             exceptionMessageDialog(e).showDialog(gui);
+        } finally {
             eventPublisher.publishEvent(new ApplicationExitEvent(this));
         }
     }
 
-    private MessageDialog exceptionMessageDialog(final LdapUserManagerException e) {
+    private MessageDialog exceptionMessageDialog(final LdapUserManagerException exception) {
+        final Collection<String> messages = new ArrayList<>();
+        Throwable tip = exception;
+        while (tip != null) {
+            messages.add(tip.getMessage());
+            tip = tip.getCause();
+        }
+        final int wrapLength = gui.getScreen()
+                                  .getTerminalSize()
+                                  .getColumns() - 5;
         return messageDialogBuilder.setTitle("Unhandled Error")
-                                   .setText(e.getMessage() + "\n" + e.getCause()
-                                                                     .toString())
+                                   .setText(WordUtils.wrap(String.join(NEWLINE, messages), wrapLength, NEWLINE, false))
                                    .build();
     }
 }

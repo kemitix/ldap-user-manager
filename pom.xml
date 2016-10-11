@@ -109,6 +109,10 @@
             <version>${trajano-commons-testing.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
