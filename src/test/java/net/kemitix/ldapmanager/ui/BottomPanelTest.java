@@ -1,18 +1,17 @@
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
-import lombok.val;
-import net.kemitix.ldapmanager.events.ApplicationExitEvent;
+import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
+import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.ApplicationEventPublisher;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
+import static org.mockito.BDDMockito.given;
 
 /**
  * Tests for {@link BottomPanel}.
@@ -24,29 +23,40 @@ public class BottomPanelTest {
     private BottomPanel bottomPanel;
 
     @Mock
-    private ApplicationEventPublisher eventPublisher;
+    private KeyStrokeHandlers keyStrokeHandlers;
+
+    private Set<KeyStrokeHandler> handlers;
+
+    @Mock
+    private KeyStrokeHandler handler;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        bottomPanel = new BottomPanel(eventPublisher);
-        bottomPanel.init();
+        bottomPanel = new BottomPanel(keyStrokeHandlers);
+        handlers = new HashSet<>();
     }
 
     @Test
-    public void shouldInit() throws Exception {
-        assertThat(bottomPanel.getExitButton()
-                              .isInside(bottomPanel)).isTrue();
-    }
-
-    @Test
-    public void shouldSendApplicationExitEvent() {
-        //given
-        val exitButton = bottomPanel.getExitButton();
+    public void labelShouldBeInPanel() {
         //when
-        exitButton.handleKeyStroke(new KeyStroke(KeyType.Enter));
+        bottomPanel.init();
         //then
-        then(eventPublisher).should()
-                            .publishEvent(any(ApplicationExitEvent.class));
+        assertThat(bottomPanel.getChildCount()).isEqualTo(1);
+        assertThat(bottomPanel.getStatusBarLabel()
+                              .isInside(bottomPanel));
+    }
+
+    @Test
+    public void shouldListHandlersInLabel() {
+        //given
+        handlers.add(handler);
+        given(keyStrokeHandlers.getKeyStrokeHandlers()).willReturn(handlers);
+        given(handler.isActive()).willReturn(true);
+        given(handler.getPrompt()).willReturn("prompt");
+        //when
+        bottomPanel.init();
+        //then
+        assertThat(bottomPanel.getStatusBarLabel().getText()).isEqualTo("prompt");
     }
 }

@@ -22,77 +22,57 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.handlers;
 
-import com.googlecode.lanterna.gui2.BasicWindow;
-import com.googlecode.lanterna.gui2.Panel;
-import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
-import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.Arrays;
-
 /**
- * The main application window in the UI.
+ * Handles when the user pressed Escape by exiting the application.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class MainWindow extends BasicWindow {
-
-    private final Panel mainPanel;
+class EscapeKeyStrokeHandler implements KeyStrokeHandler {
 
     private final ApplicationEventPublisher eventPublisher;
-
-    private final KeyStrokeHandlers keyStrokeHandlers;
 
     /**
      * Constructor.
      *
-     * @param mainPanel         The main panel
-     * @param eventPublisher    The Application Event Publisher.
-     * @param keyStrokeHandlers The KeyStroke Handlers
+     * @param eventPublisher The Application Event Publisher.
      */
     @Autowired
-    MainWindow(
-            final Panel mainPanel, final ApplicationEventPublisher eventPublisher,
-            final KeyStrokeHandlers keyStrokeHandlers
-              ) {
-        this.mainPanel = mainPanel;
+    EscapeKeyStrokeHandler(final ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
-        this.keyStrokeHandlers = keyStrokeHandlers;
-    }
-
-    /**
-     * Initializer.
-     */
-    @PostConstruct
-    public void init() {
-        setHints(Arrays.asList(Window.Hint.FULL_SCREEN, Window.Hint.NO_DECORATIONS));
-        setComponent(mainPanel);
-    }
-
-    /**
-     * Listener to close the main UI window.
-     *
-     * @throws IOException if error stopping terminal screen
-     */
-    @EventListener(ApplicationExitEvent.class)
-    @Order(1)
-    public void onApplicationExit() throws IOException {
-        close();
     }
 
     @Override
-    public boolean handleInput(final KeyStroke key) {
-        return super.handleInput(key) || keyStrokeHandlers.handleInput(key);
+    public boolean isActive() {
+        return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Exit";
+    }
+
+    @Override
+    public String getKey() {
+        return "esc";
+    }
+
+    @Override
+    public boolean canHandleKey(final KeyStroke key) {
+        return KeyType.Escape.equals(key.getKeyType());
+    }
+
+    @Override
+    public void handleInput(final KeyStroke key) {
+        eventPublisher.publishEvent(new ApplicationExitEvent(key));
     }
 }
