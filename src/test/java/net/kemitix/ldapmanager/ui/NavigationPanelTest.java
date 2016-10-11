@@ -6,11 +6,21 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.ldap.AuthenticationException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 
 /**
  * Tests for {@link NavigationPanel}.
@@ -21,24 +31,31 @@ public class NavigationPanelTest {
 
     private NavigationPanel navigationPanel;
 
-    private ArrayList<NamedItem<Runnable>> namedItems;
-
-    private AtomicReference<String> selectedItem = new AtomicReference<>("unselected");
+    @Mock
+    private StartupExceptionsCollector startupExceptionsCollector;
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    @Mock
+    private Supplier<List<NamedItem<Runnable>>> navigationItemsSupplier;
+
+    private List<NamedItem<Runnable>> namedItems;
+
+    private final AtomicReference<String> selectedItem = new AtomicReference<>("unselected");
+
     @Before
     public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        navigationPanel = new NavigationPanel(navigationItemsSupplier, startupExceptionsCollector);
         namedItems = new ArrayList<>();
-        navigationPanel = new NavigationPanel(() -> namedItems);
-        navigationPanel.init();
     }
 
     @Test
     public void findItemPositionByNameShouldFindItemWhenPresent() {
         //given
         givenPopulatedList();
+        navigationPanel.init();
         //when
         val result = navigationPanel.findItemPositionByName("beta");
         //then
@@ -49,6 +66,7 @@ public class NavigationPanelTest {
     public void findItemPositionByNameShouldFindNothingWhenNotPresent() {
         //given
         givenPopulatedList();
+        navigationPanel.init();
         //when
         val result = navigationPanel.findItemPositionByName("gamma");
         //then
@@ -59,6 +77,7 @@ public class NavigationPanelTest {
     public void findAndSelectItemByNameShouldSelectItemWhenPresent() {
         //given
         givenPopulatedList();
+        navigationPanel.init();
         //when
         val result = navigationPanel.findAndSelectItemByName("beta");
         //then
@@ -71,6 +90,7 @@ public class NavigationPanelTest {
     public void findAndSelectItemByNameShouldLeaveSelectionAlonItemWhenNotPresent() {
         //given
         givenPopulatedList();
+        navigationPanel.init();
         //when
         val result = navigationPanel.findAndSelectItemByName("gamma");
         //then
@@ -94,9 +114,21 @@ public class NavigationPanelTest {
         navigationPanel.findItemPositionByName(null);
     }
 
+    @Test
+    public void initShouldCollectAuthenticationException() {
+        //given
+        willThrow(AuthenticationException.class).given(navigationItemsSupplier)
+                                                .get();
+        //when
+        navigationPanel.init();
+        //then
+        then(startupExceptionsCollector).should()
+                                        .addException(eq("Authentication error"), any(AuthenticationException.class));
+    }
+
     private void givenPopulatedList() {
+        given(navigationItemsSupplier.get()).willReturn(namedItems);
         namedItems.add(0, NamedItem.of("alpha", () -> selectedItem.getAndSet("alpha")));
         namedItems.add(1, NamedItem.of("beta", () -> selectedItem.getAndSet("beta")));
-        navigationPanel.onCurrentContainerChangedEventUpdateNavigationItems();
     }
 }

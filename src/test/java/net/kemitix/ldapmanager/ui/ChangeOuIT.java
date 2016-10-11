@@ -69,7 +69,7 @@ public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
     public void setUp() {
         currentContainer.setDn(LdapNameUtil.empty());
         currentContainer.publishCurrentContainer();
-        navigationPanel.onCurrentContainerChangedEventUpdateNavigationItems();
+        navigationPanel.updateNavigationItems();
         assertThat(currentOuLabel.getText()).isEqualTo(ldapOptions.getBase());
     }
 
