@@ -64,7 +64,7 @@ class DefaultLogMessages implements LogMessages {
     @Override
     public void add(final String message) {
         messages.add(message);
-        eventPublisher.publishEvent(new LogMessageAddedEvent(message));
+        eventPublisher.publishEvent(LogMessageAddedEvent.create());
     }
 
     @Override

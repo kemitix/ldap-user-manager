@@ -24,7 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import org.springframework.context.ApplicationEvent;
+import lombok.Getter;
 
 import javax.naming.Name;
 
@@ -33,7 +33,10 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class CurrentContainerChangedEvent extends ApplicationEvent {
+public final class CurrentContainerChangedEvent {
+
+    @Getter
+    private final Name newContainer;
 
     /**
      * Constructor.
@@ -41,7 +44,7 @@ public final class CurrentContainerChangedEvent extends ApplicationEvent {
      * @param newContainer The name of the new container.
      */
     private CurrentContainerChangedEvent(final Name newContainer) {
-        super(newContainer);
+        this.newContainer = newContainer;
     }
 
     /**
