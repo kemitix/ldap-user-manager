@@ -22,40 +22,48 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.events;
+package net.kemitix.ldapmanager.navigation;
 
 import lombok.Getter;
-import net.kemitix.ldapmanager.domain.LdapEntity;
-import org.springframework.context.ApplicationEvent;
+import lombok.extern.java.Log;
+
+import javax.naming.Name;
+import java.util.logging.Level;
 
 /**
- * Raised when a Navigation Item is selected.
+ * Raised when a User Navigation Item is selected.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class NavigationItemSelectedEvent extends ApplicationEvent {
+@Log
+public final class NavigationItemUserSelectedEvent {
 
     @Getter
-    private final LdapEntity selected;
+    private final UserNavigationItem selected;
+
+    @Getter
+    private final Name dn;
 
     /**
      * Create a new ApplicationEvent.
      *
-     * @param source the object on which the event initially occurred (never {@code null})
+     * @param selected the object on which the event initially occurred (never {@code null})
      */
-    private NavigationItemSelectedEvent(final LdapEntity source) {
-        super(source);
-        this.selected = source;
+    private NavigationItemUserSelectedEvent(final UserNavigationItem selected) {
+        this.selected = selected;
+        dn = selected.getUser()
+                     .getDn();
     }
 
     /**
-     * Creates a new {@link NavigationItemSelectedEvent}.
+     * Creates a new NavigationItemOuSelectedEvent.
      *
-     * @param item the LdapEntity selected
+     * @param item the User Navigation Item selected
      *
      * @return the event
      */
-    public static NavigationItemSelectedEvent of(final LdapEntity item) {
-        return new NavigationItemSelectedEvent(item);
+    public static NavigationItemUserSelectedEvent of(final UserNavigationItem item) {
+        log.log(Level.FINEST, "of(%s)", item);
+        return new NavigationItemUserSelectedEvent(item);
     }
 }
