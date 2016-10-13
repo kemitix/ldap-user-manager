@@ -33,6 +33,7 @@ import com.googlecode.lanterna.input.KeyType;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -56,12 +57,11 @@ class NavigationPanel extends Panel {
 
     private static final BorderLayout.Location CENTER = BorderLayout.Location.CENTER;
 
-    private final Supplier<List<NamedItem<Runnable>>> navigationItemSupplier;
+    private final Supplier<List<NamedItem<NavigationItem>>> navigationItemSupplier;
 
     private final StartupExceptionsCollector startupExceptionsCollector;
 
     private final ActionListBox actionListBox;
-
 
     /**
      * Constructor.
@@ -71,7 +71,7 @@ class NavigationPanel extends Panel {
      */
     @Autowired
     NavigationPanel(
-            final Supplier<List<NamedItem<Runnable>>> navigationItemsSupplier,
+            final Supplier<List<NamedItem<NavigationItem>>> navigationItemsSupplier,
             final StartupExceptionsCollector startupExceptionsCollector
                    ) {
         super(new BorderLayout());

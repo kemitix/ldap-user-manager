@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.ui;
 
 import lombok.val;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,9 +39,9 @@ public class NavigationPanelTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Mock
-    private Supplier<List<NamedItem<Runnable>>> navigationItemsSupplier;
+    private Supplier<List<NamedItem<NavigationItem>>> navigationItemsSupplier;
 
-    private List<NamedItem<Runnable>> namedItems;
+    private List<NamedItem<NavigationItem>> namedItems;
 
     private final AtomicReference<String> selectedItem = new AtomicReference<>("unselected");
 
