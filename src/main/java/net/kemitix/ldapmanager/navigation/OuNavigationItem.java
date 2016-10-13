@@ -65,4 +65,9 @@ public final class OuNavigationItem extends AbstractNavigationItem {
         log.log(Level.FINEST, "run(): %1", getName());
         getEventPublisher().publishEvent(NavigationItemOuSelectedEvent.of(this));
     }
+
+    @Override
+    public String toString() {
+        return ou.name();
+    }
 }

@@ -65,4 +65,9 @@ public final class UserNavigationItem extends AbstractNavigationItem {
         log.log(Level.FINEST, "run(): %1", getName());
         getEventPublisher().publishEvent(NavigationItemUserSelectedEvent.of(this));
     }
+
+    @Override
+    public String toString() {
+        return user.name();
+    }
 }

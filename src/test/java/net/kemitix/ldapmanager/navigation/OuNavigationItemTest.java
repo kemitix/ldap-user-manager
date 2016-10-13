@@ -25,10 +25,14 @@ public class OuNavigationItemTest {
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
+    private String name;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        name = "name";
         ou = OU.builder()
+               .ou(name)
                .build();
         ouNavigationItem = OuNavigationItem.create(ou, applicationEventPublisher);
     }
@@ -50,5 +54,10 @@ public class OuNavigationItemTest {
     @Test
     public void getOu() throws Exception {
         assertThat(((OuNavigationItem) ouNavigationItem).getOu()).isSameAs(ou);
+    }
+
+    @Test
+    public void toStringIsName() throws Exception {
+        assertThat(ouNavigationItem.toString()).isEqualTo(name);
     }
 }

@@ -25,7 +25,6 @@ SOFTWARE.
 package net.kemitix.ldapmanager.navigation;
 
 import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.gui2.AbstractListBox;
 import com.googlecode.lanterna.gui2.ActionListBox;
 import com.googlecode.lanterna.gui2.Interactable;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -34,9 +33,12 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.ui.AbstractListenableListBox;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.ldap.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -54,87 +56,96 @@ import java.util.logging.Level;
  */
 @Log
 @Component
-class DefaultNavigationItemActionListBox extends AbstractListBox<NavigationItem, DefaultNavigationItemActionListBox>
+class DefaultNavigationItemActionListBox
+        extends AbstractListenableListBox<NavigationItem, DefaultNavigationItemActionListBox>
         implements NavigationItemActionListBox {
 
     private final Supplier<List<NamedItem<NavigationItem>>> navigationItemSupplier;
 
     private final StartupExceptionsCollector startupExceptionsCollector;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private boolean publishOnSelectionChange;
 
     /**
      * Constructor.
      *
      * @param navigationItemSupplier     The Supplier for Navigation Items.
      * @param startupExceptionsCollector The LDAP Server Status.
+     * @param applicationEventPublisher  The Application Event Publisher.
      */
     @Autowired
     DefaultNavigationItemActionListBox(
             final Supplier<List<NamedItem<NavigationItem>>> navigationItemSupplier,
-            final StartupExceptionsCollector startupExceptionsCollector
+            final StartupExceptionsCollector startupExceptionsCollector,
+            final ApplicationEventPublisher applicationEventPublisher
                                       ) {
-        super(null);
         this.navigationItemSupplier = navigationItemSupplier;
         this.startupExceptionsCollector = startupExceptionsCollector;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     /**
      * Initializer to load the initial container.
      */
     @PostConstruct
-    public void init() {
+    public final void init() {
+        log.log(Level.FINEST, "init()");
         try {
             onCurrentContainerChanged();
         } catch (final AuthenticationException e) {
-            startupExceptionsCollector.addException("Authentication error", e);
+            startupExceptionsCollector.addException(Messages.ERROR_AUTHENTICATION, e);
         }
+        publishOnSelectionChange = true;
     }
 
     @Override
     public final TerminalPosition getCursorLocation() {
+        log.log(Level.FINEST, "getCursorLocation(): null");
         return null;
     }
 
     @Override
-    public final synchronized Interactable.Result handleKeyStroke(final KeyStroke keyStroke) {
-        final Object selectedItem = getSelectedItem();
+    public final Interactable.Result onHandleKeyStroke(final KeyStroke keyStroke) {
+        log.log(Level.FINEST, "onHandleKeyStroke(%s)", keyStroke);
+        final NavigationItem selectedItem = getSelectedItem();
         if (canHandle(keyStroke, selectedItem)) {
-            ((Runnable) selectedItem).run();
+            selectedItem.run();
             return Interactable.Result.HANDLED;
         }
-        return super.handleKeyStroke(keyStroke);
+        return Interactable.Result.UNHANDLED;
+    }
+
+    @Override
+    public final void onSelectionChange(final int oldSelectionIndex, final int newSelectionIndex) {
+        log.log(Level.FINEST, "onSelectionChange(%d, %d)", new Object[]{oldSelectionIndex, newSelectionIndex});
+        if (publishOnSelectionChange) {
+            doPublishOnSelectionChange(oldSelectionIndex, newSelectionIndex);
+        }
+    }
+
+    private void doPublishOnSelectionChange(final int oldSelectionIndex, final int newSelectionIndex) {
+        NavigationItem oldItem = null;
+        if ((oldSelectionIndex >= 0) && (getItemCount() > 0)) {
+            oldItem = getItemAt(oldSelectionIndex);
+        }
+        NavigationItem newItem = null;
+        if ((newSelectionIndex >= 0) && (getItemCount() > 0)) {
+            newItem = getItemAt(newSelectionIndex);
+        }
+        applicationEventPublisher.publishEvent(NavigationItemSelectionChangedEvent.of(oldItem, newItem));
     }
 
     private static boolean canHandle(final KeyStroke keyStroke, final Object selectedItem) {
         val isItemSelected = selectedItem != null;
         if (isItemSelected) {
             val isEnter = keyStroke.getKeyType() == KeyType.Enter;
-            val isSpaceBar = (keyStroke.getKeyType() == KeyType.Character) && (keyStroke.getCharacter() == ' ');
+            val isSpaceBar = (keyStroke.getKeyType() == KeyType.Character) && (Messages.CHAR_SPACE.equals(
+                    keyStroke.getCharacter()));
             return isEnter || isSpaceBar;
         }
         return false;
-    }
-
-    /**
-     * Adds a new item to the list, which is displayed in the list using a supplied label.
-     *
-     * @param label  Label to use in the list for the new item
-     * @param action NavigationItem to invoke when this action is selected and then triggered
-     *
-     * @return Itself
-     */
-    private NavigationItemActionListBox addItem(final String label, final NavigationItem action) {
-        return addItem(new NavigationItem() {
-            @Override
-            public void run() {
-                action.run();
-            }
-
-            @Override
-            public String toString() {
-                return label;
-            }
-        });
     }
 
     /**
@@ -145,11 +156,12 @@ class DefaultNavigationItemActionListBox extends AbstractListBox<NavigationItem,
         log.log(Level.FINEST, "onCurrentContainerChanged()");
         clearItems();
         navigationItemSupplier.get()
-                              .forEach(item -> addItem(item.getName(), item.getItem()));
+                              .forEach(item -> addItem(item.getItem()));
     }
 
     @Override
     public final Optional<NavigationItem> findAndSelectItemByName(@NonNull final String name) {
+        log.log(Level.FINEST, "findAndSelectItemByName(%s)", name);
         return findItemPositionByName(name).map(pos -> {
             setSelectedIndex(pos);
             return getItemAt(pos);
@@ -158,9 +170,11 @@ class DefaultNavigationItemActionListBox extends AbstractListBox<NavigationItem,
 
     @Override
     public final Optional<Integer> findItemPositionByName(@NonNull final String name) {
+        log.log(Level.FINEST, "findItemPositionByName(%s)", name);
         int selected = 0;
         for (final NavigationItem navigationItem : getItems()) {
-            if (name.equals(navigationItem.toString())) {
+            final String itemName = navigationItem.toString();
+            if (name.equals(itemName)) {
                 return Optional.of(selected);
             }
             selected++;
@@ -170,6 +184,8 @@ class DefaultNavigationItemActionListBox extends AbstractListBox<NavigationItem,
 
     @Override
     public final void performSelectedItem() {
+        log.log(Level.FINEST, "performSelectedItem()");
         handleKeyStroke(new KeyStroke(KeyType.Enter));
     }
+
 }

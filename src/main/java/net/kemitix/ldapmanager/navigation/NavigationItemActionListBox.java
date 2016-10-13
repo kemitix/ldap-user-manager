@@ -70,4 +70,22 @@ public interface NavigationItemActionListBox extends Interactable {
      * Sends an ENTER keystroke to the action list box to trigger the currently selected item.
      */
     void performSelectedItem();
+
+    /**
+     * Returns the index of the currently selected item in the list box. Please note that in this context, selected
+     * simply means it is the item that currently has input focus. This is not to be confused with list box
+     * implementations such as {@code CheckBoxList} where individual items have a certain checked/unchecked state.
+     *
+     * @return The index of the currently selected row in the list box, or -1 if there are no items
+     */
+    int getSelectedIndex();
+
+    /**
+     * Returns the currently selected item in the list box. Please note that in this context, selected
+     * simply means it is the item that currently has input focus. This is not to be confused with list box
+     * implementations such as {@code CheckBoxList} where individual items have a certain checked/unchecked state.
+     *
+     * @return The currently selected item in the list box, or {@code null} if there are no items
+     */
+    NavigationItem getSelectedItem();
 }

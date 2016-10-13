@@ -30,11 +30,11 @@ public class NavigationItemSelectionChangedEventTest {
 
     @Test
     public void getOldItem() throws Exception {
-        assertThat(event.getOldItem()).isSameAs(oldItem);
+        assertThat(event.getOldItem()).contains(oldItem);
     }
 
     @Test
     public void getNewItem() throws Exception {
-        assertThat(event.getNewItem()).isSameAs(newItem);
+        assertThat(event.getNewItem()).contains(newItem);
     }
 }

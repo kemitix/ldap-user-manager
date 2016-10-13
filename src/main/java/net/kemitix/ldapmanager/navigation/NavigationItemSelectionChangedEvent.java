@@ -24,9 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
-import lombok.Getter;
 import lombok.extern.java.Log;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 /**
@@ -37,11 +37,10 @@ import java.util.logging.Level;
 @Log
 public final class NavigationItemSelectionChangedEvent {
 
-    @Getter
     private final NavigationItem oldItem;
 
-    @Getter
     private final NavigationItem newItem;
+
 
     private NavigationItemSelectionChangedEvent(final NavigationItem oldItem, final NavigationItem newItem) {
         this.oldItem = oldItem;
@@ -59,7 +58,25 @@ public final class NavigationItemSelectionChangedEvent {
     public static NavigationItemSelectionChangedEvent of(
             final NavigationItem oldItem, final NavigationItem newItem
                                                         ) {
-        log.log(Level.FINEST, "of(%s, %s)", new Object[]{oldItem.toString(), newItem.toString()});
+        log.log(Level.FINEST, "of(%s, %s)", new Object[]{oldItem, newItem});
         return new NavigationItemSelectionChangedEvent(oldItem, newItem);
+    }
+
+    /**
+     * Returns the old item in an Optional.
+     *
+     * @return an optional containing the old item, or empty.
+     */
+    public Optional<NavigationItem> getOldItem() {
+        return Optional.ofNullable(oldItem);
+    }
+
+    /**
+     * Returns the new item in an Optional.
+     *
+     * @return an optional containing the new item, or empty.
+     */
+    public Optional<NavigationItem> getNewItem() {
+        return Optional.ofNullable(newItem);
     }
 }
