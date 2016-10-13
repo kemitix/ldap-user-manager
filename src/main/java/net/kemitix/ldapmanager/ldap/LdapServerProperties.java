@@ -30,9 +30,6 @@ import lombok.extern.java.Log;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
-
 /**
  * Loads LDAP Credentials from properties file.
  *
@@ -40,28 +37,16 @@ import java.util.Arrays;
  */
 @Log
 @Setter
-@Getter
 @Component
 @ConfigurationProperties(prefix = "ldap")
+@Getter
 class LdapServerProperties implements LdapCredentials, LdapOptions {
 
-    private String[] urls = new String[0];
+    private String[] urls = new String[1];
 
     private String base;
 
     private String userDn;
 
     private String password;
-
-    /**
-     * Logs the values of the properties loaded to debug.
-     */
-    @PostConstruct
-    public void logProperties() {
-        Arrays.asList(urls)
-              .forEach(url -> log.info(() -> "url: " + url));
-        log.info(() -> "base: " + base);
-        log.info(() -> "userDn: " + userDn);
-        log.info(() -> "password: ****");
-    }
 }

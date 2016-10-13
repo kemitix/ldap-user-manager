@@ -1,12 +1,11 @@
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.val;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.boot.test.rule.OutputCapture;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for {@link LdapServerProperties}.
@@ -38,21 +37,8 @@ public class LdapServerPropertiesTest {
     }
 
     @Test
-    public void shouldLogProperties() throws Exception {
-        //given
-        //when
-        properties.logProperties();
-        //then
-        final String output = outputCapture.toString();
-        assertThat(output).contains("url: ldap server");
-        assertThat(output).contains("base: base ou");
-        assertThat(output).contains("userDn: user dn");
-        assertThat(output).contains("password: ****");
-    }
-
-    @Test
     public void getters() {
-        SoftAssertions softly = new SoftAssertions();
+        val softly = new SoftAssertions();
         softly.assertThat(properties.getUrls())
               .containsOnly(LDAP_SERVER);
         softly.assertThat(properties.getBase())
