@@ -25,6 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.Getter;
+import lombok.NonNull;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 
@@ -49,7 +50,7 @@ public final class NavigationItemUserActionEvent {
      *
      * @return the event
      */
-    public static NavigationItemUserActionEvent of(final User user) {
+    public static NavigationItemUserActionEvent of(@NonNull final User user) {
         return new NavigationItemUserActionEvent(user);
     }
 }

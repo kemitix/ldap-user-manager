@@ -51,8 +51,8 @@ public final class NavigationItemSelectionChangedEvent {
     /**
      * Create a new ApplicationEvent for when the highlighted item in the Navigation Panel changes.
      *
-     * @param oldItem The previously selected {@link NavigationItem}.
-     * @param newItem The newly selected {@link NavigationItem}.
+     * @param oldItem The previously selected {@link NavigationItem} - may be null.
+     * @param newItem The newly selected {@link NavigationItem} - may be null.
      *
      * @return the event
      */

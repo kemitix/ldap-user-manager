@@ -25,6 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 
@@ -40,7 +41,7 @@ import java.util.logging.Level;
 public final class NavigationItemOuSelectedEvent {
 
     @Getter
-    private final OuNavigationItem selected;
+    private final OuNavigationItem ouNavigationItem;
 
     @Getter
     private final Name dn;
@@ -48,23 +49,23 @@ public final class NavigationItemOuSelectedEvent {
     /**
      * Create a new ApplicationEvent.
      *
-     * @param selected the object on which the event initially occurred (never {@code null})
+     * @param ouNavigationItem the object on which the event initially occurred (never {@code null})
      */
-    private NavigationItemOuSelectedEvent(final OuNavigationItem selected) {
-        this.selected = selected;
-        dn = selected.getOu()
-                     .getDn();
+    private NavigationItemOuSelectedEvent(final OuNavigationItem ouNavigationItem) {
+        this.ouNavigationItem = ouNavigationItem;
+        dn = ouNavigationItem.getOu()
+                             .getDn();
     }
 
     /**
      * Creates a new NavigationItemOuSelectedEvent.
      *
-     * @param item the OU Navigation Item selected
+     * @param ouNavigationItem the OU Navigation Item selected
      *
      * @return the event
      */
-    public static NavigationItemOuSelectedEvent of(final OuNavigationItem item) {
-        log.log(Level.FINEST, "of(%s)", item);
-        return new NavigationItemOuSelectedEvent(item);
+    public static NavigationItemOuSelectedEvent of(@NonNull final OuNavigationItem ouNavigationItem) {
+        log.log(Level.FINEST, "of(%s)", ouNavigationItem);
+        return new NavigationItemOuSelectedEvent(ouNavigationItem);
     }
 }

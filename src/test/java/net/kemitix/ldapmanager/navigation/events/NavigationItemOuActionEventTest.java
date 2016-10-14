@@ -2,8 +2,9 @@ package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,6 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class NavigationItemOuActionEventTest {
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test
     public void shouldCreateEventAndGetOuBackOut() {
         //given
@@ -23,5 +27,14 @@ public class NavigationItemOuActionEventTest {
         val event = NavigationItemOuActionEvent.of(ou);
         //then
         assertThat(event.getOu()).isSameAs(ou);
+    }
+
+    @Test
+    public void shouldThrowNPEWhenCreateEventWithNullOu() {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("ou");
+        //when
+        NavigationItemOuActionEvent.of(null);
     }
 }

@@ -3,7 +3,9 @@ package net.kemitix.ldapmanager.navigation.events;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
@@ -31,6 +33,9 @@ public class NavigationItemUserSelectedEventTest {
 
     private Name dn;
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -45,11 +50,20 @@ public class NavigationItemUserSelectedEventTest {
 
     @Test
     public void getSelected() throws Exception {
-        assertThat(event.getSelected()).isSameAs(userNavigationItem);
+        assertThat(event.getUserNavigationItem()).isSameAs(userNavigationItem);
     }
 
     @Test
     public void getDn() throws Exception {
         assertThat(event.getDn()).isSameAs(dn);
+    }
+
+    @Test
+    public void shouldThrowNPEWhenCreateEventWithNullUserNavigationItem() {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("userNavigationItem");
+        //when
+        NavigationItemUserSelectedEvent.of(null);
     }
 }
