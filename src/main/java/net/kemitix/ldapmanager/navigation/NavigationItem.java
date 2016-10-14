@@ -31,4 +31,8 @@ package net.kemitix.ldapmanager.navigation;
  */
 public interface NavigationItem extends Runnable {
 
+    /**
+     * Publish an event indicating that this item has been selected.
+     */
+    void publishAsSelected();
 }

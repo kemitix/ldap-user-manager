@@ -73,4 +73,10 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     public String toString() {
         return user.name();
     }
+
+    @Override
+    public void publishAsSelected() {
+        log.log(Level.FINEST, "publishAsSelected(): %1", getName());
+        applicationEventPublisher.publishEvent(NavigationItemUserSelectedEvent.of(this));
+    }
 }
