@@ -22,12 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.suppliers;
+package net.kemitix.ldapmanager.navigation;
 
+import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
-import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
@@ -40,6 +40,7 @@ import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -47,32 +48,33 @@ import java.util.stream.Collectors;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Log
 @Component
-class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
+class NavigationItemsSupplier implements Supplier<List<NamedItem<NavigationItem>>> {
 
     private static final String PARENT = "..";
 
     private final Supplier<LdapEntityContainer> currentLdapContainerSupplier;
 
-    private final ApplicationEventPublisher eventPublisher;
-
     private final CurrentContainer currentContainer;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Constructor.
      *
      * @param currentLdapContainerSupplier The supplier of the node for the current LdapEntityContainer.
-     * @param eventPublisher               The Application Event Publisher.
      * @param currentContainer             The Current Container.
+     * @param applicationEventPublisher    The Application Event Publisher
      */
     @Autowired
     NavigationItemsSupplier(
-            final Supplier<LdapEntityContainer> currentLdapContainerSupplier,
-            final ApplicationEventPublisher eventPublisher, final CurrentContainer currentContainer
+            final Supplier<LdapEntityContainer> currentLdapContainerSupplier, final CurrentContainer currentContainer,
+            final ApplicationEventPublisher applicationEventPublisher
                            ) {
         this.currentLdapContainerSupplier = currentLdapContainerSupplier;
-        this.eventPublisher = eventPublisher;
         this.currentContainer = currentContainer;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     /**
@@ -81,31 +83,31 @@ class NavigationItemsSupplier implements Supplier<List<NamedItem<Runnable>>> {
      * @return the list of items
      */
     @Override
-    public List<NamedItem<Runnable>> get() {
-        val items = new ArrayList<NamedItem<Runnable>>();
+    public final List<NamedItem<NavigationItem>> get() {
+        log.log(Level.FINEST, "get()");
+        val items = new ArrayList<NamedItem<NavigationItem>>();
+        // Add '..' entry to parent container
         LdapNameUtil.getParent(currentContainer.getDn())
                     .map(this::createParentItem)
                     .ifPresent(items::add);
-        items.addAll(new ArrayList<>(currentLdapContainerSupplier.get()
-                                                                 .getContents()
-                                                                 .stream()
-                                                                 .map(this::createNamedItem)
-                                                                 .collect(Collectors.toList())));
+        // Add entity in container
+        items.addAll(currentLdapContainerSupplier.get()
+                                                 .getContents()
+                                                 .stream()
+                                                 .map(this::createNamedItem)
+                                                 .collect(Collectors.toList()));
         return items;
     }
 
-    private NamedItem<Runnable> createParentItem(final Name parentName) {
-        return NamedItem.of(PARENT, () -> eventPublisher.publishEvent(NavigationItemSelectedEvent.of(OU.builder()
-                                                                                                       .dn(parentName)
-                                                                                                       .ou(PARENT)
-                                                                                                       .build())));
+    private NamedItem<NavigationItem> createParentItem(final Name parentName) {
+        return NamedItem.of(PARENT, OU.builder()
+                                      .dn(parentName)
+                                      .ou(PARENT)
+                                      .build()
+                                      .asNavigationItem(applicationEventPublisher));
     }
 
-    private NamedItem<Runnable> createNamedItem(final LdapEntity ldapEntity) {
-        return NamedItem.of(ldapEntity.name(), () -> doAction(ldapEntity));
-    }
-
-    private void doAction(final LdapEntity ldapEntity) {
-        eventPublisher.publishEvent(NavigationItemSelectedEvent.of(ldapEntity));
+    private NamedItem<NavigationItem> createNamedItem(final LdapEntity ldapEntity) {
+        return NamedItem.of(ldapEntity.name(), ldapEntity.asNavigationItem(applicationEventPublisher));
     }
 }

@@ -60,4 +60,9 @@ public class EscapeKeyStrokeHandlerTest {
         then(eventPublisher).should()
                             .publishEvent(any(ApplicationExitEvent.class));
     }
+
+    @Test
+    public void shouldGetPrompt() throws Exception {
+        assertThat(handler.getPrompt()).isEqualTo("[esc] Exit");
+    }
 }

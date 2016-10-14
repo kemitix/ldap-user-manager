@@ -40,7 +40,7 @@ public class ApplicationExitEventIT {
         //given
         assertThat(mainWindow.getComponent()).isNotNull();
         //when
-        eventPublisher.publishEvent(new ApplicationExitEvent(this));
+        eventPublisher.publishEvent(ApplicationExitEvent.create());
         //then
         assertThat(mainWindow.getComponent()).isNull();
     }
@@ -50,7 +50,7 @@ public class ApplicationExitEventIT {
         //given
         assertThat(scheduledExecutorService.isShutdown()).isFalse();
         //when
-        eventPublisher.publishEvent(new ApplicationExitEvent(this));
+        eventPublisher.publishEvent(ApplicationExitEvent.create());
         //then
         assertThat(scheduledExecutorService.isShutdown()).isTrue();
     }

@@ -31,6 +31,7 @@ import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import lombok.val;
+import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.KeyStrokeHandlerUpdateEvent;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
@@ -88,6 +89,7 @@ class BottomPanel extends Panel {
                                                 .filter(KeyStrokeHandler::isActive)
                                                 //.sorted()
                                                 .map(KeyStrokeHandler::getPrompt)
-                                                .collect(Collectors.joining(" | ")));
+                                                .collect(Collectors.joining(
+                                                        Messages.KEYSTROKE_LABEL_DELIMITER.getValue())));
     }
 }

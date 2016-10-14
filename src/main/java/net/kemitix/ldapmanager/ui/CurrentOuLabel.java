@@ -25,6 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Label;
+import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
@@ -72,7 +73,7 @@ class CurrentOuLabel extends Label {
     @EventListener(CurrentContainerChangedEvent.class)
     public void onCurrentContainerChangerEventUpdateUiLabel() {
         final String dn = currentOuSupplier.get();
-        logMessages.add("Changed to container: " + dn);
+        logMessages.add(Messages.LOG_CHANGED_TO_CONTAINER + dn);
         setText(LdapNameUtil.join(dn, baseDn)
                             .toString());
     }

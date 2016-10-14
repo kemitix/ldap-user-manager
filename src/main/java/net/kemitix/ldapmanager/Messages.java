@@ -22,40 +22,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.events;
+package net.kemitix.ldapmanager;
 
 import lombok.Getter;
-import net.kemitix.ldapmanager.domain.LdapEntity;
-import org.springframework.context.ApplicationEvent;
 
 /**
- * Raised when a Navigation Item is selected.
+ * Text messages.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class NavigationItemSelectedEvent extends ApplicationEvent {
+@SuppressWarnings("enumvaluename")
+public enum Messages {
+
+    ERROR_AUTHENTICATION("Authentication error"),
+    ERROR_UNHANDLED("Unhandled Error"),
+    CURRENT_OU("Current OU"),
+    TIME("Time"),
+    NAVIGATION("Navigation"),
+    APP_NAME("LDAP User Manager"),
+    LOG("Log"),
+    STARTING_LANTERNA_UI("Starting Lanterna UI...adding main window"),
+    ENTERING_MAIN_LOOP("Entering main loop..."),
+    LOG_CHANGED_TO_CONTAINER("Changed to container: "),
+    KEYSTROKE_LABEL_DELIMITER(" | ");
 
     @Getter
-    private final LdapEntity selected;
+    private final String value;
 
     /**
-     * Create a new ApplicationEvent.
+     * Constructor.
      *
-     * @param source the object on which the event initially occurred (never {@code null})
+     * @param value The string value of the message.
      */
-    private NavigationItemSelectedEvent(final LdapEntity source) {
-        super(source);
-        this.selected = source;
-    }
-
-    /**
-     * Creates a new {@link NavigationItemSelectedEvent}.
-     *
-     * @param item the LdapEntity selected
-     *
-     * @return the event
-     */
-    public static NavigationItemSelectedEvent of(final LdapEntity item) {
-        return new NavigationItemSelectedEvent(item);
+    Messages(final String value) {
+        this.value = value;
     }
 }

@@ -31,7 +31,6 @@ import com.googlecode.lanterna.input.KeyStroke;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -50,24 +49,19 @@ class MainWindow extends BasicWindow {
 
     private final Panel mainPanel;
 
-    private final ApplicationEventPublisher eventPublisher;
-
     private final KeyStrokeHandlers keyStrokeHandlers;
 
     /**
      * Constructor.
      *
      * @param mainPanel         The main panel
-     * @param eventPublisher    The Application Event Publisher.
      * @param keyStrokeHandlers The KeyStroke Handlers
      */
     @Autowired
     MainWindow(
-            final Panel mainPanel, final ApplicationEventPublisher eventPublisher,
-            final KeyStrokeHandlers keyStrokeHandlers
+            final Panel mainPanel, final KeyStrokeHandlers keyStrokeHandlers
               ) {
         this.mainPanel = mainPanel;
-        this.eventPublisher = eventPublisher;
         this.keyStrokeHandlers = keyStrokeHandlers;
     }
 

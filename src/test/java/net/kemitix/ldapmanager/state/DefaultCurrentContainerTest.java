@@ -3,8 +3,8 @@ package net.kemitix.ldapmanager.state;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
-import net.kemitix.ldapmanager.events.NavigationItemSelectedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -64,22 +64,23 @@ public class DefaultCurrentContainerTest {
     @Test
     public void updateShouldPropagateIfOldNotEqualsNew() {
         //given
-        val dnOld = LdapNameUtil.parse("ou=old");
-        val dnNew = LdapNameUtil.parse("ou=new");
-        container.setDn(dnOld);
+        val oldDn = LdapNameUtil.parse("ou=old");
+        val newDn = LdapNameUtil.parse("ou=new");
+        container.setDn(oldDn);
         reset(eventPublisher);
+        val newOu = OU.builder()
+                      .dn(newDn)
+                      .build();
         //when
-        container.onNavigationItemSelectedOu(NavigationItemSelectedEvent.of(OU.builder()
-                                                                              .dn(dnNew)
-                                                                              .build()));
+        container.onNavigationItemOuAction(NavigationItemOuActionEvent.of(newOu));
         //then
-        ArgumentCaptor<CurrentContainerChangedEvent> eventArgumentCaptor =
+        final ArgumentCaptor<CurrentContainerChangedEvent> eventArgumentCaptor =
                 ArgumentCaptor.forClass(CurrentContainerChangedEvent.class);
         then(eventPublisher).should()
                             .publishEvent(eventArgumentCaptor.capture());
-        assertThat(eventArgumentCaptor.getValue()
-                                      .getSource()
-                                      .toString()).isEqualTo(dnNew.toString());
+        final CurrentContainerChangedEvent caughtEvent = eventArgumentCaptor.getValue();
+        assertThat(caughtEvent.getNewContainer()
+                              .toString()).isEqualTo(newDn.toString());
     }
 
     @Test
@@ -88,10 +89,11 @@ public class DefaultCurrentContainerTest {
         val dn = LdapNameUtil.parse("ou=users");
         container.setDn(dn);
         reset(eventPublisher);
+        val newOu = OU.builder()
+                      .dn(dn)
+                      .build();
         //when
-        container.onNavigationItemSelectedOu(NavigationItemSelectedEvent.of(OU.builder()
-                                                                              .dn(dn)
-                                                                              .build()));
+        container.onNavigationItemOuAction(NavigationItemOuActionEvent.of(newOu));
         //then
         then(eventPublisher).should(never())
                             .publishEvent(any(CurrentContainerChangedEvent.class));

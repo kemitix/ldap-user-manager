@@ -24,8 +24,11 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.domain;
 
+import net.kemitix.ldapmanager.navigation.NavigationItem;
+import org.springframework.context.ApplicationEventPublisher;
+
 /**
- * .
+ * Common interface for LDAP Entities.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
@@ -39,4 +42,13 @@ public interface LdapEntity {
      * @return the name of the entity
      */
     String name();
+
+    /**
+     * Create a NavigationItem for this.
+     *
+     * @param eventPublisher The Application Event Publisher
+     *
+     * @return the navigation item
+     */
+    NavigationItem asNavigationItem(ApplicationEventPublisher eventPublisher);
 }

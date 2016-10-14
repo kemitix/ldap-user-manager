@@ -29,17 +29,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.ldap.ObjectClass;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.navigation.NavigationItemFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
 import javax.naming.Name;
+import java.util.logging.Level;
 
 /**
  * An Organizational Unit.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Log
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -54,6 +60,12 @@ public final class OU implements LdapEntity {
 
     @Override
     public String name() {
+        log.log(Level.FINEST, "name(): %1", ou);
         return ou;
+    }
+
+    @Override
+    public NavigationItem asNavigationItem(final ApplicationEventPublisher eventPublisher) {
+        return NavigationItemFactory.create(this, eventPublisher);
     }
 }

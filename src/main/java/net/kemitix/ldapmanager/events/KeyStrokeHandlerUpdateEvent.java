@@ -26,14 +26,13 @@ package net.kemitix.ldapmanager.events;
 
 import lombok.Getter;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
-import org.springframework.context.ApplicationEvent;
 
 /**
  * Raised when a {@link KeyStrokeHandler} is enabled or disabled.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class KeyStrokeHandlerUpdateEvent extends ApplicationEvent {
+public final class KeyStrokeHandlerUpdateEvent {
 
     @Getter
     private final KeyStrokeHandler keyStrokeHandler;
@@ -41,11 +40,10 @@ public final class KeyStrokeHandlerUpdateEvent extends ApplicationEvent {
     /**
      * Create a new ApplicationEvent.
      *
-     * @param source the keystroke handler on which the event initially occurred (never {@code null})
+     * @param keyStrokeHandler the keystroke handler on which the event initially occurred (never {@code null})
      */
-    private KeyStrokeHandlerUpdateEvent(final KeyStrokeHandler source) {
-        super(source);
-        this.keyStrokeHandler = source;
+    private KeyStrokeHandlerUpdateEvent(final KeyStrokeHandler keyStrokeHandler) {
+        this.keyStrokeHandler = keyStrokeHandler;
     }
 
     /**

@@ -24,21 +24,21 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import org.springframework.context.ApplicationEvent;
-
 /**
  * Log message added.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class LogMessageAddedEvent extends ApplicationEvent {
+public final class LogMessageAddedEvent {
+    private LogMessageAddedEvent() {
+    }
 
     /**
      * Create a new ApplicationEvent.
      *
-     * @param source the object on which the event initially occurred (never {@code null})
+     * @return the event
      */
-    public LogMessageAddedEvent(final Object source) {
-        super(source);
+    public static LogMessageAddedEvent create() {
+        return new LogMessageAddedEvent();
     }
 }

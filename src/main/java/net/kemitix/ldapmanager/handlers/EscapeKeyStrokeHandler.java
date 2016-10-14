@@ -73,6 +73,6 @@ class EscapeKeyStrokeHandler implements KeyStrokeHandler {
 
     @Override
     public void handleInput(final KeyStroke key) {
-        eventPublisher.publishEvent(new ApplicationExitEvent(key));
+        eventPublisher.publishEvent(ApplicationExitEvent.create());
     }
 }

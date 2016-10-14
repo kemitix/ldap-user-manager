@@ -24,21 +24,25 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import org.springframework.context.ApplicationEvent;
-
 /**
  * Application Exit Event Configuration.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class ApplicationExitEvent extends ApplicationEvent {
+public final class ApplicationExitEvent {
 
     /**
      * Create a new ApplicationEvent.
-     *
-     * @param source the object on which the event initially occurred (never {@code null})
      */
-    public ApplicationExitEvent(final Object source) {
-        super(source);
+    private ApplicationExitEvent() {
+    }
+
+    /**
+     * Create an ApplicationExitEvent.
+     *
+     * @return the event
+     */
+    public static ApplicationExitEvent create() {
+        return new ApplicationExitEvent();
     }
 }
