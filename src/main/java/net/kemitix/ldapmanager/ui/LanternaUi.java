@@ -31,6 +31,7 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.LdapUserManagerException;
+import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.apache.commons.lang.WordUtils;
@@ -40,7 +41,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -97,18 +97,16 @@ class LanternaUi implements CommandLineRunner {
      * Display the Lanterna UI.
      *
      * @param strings The command line arguments - ignored
-     *
-     * @throws IOException if there is an error starting the screen
      */
     @Override
-    public final void run(final String... strings) throws IOException {
+    public final void run(final String... strings) {
         log.log(Level.FINEST, "run(%1)", strings);
         try {
-            logMessages.add("Starting Lanterna UI...adding main window");
+            logMessages.add(Messages.STARTING_LANTERNA_UI);
             gui.addWindow(mainWindow);
             val startupExceptions = startupExceptionsCollector.getExceptions();
             if (startupExceptions.isEmpty()) {
-                logMessages.add("Entering main loop...");
+                logMessages.add(Messages.ENTERING_MAIN_LOOP);
                 gui.waitForWindowToClose(mainWindow);
             } else {
                 startupExceptions.forEach(e -> {
@@ -132,7 +130,7 @@ class LanternaUi implements CommandLineRunner {
         final int wrapLength = gui.getScreen()
                                   .getTerminalSize()
                                   .getColumns() - 5;
-        return messageDialogBuilder.setTitle("Unhandled Error")
+        return messageDialogBuilder.setTitle(Messages.ERROR_UNHANDLED)
                                    .setText(WordUtils.wrap(String.join(NEWLINE, messages), wrapLength, NEWLINE, false))
                                    .build();
     }

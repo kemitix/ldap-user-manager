@@ -31,6 +31,7 @@ import com.googlecode.lanterna.gui2.LayoutManager;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
+import net.kemitix.ldapmanager.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -83,7 +84,7 @@ class MainPanel extends Panel {
         innerPanel.addComponent(topPanel, BorderLayout.Location.TOP);
         innerPanel.addComponent(getBottomPanel(), BorderLayout.Location.BOTTOM);
         innerPanel.addComponent(navigationPanel, BorderLayout.Location.LEFT);
-        addComponent(innerPanel.withBorder(Borders.singleLine("LDAP User Manager")));
+        addComponent(innerPanel.withBorder(Borders.singleLine(Messages.APP_NAME)));
         setLayoutManager(layoutManager);
         setLayoutData(BorderLayout.Location.CENTER);
     }

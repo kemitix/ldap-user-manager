@@ -30,6 +30,7 @@ import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
 import lombok.val;
+import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +75,7 @@ class LogPanel extends Panel {
     @PostConstruct
     public void init() {
         val component = new Panel().addComponent(messageLabel)
-                                   .withBorder(Borders.singleLine("Log"));
+                                   .withBorder(Borders.singleLine(Messages.LOG));
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
         update();

@@ -35,6 +35,26 @@ public final class Messages {
 
     public static final String ERROR_AUTHENTICATION = "Authentication error";
 
+    public static final String CURRENT_OU = "Current OU";
+
+    public static final String TIME = "Time";
+
+    public static final String NAVIGATION = "Navigation";
+
+    public static final String APP_NAME = "LDAP User Manager";
+
+    public static final String LOG = "Log";
+
+    public static final String STARTING_LANTERNA_UI = "Starting Lanterna UI...adding main window";
+
+    public static final String ENTERING_MAIN_LOOP = "Entering main loop...";
+
+    public static final String ERROR_UNHANDLED = "Unhandled Error";
+
+    public static final String LOG_CHANGED_TO_CONTAINER = "Changed to container: ";
+
+    public static final String KEYSTROKE_LABEL_DELIMITER = " | ";
+
     private Messages() {
     }
 }

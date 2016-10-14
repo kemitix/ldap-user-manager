@@ -29,6 +29,7 @@ import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.extern.java.Log;
+import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -65,6 +66,6 @@ class NavigationPanel extends Panel {
     public final void init() {
         log.log(Level.FINEST, "init()");
         addComponent(new Panel().addComponent(actionListBox, LinearLayout.createLayoutData(LinearLayout.Alignment.Fill))
-                                .withBorder(Borders.singleLine("Navigation")), BorderLayout.Location.CENTER);
+                                .withBorder(Borders.singleLine(Messages.NAVIGATION)), BorderLayout.Location.CENTER);
     }
 }

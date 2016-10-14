@@ -31,6 +31,7 @@ import com.googlecode.lanterna.gui2.LayoutData;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
+import net.kemitix.ldapmanager.Messages;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -70,9 +71,9 @@ class TopPanel extends Panel {
     @PostConstruct
     public void init() {
         val ouPanel = new Panel().addComponent(currentOuLabel)
-                                 .withBorder(Borders.singleLine("Current OU"));
+                                 .withBorder(Borders.singleLine(Messages.CURRENT_OU));
         val clockPanel = new Panel().addComponent(clockLabel)
-                                    .withBorder(Borders.singleLine("Time"));
+                                    .withBorder(Borders.singleLine(Messages.TIME));
         val horizon = new Panel(new BorderLayout()).addComponent(ouPanel, CENTER)
                                                    .addComponent(clockPanel, RIGHT);
         addComponent(horizon, FILL);

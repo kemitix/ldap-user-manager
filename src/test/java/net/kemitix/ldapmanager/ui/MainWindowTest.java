@@ -124,7 +124,7 @@ public class MainWindowTest {
                 final Panel mainPanel, final ApplicationEventPublisher eventPublisher,
                 final KeyStrokeHandlers keyStrokeHandlers
                       ) {
-            super(mainPanel, eventPublisher, keyStrokeHandlers);
+            super(mainPanel, keyStrokeHandlers);
         }
 
         @Override
