@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.navigation;
 
 import net.kemitix.ldapmanager.domain.OU;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

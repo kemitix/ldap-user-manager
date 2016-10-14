@@ -22,9 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation;
+package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.extern.java.Log;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
 
 import java.util.Optional;
 import java.util.logging.Level;

@@ -4,6 +4,7 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;

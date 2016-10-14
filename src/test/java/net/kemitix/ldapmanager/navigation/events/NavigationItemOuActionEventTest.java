@@ -1,7 +1,8 @@
-package net.kemitix.ldapmanager.navigation;
+package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

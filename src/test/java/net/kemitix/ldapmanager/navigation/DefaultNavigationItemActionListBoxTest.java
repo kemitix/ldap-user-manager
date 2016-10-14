@@ -5,6 +5,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.junit.Before;

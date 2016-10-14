@@ -6,7 +6,7 @@ import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.NavigationItemActionListBox;
-import net.kemitix.ldapmanager.navigation.NavigationItemSelectionChangedEvent;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import net.kemitix.ldapmanager.state.CurrentContainer;

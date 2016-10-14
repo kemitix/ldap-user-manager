@@ -27,6 +27,8 @@ package net.kemitix.ldapmanager.navigation;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.logging.Level;

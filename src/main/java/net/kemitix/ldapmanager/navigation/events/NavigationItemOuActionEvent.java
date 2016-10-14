@@ -22,48 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation;
+package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.Getter;
-import lombok.extern.java.Log;
-
-import javax.naming.Name;
-import java.util.logging.Level;
+import lombok.NonNull;
+import net.kemitix.ldapmanager.domain.OU;
 
 /**
- * Raised when an OU Navigation Item is selected.
+ * Raised when the switching context from one OU to another.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Log
-public final class NavigationItemOuSelectedEvent {
+public final class NavigationItemOuActionEvent {
 
     @Getter
-    private final OuNavigationItem selected;
+    private final OU ou;
 
-    @Getter
-    private final Name dn;
-
-    /**
-     * Create a new ApplicationEvent.
-     *
-     * @param selected the object on which the event initially occurred (never {@code null})
-     */
-    private NavigationItemOuSelectedEvent(final OuNavigationItem selected) {
-        this.selected = selected;
-        dn = selected.getOu()
-                     .getDn();
+    private NavigationItemOuActionEvent(final OU ou) {
+        this.ou = ou;
     }
 
     /**
-     * Creates a new NavigationItemOuSelectedEvent.
+     * Create a new ApplicationEvent for when the current OU is switched to a another.
      *
-     * @param item the OU Navigation Item selected
+     * @param ou The OU being switched to.
      *
      * @return the event
      */
-    public static NavigationItemOuSelectedEvent of(final OuNavigationItem item) {
-        log.log(Level.FINEST, "of(%s)", item);
-        return new NavigationItemOuSelectedEvent(item);
+    public static NavigationItemOuActionEvent of(@NonNull final OU ou) {
+        return new NavigationItemOuActionEvent(ou);
     }
 }

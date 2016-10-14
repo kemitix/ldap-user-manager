@@ -1,8 +1,11 @@
-package net.kemitix.ldapmanager.navigation;
+package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.navigation.OuNavigationItem;
+import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.junit.Before;
 import org.junit.Test;

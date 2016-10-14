@@ -1,5 +1,6 @@
 package net.kemitix.ldapmanager.navigation;
 
+import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
