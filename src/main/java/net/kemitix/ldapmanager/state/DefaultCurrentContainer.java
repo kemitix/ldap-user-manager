@@ -29,7 +29,7 @@ import lombok.Setter;
 import lombok.val;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import net.kemitix.ldapmanager.navigation.NavigationItemOuSelectedEvent;
+import net.kemitix.ldapmanager.navigation.NavigationItemOuActionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -76,9 +76,10 @@ class DefaultCurrentContainer implements CurrentContainer {
      *
      * @param event the event containing the {@link net.kemitix.ldapmanager.domain.LdapEntity} for the item selected.
      */
-    @EventListener(NavigationItemOuSelectedEvent.class)
-    public void onNavigationItemSelectedOu(final NavigationItemOuSelectedEvent event) {
-        val newDn = event.getDn();
+    @EventListener(NavigationItemOuActionEvent.class)
+    public void onNavigationItemOuAction(final NavigationItemOuActionEvent event) {
+        val newDn = event.getOu()
+                         .getDn();
         if (!newDn.equals(dn)) {
             dn = newDn;
             publishCurrentContainer();

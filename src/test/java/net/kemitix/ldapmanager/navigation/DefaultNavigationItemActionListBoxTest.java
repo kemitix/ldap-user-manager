@@ -311,14 +311,17 @@ public class DefaultNavigationItemActionListBoxTest {
 
         private final String name;
 
+        private final ApplicationEventPublisher applicationEventPublisher;
+
         private final AtomicReference<String> selectedItem;
 
         MyItem(
                 final String name, final ApplicationEventPublisher applicationEventPublisher,
                 final AtomicReference<String> selectedItem
               ) {
-            super(name, applicationEventPublisher);
+            super(name);
             this.name = name;
+            this.applicationEventPublisher = applicationEventPublisher;
             this.selectedItem = selectedItem;
         }
 
@@ -330,6 +333,11 @@ public class DefaultNavigationItemActionListBoxTest {
         @Override
         public String toString() {
             return name;
+        }
+
+        @Override
+        public void publishAsSelected() {
+            applicationEventPublisher.publishEvent(this);
         }
     }
 }

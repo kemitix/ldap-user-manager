@@ -48,7 +48,7 @@ public class UserNavigationItemTest {
         userNavigationItem.run();
         //then
         then(applicationEventPublisher).should()
-                                       .publishEvent(any(NavigationItemUserSelectedEvent.class));
+                                       .publishEvent(any(NavigationItemUserActionEvent.class));
     }
 
     @Test

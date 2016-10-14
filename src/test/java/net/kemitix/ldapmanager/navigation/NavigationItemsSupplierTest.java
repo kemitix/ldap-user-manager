@@ -91,7 +91,7 @@ public class NavigationItemsSupplierTest {
     }
 
     @Test
-    public void shouldPublishNavigationItemSelectedEventWhenOUSelected() {
+    public void shouldPublishSwitchOuWhenRunOuNavigationItem() {
         //given
         given(currentContainer.getDn()).willReturn(usersOu.getDn());
         given(currentLdapContainerSupplier.get()).willReturn(
@@ -104,11 +104,10 @@ public class NavigationItemsSupplierTest {
                                .map(NamedItem::getItem)
                                .forEach(Runnable::run);
         //then
-        val event = ArgumentCaptor.forClass(NavigationItemOuSelectedEvent.class);
+        val event = ArgumentCaptor.forClass(NavigationItemOuActionEvent.class);
         then(eventPublisher).should()
                             .publishEvent(event.capture());
         assertThat(event.getValue()
-                        .getSelected()
                         .getOu()).isSameAs(itUsersOu);
     }
 
@@ -126,7 +125,7 @@ public class NavigationItemsSupplierTest {
     }
 
     @Test
-    public void injectedParentItemsShouldPublishNavigationItemSelectedEventWhenRun() {
+    public void injectedParentItemsShouldPublishSwitchOuEventWhenRun() {
         //given
         given(currentContainer.getDn()).willReturn(itUsersOu.getDn());
         given(currentLdapContainerSupplier.get()).willReturn(
@@ -143,15 +142,11 @@ public class NavigationItemsSupplierTest {
         //when
         navigationItem.run();
         //then
-        val event = ArgumentCaptor.forClass(NavigationItemOuSelectedEvent.class);
+        val eventCaptor = ArgumentCaptor.forClass(NavigationItemOuActionEvent.class);
         then(eventPublisher).should()
-                            .publishEvent(event.capture());
-        final NavigationItemOuSelectedEvent value = event.getValue();
-        final NavigationItem selected = value.getSelected();
-        assertThat(selected).isInstanceOf(OuNavigationItem.class);
-        val selectedOu = (OuNavigationItem) selected;
-        val selectedDn = selectedOu.getOu()
-                                   .getDn();
-        assertThat(selectedDn).isEqualTo(usersOu.getDn());
+                            .publishEvent(eventCaptor.capture());
+        assertThat(eventCaptor.getValue()
+                              .getOu()
+                              .getDn()).isEqualTo(usersOu.getDn());
     }
 }

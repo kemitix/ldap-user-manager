@@ -4,8 +4,7 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import net.kemitix.ldapmanager.navigation.NavigationItemOuSelectedEvent;
-import net.kemitix.ldapmanager.navigation.OuNavigationItem;
+import net.kemitix.ldapmanager.navigation.NavigationItemOuActionEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -69,12 +68,11 @@ public class DefaultCurrentContainerTest {
         val newDn = LdapNameUtil.parse("ou=new");
         container.setDn(oldDn);
         reset(eventPublisher);
-        final OU newOu = OU.builder()
-                           .dn(newDn)
-                           .build();
+        val newOu = OU.builder()
+                      .dn(newDn)
+                      .build();
         //when
-        container.onNavigationItemSelectedOu(
-                NavigationItemOuSelectedEvent.of((OuNavigationItem) newOu.asNavigationItem(eventPublisher)));
+        container.onNavigationItemOuAction(NavigationItemOuActionEvent.of(newOu));
         //then
         final ArgumentCaptor<CurrentContainerChangedEvent> eventArgumentCaptor =
                 ArgumentCaptor.forClass(CurrentContainerChangedEvent.class);
@@ -91,13 +89,11 @@ public class DefaultCurrentContainerTest {
         val dn = LdapNameUtil.parse("ou=users");
         container.setDn(dn);
         reset(eventPublisher);
-        final OU newOu = OU.builder()
-                           .dn(dn)
-                           .build();
-        final NavigationItemOuSelectedEvent event =
-                NavigationItemOuSelectedEvent.of((OuNavigationItem) newOu.asNavigationItem(eventPublisher));
+        val newOu = OU.builder()
+                      .dn(dn)
+                      .build();
         //when
-        container.onNavigationItemSelectedOu(event);
+        container.onNavigationItemOuAction(NavigationItemOuActionEvent.of(newOu));
         //then
         then(eventPublisher).should(never())
                             .publishEvent(any(CurrentContainerChangedEvent.class));
