@@ -42,9 +42,12 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     @Getter
     private final User user;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     private UserNavigationItem(final User user, final ApplicationEventPublisher eventPublisher) {
-        super(user.getCn(), eventPublisher);
+        super(user.getCn());
         this.user = user;
+        applicationEventPublisher = eventPublisher;
     }
 
     /**
@@ -63,7 +66,7 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     @Override
     public void run() {
         log.log(Level.FINEST, "run(): %1", getName());
-        getEventPublisher().publishEvent(NavigationItemUserSelectedEvent.of(this));
+        applicationEventPublisher.publishEvent(NavigationItemUserActionEvent.of(user));
     }
 
     @Override

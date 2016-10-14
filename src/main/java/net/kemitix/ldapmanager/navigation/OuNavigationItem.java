@@ -42,9 +42,12 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     @Getter
     private final OU ou;
 
-    private OuNavigationItem(final OU ou, final ApplicationEventPublisher eventPublisher) {
-        super(ou.getOu(), eventPublisher);
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private OuNavigationItem(final OU ou, final ApplicationEventPublisher applicationEventPublisher) {
+        super(ou.getOu());
         this.ou = ou;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     /**
@@ -63,7 +66,7 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     @Override
     public void run() {
         log.log(Level.FINEST, "run(): %1", getName());
-        getEventPublisher().publishEvent(NavigationItemOuSelectedEvent.of(this));
+        applicationEventPublisher.publishEvent(NavigationItemOuActionEvent.of(ou));
     }
 
     @Override

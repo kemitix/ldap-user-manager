@@ -27,7 +27,6 @@ package net.kemitix.ldapmanager.navigation;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.java.Log;
-import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * An abstract {@link NavigationItem}.
@@ -40,17 +39,12 @@ abstract class AbstractNavigationItem implements NavigationItem {
     @Getter(AccessLevel.PROTECTED)
     private final String name;
 
-    @Getter(AccessLevel.PROTECTED)
-    private final ApplicationEventPublisher eventPublisher;
-
     /**
      * Constructor.
      *
      * @param name           The name.
-     * @param eventPublisher The Application Event Publisher.
      */
-    protected AbstractNavigationItem(final String name, final ApplicationEventPublisher eventPublisher) {
+    protected AbstractNavigationItem(final String name) {
         this.name = name;
-        this.eventPublisher = eventPublisher;
     }
 }
