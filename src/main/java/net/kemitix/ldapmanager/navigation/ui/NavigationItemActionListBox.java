@@ -22,11 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation;
+package net.kemitix.ldapmanager.navigation.ui;
 
 import com.googlecode.lanterna.gui2.Interactable;
 import com.googlecode.lanterna.input.KeyStroke;
 import lombok.NonNull;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
 
 import java.util.Optional;
 

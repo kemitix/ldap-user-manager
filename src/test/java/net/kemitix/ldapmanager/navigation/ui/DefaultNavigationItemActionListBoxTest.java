@@ -1,13 +1,15 @@
-package net.kemitix.ldapmanager.navigation;
+package net.kemitix.ldapmanager.navigation.ui;
 
 import com.googlecode.lanterna.gui2.Interactable;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
 import net.kemitix.ldapmanager.util.nameditem.NamedItem;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -145,7 +147,7 @@ public class DefaultNavigationItemActionListBoxTest {
         //when
         val result = navigationItemListBox.findAndSelectItemByName(ITEM_NAME_2);
         //then
-        assertThat(result.map(Runnable::toString)).contains(ITEM_NAME_2);
+        Assertions.assertThat(result.map(Runnable::toString)).contains(ITEM_NAME_2);
         result.ifPresent(a -> navigationItemListBox.performSelectedItem());
         assertThat(selectedItem.get()).isEqualTo(ITEM_NAME_2);
     }
@@ -157,7 +159,7 @@ public class DefaultNavigationItemActionListBoxTest {
         //when
         val result = navigationItemListBox.findAndSelectItemByName(ITEM_NAME_OTHER);
         //then
-        assertThat(result).isEmpty();
+        Assertions.assertThat(result).isEmpty();
         assertThat(selectedItem.get()).isEqualTo("unselected");
     }
 
@@ -308,7 +310,7 @@ public class DefaultNavigationItemActionListBoxTest {
         return NamedItem.of(label, myItem);
     }
 
-    private static class MyItem extends AbstractNavigationItem {
+    private static class MyItem implements NavigationItem {
 
         private final String name;
 
@@ -320,7 +322,6 @@ public class DefaultNavigationItemActionListBoxTest {
                 final String name, final ApplicationEventPublisher applicationEventPublisher,
                 final AtomicReference<String> selectedItem
               ) {
-            super(name);
             this.name = name;
             this.applicationEventPublisher = applicationEventPublisher;
             this.selectedItem = selectedItem;

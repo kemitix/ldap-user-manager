@@ -1,6 +1,6 @@
 package net.kemitix.ldapmanager.ui;
 
-import net.kemitix.ldapmanager.navigation.NavigationItemActionListBox;
+import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
