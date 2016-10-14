@@ -46,6 +46,10 @@ public class DefaultNavigationItemActionListBoxTest {
 
     public static final String ITEM_NAME_1 = "name";
 
+    private static final char CHAR_SPACE = ' ';
+
+    private static final char CHAR_X = 'x';
+
     private DefaultNavigationItemActionListBox navigationItemListBox;
 
     private List<NamedItem<NavigationItem>> namedItems;
@@ -90,10 +94,10 @@ public class DefaultNavigationItemActionListBoxTest {
         given(navigationItemsSupplier.get()).willReturn(namedItems);
         escapeKeyStroke = new KeyStroke(KeyType.Escape);
         enterKeyStroke = new KeyStroke(KeyType.Enter);
-        xKeyStroke = new KeyStroke('x', false, false);
-        spaceKeyStroke = new KeyStroke(Messages.CHAR_SPACE, false, false);
+        xKeyStroke = new KeyStroke(CHAR_X, false, false);
+        spaceKeyStroke = new KeyStroke(CHAR_SPACE, false, false);
         assertThat(spaceKeyStroke.getKeyType()).isEqualTo(KeyType.Character);
-        assertThat(spaceKeyStroke.getCharacter()).isEqualTo(Messages.CHAR_SPACE);
+        assertThat(spaceKeyStroke.getCharacter()).isEqualTo(CHAR_SPACE);
         namedNavigationItem0 = createItem(ITEM_NAME_1);
         namedNavigationItem1 = createItem(ITEM_NAME_2);
     }
@@ -147,7 +151,8 @@ public class DefaultNavigationItemActionListBoxTest {
         //when
         val result = navigationItemListBox.findAndSelectItemByName(ITEM_NAME_2);
         //then
-        Assertions.assertThat(result.map(Runnable::toString)).contains(ITEM_NAME_2);
+        Assertions.assertThat(result.map(Runnable::toString))
+                  .contains(ITEM_NAME_2);
         result.ifPresent(a -> navigationItemListBox.performSelectedItem());
         assertThat(selectedItem.get()).isEqualTo(ITEM_NAME_2);
     }
@@ -159,7 +164,8 @@ public class DefaultNavigationItemActionListBoxTest {
         //when
         val result = navigationItemListBox.findAndSelectItemByName(ITEM_NAME_OTHER);
         //then
-        Assertions.assertThat(result).isEmpty();
+        Assertions.assertThat(result)
+                  .isEmpty();
         assertThat(selectedItem.get()).isEqualTo("unselected");
     }
 
@@ -172,7 +178,7 @@ public class DefaultNavigationItemActionListBoxTest {
         navigationItemListBox.init();
         //then
         then(startupExceptionsCollector).should()
-                                        .addException(eq(Messages.ERROR_AUTHENTICATION),
+                                        .addException(eq(Messages.ERROR_AUTHENTICATION.getValue()),
                                                       any(AuthenticationException.class)
                                                      );
     }

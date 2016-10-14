@@ -84,7 +84,7 @@ class MainPanel extends Panel {
         innerPanel.addComponent(topPanel, BorderLayout.Location.TOP);
         innerPanel.addComponent(getBottomPanel(), BorderLayout.Location.BOTTOM);
         innerPanel.addComponent(navigationPanel, BorderLayout.Location.LEFT);
-        addComponent(innerPanel.withBorder(Borders.singleLine(Messages.APP_NAME)));
+        addComponent(innerPanel.withBorder(Borders.singleLine(Messages.APP_NAME.getValue())));
         setLayoutManager(layoutManager);
         setLayoutData(BorderLayout.Location.CENTER);
     }

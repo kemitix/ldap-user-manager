@@ -102,11 +102,11 @@ class LanternaUi implements CommandLineRunner {
     public final void run(final String... strings) {
         log.log(Level.FINEST, "run(%1)", strings);
         try {
-            logMessages.add(Messages.STARTING_LANTERNA_UI);
+            logMessages.add(Messages.STARTING_LANTERNA_UI.getValue());
             gui.addWindow(mainWindow);
             val startupExceptions = startupExceptionsCollector.getExceptions();
             if (startupExceptions.isEmpty()) {
-                logMessages.add(Messages.ENTERING_MAIN_LOOP);
+                logMessages.add(Messages.ENTERING_MAIN_LOOP.getValue());
                 gui.waitForWindowToClose(mainWindow);
             } else {
                 startupExceptions.forEach(e -> {
@@ -130,7 +130,7 @@ class LanternaUi implements CommandLineRunner {
         final int wrapLength = gui.getScreen()
                                   .getTerminalSize()
                                   .getColumns() - 5;
-        return messageDialogBuilder.setTitle(Messages.ERROR_UNHANDLED)
+        return messageDialogBuilder.setTitle(Messages.ERROR_UNHANDLED.getValue())
                                    .setText(WordUtils.wrap(String.join(NEWLINE, messages), wrapLength, NEWLINE, false))
                                    .build();
     }

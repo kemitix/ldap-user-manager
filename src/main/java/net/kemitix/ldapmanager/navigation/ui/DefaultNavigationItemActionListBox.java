@@ -32,8 +32,8 @@ import com.googlecode.lanterna.input.KeyType;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import lombok.val;
-import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.AbstractListenableListBox;
@@ -61,6 +61,8 @@ import java.util.logging.Level;
 class DefaultNavigationItemActionListBox
         extends AbstractListenableListBox<NavigationItem, DefaultNavigationItemActionListBox>
         implements NavigationItemActionListBox {
+
+    private static final Character CHAR_SPACE = ' ';
 
     private final Supplier<List<NamedItem<NavigationItem>>> navigationItemSupplier;
 
@@ -97,7 +99,7 @@ class DefaultNavigationItemActionListBox
         try {
             onCurrentContainerChanged();
         } catch (final AuthenticationException e) {
-            startupExceptionsCollector.addException(Messages.ERROR_AUTHENTICATION, e);
+            startupExceptionsCollector.addException(Messages.ERROR_AUTHENTICATION.getValue(), e);
         }
         publishOnSelectionChange = true;
     }
@@ -143,8 +145,8 @@ class DefaultNavigationItemActionListBox
         val isItemSelected = selectedItem != null;
         if (isItemSelected) {
             val isEnter = keyStroke.getKeyType() == KeyType.Enter;
-            val isSpaceBar = (keyStroke.getKeyType() == KeyType.Character) && (Messages.CHAR_SPACE.equals(
-                    keyStroke.getCharacter()));
+            val isSpaceBar =
+                    (keyStroke.getKeyType() == KeyType.Character) && (CHAR_SPACE.equals(keyStroke.getCharacter()));
             return isEnter || isSpaceBar;
         }
         return false;

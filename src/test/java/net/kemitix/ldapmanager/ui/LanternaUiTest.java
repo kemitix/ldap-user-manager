@@ -8,6 +8,7 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.screen.Screen;
 import lombok.val;
 import net.kemitix.ldapmanager.LdapUserManagerException;
+import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.junit.Before;
@@ -110,7 +111,7 @@ public class LanternaUiTest {
         ui.run();
         //then
         then(messageDialogBuilder).should()
-                                  .setTitle("Unhandled Error");
+                                  .setTitle(Messages.ERROR_UNHANDLED.getValue());
         then(messageDialogBuilder).should()
                                   .setText(stringCaptor.capture());
         assertThat(stringCaptor.getValue()).contains("the message")
@@ -133,7 +134,7 @@ public class LanternaUiTest {
         ui.run();
         //then
         then(messageDialogBuilder).should()
-                                  .setTitle("Unhandled Error");
+                                  .setTitle(Messages.ERROR_UNHANDLED.getValue());
         then(messageDialogBuilder).should()
                                   .setText(stringCaptor.capture());
         assertThat(stringCaptor.getValue()).contains("the message")

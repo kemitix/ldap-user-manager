@@ -24,37 +24,37 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager;
 
+import lombok.Getter;
+
 /**
  * Text messages.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class Messages {
+@SuppressWarnings("enumvaluename")
+public enum Messages {
 
-    public static final Character CHAR_SPACE = ' ';
+    ERROR_AUTHENTICATION("Authentication error"),
+    ERROR_UNHANDLED("Unhandled Error"),
+    CURRENT_OU("Current OU"),
+    TIME("Time"),
+    NAVIGATION("Navigation"),
+    APP_NAME("LDAP User Manager"),
+    LOG("Log"),
+    STARTING_LANTERNA_UI("Starting Lanterna UI...adding main window"),
+    ENTERING_MAIN_LOOP("Entering main loop..."),
+    LOG_CHANGED_TO_CONTAINER("Changed to container: "),
+    KEYSTROKE_LABEL_DELIMITER(" | ");
 
-    public static final String ERROR_AUTHENTICATION = "Authentication error";
+    @Getter
+    private final String value;
 
-    public static final String CURRENT_OU = "Current OU";
-
-    public static final String TIME = "Time";
-
-    public static final String NAVIGATION = "Navigation";
-
-    public static final String APP_NAME = "LDAP User Manager";
-
-    public static final String LOG = "Log";
-
-    public static final String STARTING_LANTERNA_UI = "Starting Lanterna UI...adding main window";
-
-    public static final String ENTERING_MAIN_LOOP = "Entering main loop...";
-
-    public static final String ERROR_UNHANDLED = "Unhandled Error";
-
-    public static final String LOG_CHANGED_TO_CONTAINER = "Changed to container: ";
-
-    public static final String KEYSTROKE_LABEL_DELIMITER = " | ";
-
-    private Messages() {
+    /**
+     * Constructor.
+     *
+     * @param value The string value of the message.
+     */
+    Messages(final String value) {
+        this.value = value;
     }
 }

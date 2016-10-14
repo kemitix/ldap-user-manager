@@ -89,6 +89,7 @@ class BottomPanel extends Panel {
                                                 .filter(KeyStrokeHandler::isActive)
                                                 //.sorted()
                                                 .map(KeyStrokeHandler::getPrompt)
-                                                .collect(Collectors.joining(Messages.KEYSTROKE_LABEL_DELIMITER)));
+                                                .collect(Collectors.joining(
+                                                        Messages.KEYSTROKE_LABEL_DELIMITER.getValue())));
     }
 }

@@ -75,7 +75,7 @@ class LogPanel extends Panel {
     @PostConstruct
     public void init() {
         val component = new Panel().addComponent(messageLabel)
-                                   .withBorder(Borders.singleLine(Messages.LOG));
+                                   .withBorder(Borders.singleLine(Messages.LOG.getValue()));
         component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
         addComponent(component);
         update();

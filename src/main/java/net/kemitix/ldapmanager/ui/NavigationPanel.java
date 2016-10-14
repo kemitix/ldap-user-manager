@@ -65,7 +65,10 @@ class NavigationPanel extends Panel {
     @PostConstruct
     public final void init() {
         log.log(Level.FINEST, "init()");
-        addComponent(new Panel().addComponent(actionListBox, LinearLayout.createLayoutData(LinearLayout.Alignment.Fill))
-                                .withBorder(Borders.singleLine(Messages.NAVIGATION)), BorderLayout.Location.CENTER);
+        addComponent(
+                new Panel().addComponent(actionListBox, LinearLayout.createLayoutData(LinearLayout.Alignment.Fill))
+                           .withBorder(Borders.singleLine(Messages.NAVIGATION.getValue())),
+                BorderLayout.Location.CENTER
+                    );
     }
 }
