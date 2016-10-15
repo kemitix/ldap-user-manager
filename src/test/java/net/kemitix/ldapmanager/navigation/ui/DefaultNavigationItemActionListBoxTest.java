@@ -8,7 +8,6 @@ import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,11 +39,11 @@ import static org.mockito.Matchers.eq;
  */
 public class DefaultNavigationItemActionListBoxTest {
 
-    public static final String ITEM_NAME_2 = "beta";
+    private static final String ITEM_NAME_2 = "beta";
 
-    public static final String ITEM_NAME_OTHER = "gamma";
+    private static final String ITEM_NAME_OTHER = "gamma";
 
-    public static final String ITEM_NAME_1 = "name";
+    private static final String ITEM_NAME_1 = "name";
 
     private static final char CHAR_SPACE = ' ';
 
@@ -52,10 +51,10 @@ public class DefaultNavigationItemActionListBoxTest {
 
     private DefaultNavigationItemActionListBox navigationItemListBox;
 
-    private List<NamedItem<NavigationItem>> namedItems;
+    private List<NavigationItem> navigationItems;
 
     @Mock
-    private Supplier<List<NamedItem<NavigationItem>>> navigationItemsSupplier;
+    private Supplier<List<NavigationItem>> navigationItemsSupplier;
 
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
@@ -79,9 +78,9 @@ public class DefaultNavigationItemActionListBoxTest {
     @Captor
     private ArgumentCaptor<NavigationItemSelectionChangedEvent> eventCaptor;
 
-    private NamedItem<NavigationItem> namedNavigationItem0;
+    private NavigationItem navigationItem0;
 
-    private NamedItem<NavigationItem> namedNavigationItem1;
+    private NavigationItem navigationItem1;
 
     @Before
     public void setUp() throws Exception {
@@ -90,16 +89,16 @@ public class DefaultNavigationItemActionListBoxTest {
                 new DefaultNavigationItemActionListBox(navigationItemsSupplier, startupExceptionsCollector,
                                                        applicationEventPublisher
                 );
-        namedItems = new ArrayList<>();
-        given(navigationItemsSupplier.get()).willReturn(namedItems);
+        navigationItems = new ArrayList<>();
+        given(navigationItemsSupplier.get()).willReturn(navigationItems);
         escapeKeyStroke = new KeyStroke(KeyType.Escape);
         enterKeyStroke = new KeyStroke(KeyType.Enter);
         xKeyStroke = new KeyStroke(CHAR_X, false, false);
         spaceKeyStroke = new KeyStroke(CHAR_SPACE, false, false);
         assertThat(spaceKeyStroke.getKeyType()).isEqualTo(KeyType.Character);
         assertThat(spaceKeyStroke.getCharacter()).isEqualTo(CHAR_SPACE);
-        namedNavigationItem0 = createItem(ITEM_NAME_1);
-        namedNavigationItem1 = createItem(ITEM_NAME_2);
+        navigationItem0 = createItem(ITEM_NAME_1);
+        navigationItem1 = createItem(ITEM_NAME_2);
     }
 
     @Test
@@ -253,8 +252,8 @@ public class DefaultNavigationItemActionListBoxTest {
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
-        assertThat(event.getOldItem()).contains(namedNavigationItem0.getItem());
-        assertThat(event.getNewItem()).contains(namedNavigationItem1.getItem());
+        assertThat(event.getOldItem()).contains(navigationItem0);
+        assertThat(event.getNewItem()).contains(navigationItem1);
     }
 
     @Test
@@ -267,7 +266,7 @@ public class DefaultNavigationItemActionListBoxTest {
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
-        assertThat(event.getOldItem()).contains(namedNavigationItem0.getItem());
+        assertThat(event.getOldItem()).contains(navigationItem0);
         assertThat(event.getNewItem()).isEmpty();
     }
 
@@ -282,7 +281,7 @@ public class DefaultNavigationItemActionListBoxTest {
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
         assertThat(event.getOldItem()).isEmpty();
-        assertThat(event.getNewItem()).contains(namedNavigationItem1.getItem());
+        assertThat(event.getNewItem()).contains(navigationItem1);
     }
 
     @Test
@@ -300,9 +299,9 @@ public class DefaultNavigationItemActionListBoxTest {
     }
 
     private void givenPopulatedList() {
-        given(navigationItemsSupplier.get()).willReturn(namedItems);
-        namedItems.add(namedNavigationItem0);
-        namedItems.add(namedNavigationItem1);
+        given(navigationItemsSupplier.get()).willReturn(navigationItems);
+        navigationItems.add(navigationItem0);
+        navigationItems.add(navigationItem1);
         navigationItemListBox.init();
     }
 
@@ -310,10 +309,8 @@ public class DefaultNavigationItemActionListBoxTest {
         navigationItemListBox.init();
     }
 
-    private NamedItem<NavigationItem> createItem(final String label) {
-        final NavigationItem myItem =
-                new DefaultNavigationItemActionListBoxTest.MyItem(label, applicationEventPublisher, selectedItem);
-        return NamedItem.of(label, myItem);
+    private NavigationItem createItem(final String label) {
+        return new DefaultNavigationItemActionListBoxTest.MyItem(label, applicationEventPublisher, selectedItem);
     }
 
     private static class MyItem implements NavigationItem {
@@ -339,7 +336,13 @@ public class DefaultNavigationItemActionListBoxTest {
         }
 
         @Override
+        @Deprecated
         public String toString() {
+            return name;
+        }
+
+        @Override
+        public String getName() {
             return name;
         }
 

@@ -32,6 +32,13 @@ package net.kemitix.ldapmanager.navigation;
 public interface NavigationItem extends Runnable {
 
     /**
+     * Return the name of the item.
+     *
+     * @return the item's name
+     */
+    String getName();
+
+    /**
      * Publish an event indicating that this item has been selected.
      */
     void publishAsSelected();
