@@ -24,13 +24,17 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.util.nameditem;
 
+import net.kemitix.ldapmanager.navigation.NavigationItem;
+
 /**
  * A tuple of a name and an item.
  *
  * @param <T> the type of the item
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
+ * @deprecated Only used with {@link NavigationItem} which now has a {@link NavigationItem#getName()}.
  */
+@Deprecated
 public interface NamedItem<T> {
 
     /**
