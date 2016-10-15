@@ -32,9 +32,11 @@ import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.WindowManager;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
+import com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.TerminalFactory;
+import net.kemitix.ldapmanager.Messages;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -43,6 +45,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@SuppressWarnings({"DesignForExtension", "MethodMayBeStatic"})
 @Configuration
 class LanternaConfiguration {
 
@@ -112,5 +115,21 @@ class LanternaConfiguration {
     @Bean
     MessageDialogBuilder messageDialogBuilder() {
         return new MessageDialogBuilder();
+    }
+
+    /**
+     * Validator for TextInputDialogs to ensure that the value is not empty.
+     *
+     * @return the validator
+     */
+    @SuppressWarnings("ReturnOfNull")
+    @Bean
+    public TextInputDialogResultValidator validateNotEmpty() {
+        return content -> {
+            if (content.isEmpty()) {
+                return Messages.ERROR_IS_EMPTY.getValue();
+            }
+            return null;
+        };
     }
 }
