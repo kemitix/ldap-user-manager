@@ -24,8 +24,13 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
+import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapService;
+import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
@@ -44,14 +49,25 @@ class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
 
     private final Map<Name, LdapEntityContainer> containerMap = new HashMap<>();
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final CurrentContainer currentContainer;
+
     /**
      * Constructor.
      *
-     * @param ldapService The LDAP Service
+     * @param ldapService               The LDAP Service.
+     * @param applicationEventPublisher The Application Event Publisher.
+     * @param currentContainer          The Current Container.
      */
     @Autowired
-    DefaultLdapEntityContainerMap(final LdapService ldapService) {
+    DefaultLdapEntityContainerMap(
+            final LdapService ldapService, final ApplicationEventPublisher applicationEventPublisher,
+            final CurrentContainer currentContainer
+                                 ) {
         this.ldapService = ldapService;
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.currentContainer = currentContainer;
     }
 
     @Override
@@ -62,5 +78,19 @@ class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
     @Override
     public void clear() {
         containerMap.clear();
+    }
+
+    /**
+     * Listener for {@link ContainerExpiredEvent} to remove expired containers.
+     *
+     * @param event the event
+     */
+    @EventListener(ContainerExpiredEvent.class)
+    public void onContainerExpired(final ContainerExpiredEvent event) {
+        val expiredContainers = event.getContainers();
+        expiredContainers.forEach(containerMap::remove);
+        if (expiredContainers.contains(currentContainer.getDn())) {
+            applicationEventPublisher.publishEvent(CurrentContainerChangedEvent.of(currentContainer.getDn()));
+        }
     }
 }
