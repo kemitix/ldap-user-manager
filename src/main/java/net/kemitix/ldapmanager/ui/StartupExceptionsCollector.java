@@ -26,7 +26,7 @@ package net.kemitix.ldapmanager.ui;
 
 import net.kemitix.ldapmanager.LdapUserManagerException;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Exceptions thrown during application startup are added here and are then available to the UI to display when it is
@@ -49,5 +49,12 @@ public interface StartupExceptionsCollector {
      *
      * @return the exceptions
      */
-    List<LdapUserManagerException> getExceptions();
+    Stream<LdapUserManagerException> getExceptions();
+
+    /**
+     * Returns true if no exceptions have been added.
+     *
+     * @return true if there are no exceptions
+     */
+    boolean isEmpty();
 }

@@ -38,9 +38,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * UI Panel for displaying log messages.
@@ -86,13 +83,19 @@ class LogPanel extends Panel {
      */
     @EventListener(LogMessageAddedEvent.class)
     public void update() {
-        final List<String> messages = logMessages.getMessages();
-        final int logSize = messages.size();
-        val selectedMessages = new ArrayList<String>(messages.subList(Math.max(logSize - linesToShow, 0), logSize));
-        while (selectedMessages.size() < linesToShow) {
-            selectedMessages.add(0, "");
+        final int logSize = logMessages.getMessageCount();
+        final StringBuilder log = new StringBuilder(200);
+        for (int i = logSize; i < linesToShow; i++) {
+            log.append(appendNewLine(""));
         }
-        messageLabel.setText(selectedMessages.stream()
-                                             .collect(Collectors.joining("\n")));
+        logMessages.getMessages()
+                   .skip(Math.max(logSize - linesToShow, 0))
+                   .map(LogPanel::appendNewLine)
+                   .forEach(log::append);
+        messageLabel.setText(log.toString());
+    }
+
+    private static String appendNewLine(final String line) {
+        return String.format("%s%n", line);
     }
 }

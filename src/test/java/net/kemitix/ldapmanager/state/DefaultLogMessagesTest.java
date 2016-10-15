@@ -1,6 +1,5 @@
 package net.kemitix.ldapmanager.state;
 
-import lombok.val;
 import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,16 +45,6 @@ public class DefaultLogMessagesTest {
 
     @Test
     public void shouldGetMessages() throws Exception {
-        assertThat(logMessages.getMessages()).hasSize(1);
-    }
-
-    @Test
-    public void getMessagesShouldBeACopy() {
-        //given
-        val messages = logMessages.getMessages();
-        //when
-        messages.clear();
-        //then
         assertThat(logMessages.getMessages()).hasSize(1);
     }
 }

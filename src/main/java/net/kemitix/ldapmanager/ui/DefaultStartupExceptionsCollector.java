@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Stream;
 
 /**
  * The status of the LDAP server.
@@ -53,8 +54,13 @@ class DefaultStartupExceptionsCollector implements StartupExceptionsCollector {
     }
 
     @Override
-    public final List<LdapUserManagerException> getExceptions() {
+    public final Stream<LdapUserManagerException> getExceptions() {
         log.log(Level.FINEST, "getExceptions(): %1", exceptions.size());
-        return new ArrayList<>(exceptions);
+        return exceptions.stream();
+    }
+
+    @Override
+    public final boolean isEmpty() {
+        return exceptions.isEmpty();
     }
 }

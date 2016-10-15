@@ -20,8 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -84,7 +83,8 @@ public class LanternaUiTest {
     @Test
     public void run() throws IOException {
         //given
-        given(startupExceptionsCollector.getExceptions()).willReturn(new ArrayList<>());
+        given(startupExceptionsCollector.isEmpty()).willReturn(true);
+        given(startupExceptionsCollector.getExceptions()).willReturn(Stream.empty());
         //when
         ui.run();
         //then
@@ -103,7 +103,8 @@ public class LanternaUiTest {
         val ldapUserManagerException = new LdapUserManagerException("the message", cause);
         willThrow(ldapUserManagerException).given(gui)
                                            .waitForWindowToClose(mainWindow);
-        given(startupExceptionsCollector.getExceptions()).willReturn(new ArrayList<>());
+        given(startupExceptionsCollector.isEmpty()).willReturn(true);
+        given(startupExceptionsCollector.getExceptions()).willReturn(Stream.empty());
         given(messageDialogBuilder.setTitle(anyString())).willReturn(messageDialogBuilder);
         given(messageDialogBuilder.setText(anyString())).willReturn(messageDialogBuilder);
         given(messageDialogBuilder.build()).willReturn(messageDialog);
@@ -125,8 +126,7 @@ public class LanternaUiTest {
         //given
         val cause = new RuntimeException("the cause");
         val ldapUserManagerException = new LdapUserManagerException("the message", cause);
-        given(startupExceptionsCollector.getExceptions()).willReturn(
-                new ArrayList<>(Collections.singletonList(ldapUserManagerException)));
+        given(startupExceptionsCollector.getExceptions()).willReturn(Stream.of(ldapUserManagerException));
         given(messageDialogBuilder.setTitle(anyString())).willReturn(messageDialogBuilder);
         given(messageDialogBuilder.setText(anyString())).willReturn(messageDialogBuilder);
         given(messageDialogBuilder.build()).willReturn(messageDialog);

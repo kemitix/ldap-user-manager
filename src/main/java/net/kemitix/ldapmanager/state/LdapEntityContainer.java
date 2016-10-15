@@ -28,8 +28,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A container in an LDAP directory.
@@ -43,7 +44,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LdapEntityContainer {
 
-    private final List<LdapEntity> contents;
+    private final Collection<LdapEntity> contents;
 
     /**
      * Creates an LDAP Container with the given contents.
@@ -52,11 +53,11 @@ public class LdapEntityContainer {
      *
      * @return the container
      */
-    public static LdapEntityContainer of(final List<LdapEntity> contents) {
-        return new LdapEntityContainer(new ArrayList<>(contents));
+    public static LdapEntityContainer of(final Stream<LdapEntity> contents) {
+        return new LdapEntityContainer(contents.collect(Collectors.toList()));
     }
 
-    public final List<LdapEntity> getContents() {
-        return new ArrayList<>(contents);
+    public final Stream<LdapEntity> getContents() {
+        return contents.stream();
     }
 }

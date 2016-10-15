@@ -18,7 +18,8 @@ public class DefaultStartupExceptionsCollectorTest {
 
     private DefaultStartupExceptionsCollector collector;
 
-    @Rule public final ExpectedException exception = ExpectedException.none();
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
@@ -33,10 +34,10 @@ public class DefaultStartupExceptionsCollectorTest {
         //when
         collector.addException("message", cause);
         //then
-        assertThat(collector.getExceptions()).hasSize(1);
-        assertThat(collector.getExceptions()
-                            .get(0)
-                            .getCause()).isSameAs(cause);
+        assertThat(collector.isEmpty()).isFalse();
+        collector.getExceptions()
+                 .findFirst()
+                 .ifPresent(e -> assertThat(e.getCause()).isSameAs(cause));
     }
 
     @Test
