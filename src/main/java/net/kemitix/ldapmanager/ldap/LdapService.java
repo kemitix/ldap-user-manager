@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 
 import javax.naming.Name;
@@ -43,4 +44,12 @@ public interface LdapService {
      * @return the container
      */
     LdapEntityContainer getLdapEntityContainer(Name dn);
+
+    /**
+     * Rename the entity.
+     *
+     * @param ldapEntity The entity to be renamed
+     * @param dn         The new DN attribute
+     */
+    void rename(LdapEntity ldapEntity, Name dn);
 }
