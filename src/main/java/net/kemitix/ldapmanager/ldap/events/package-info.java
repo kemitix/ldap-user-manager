@@ -22,39 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.events;
-
-import lombok.Getter;
-
-import javax.naming.Name;
-
 /**
- * Notification of a change to the current container.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class CurrentContainerChangedEvent {
 
-    @Getter
-    private final Name newContainer;
+/**
+ * LDAP Events.
+ */
 
-    /**
-     * Constructor.
-     *
-     * @param newContainer The name of the new container.
-     */
-    private CurrentContainerChangedEvent(final Name newContainer) {
-        this.newContainer = newContainer;
-    }
-
-    /**
-     * Creates a new {@link CurrentContainerChangedEvent}.
-     *
-     * @param newContainer The name of the new container.
-     *
-     * @return the event
-     */
-    public static CurrentContainerChangedEvent of(final Name newContainer) {
-        return new CurrentContainerChangedEvent(newContainer);
-    }
-}
+package net.kemitix.ldapmanager.ldap.events;
