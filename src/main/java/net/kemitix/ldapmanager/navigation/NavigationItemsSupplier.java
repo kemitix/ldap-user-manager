@@ -92,7 +92,6 @@ class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
         // Add entity in container
         items.addAll(currentLdapContainerSupplier.get()
                                                  .getContents()
-                                                 .stream()
                                                  .map(this::asNavigationItem)
                                                  .collect(Collectors.toList()));
         return items;

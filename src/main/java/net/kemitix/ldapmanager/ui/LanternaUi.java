@@ -29,7 +29,6 @@ import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import lombok.extern.java.Log;
-import lombok.val;
 import net.kemitix.ldapmanager.LdapUserManagerException;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
@@ -104,20 +103,19 @@ class LanternaUi implements CommandLineRunner {
         try {
             logMessages.add(Messages.STARTING_LANTERNA_UI.getValue());
             gui.addWindow(mainWindow);
-            val startupExceptions = startupExceptionsCollector.getExceptions();
-            if (startupExceptions.isEmpty()) {
+            if (startupExceptionsCollector.isEmpty()) {
                 logMessages.add(Messages.ENTERING_MAIN_LOOP.getValue());
                 gui.waitForWindowToClose(mainWindow);
-            } else {
-                startupExceptions.forEach(e -> {
-                    exceptionMessageDialog(e).showDialog(gui);
-                });
             }
+            startupExceptionsCollector.getExceptions()
+                                      .findFirst()
+                                      .ifPresent(e -> exceptionMessageDialog(e).showDialog(gui));
         } catch (final LdapUserManagerException e) {
             exceptionMessageDialog(e).showDialog(gui);
         } finally {
             eventPublisher.publishEvent(ApplicationExitEvent.create());
         }
+
     }
 
     private MessageDialog exceptionMessageDialog(final LdapUserManagerException exception) {

@@ -16,10 +16,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -75,8 +74,7 @@ public class NavigationItemsSupplierTest {
     public void shouldGet() throws Exception {
         //given
         given(currentContainer.getDn()).willReturn(usersOu.getDn());
-        given(currentLdapContainerSupplier.get()).willReturn(
-                LdapEntityContainer.of(Collections.singletonList(bobUsersUser)));
+        given(currentLdapContainerSupplier.get()).willReturn(LdapEntityContainer.of(Stream.of(bobUsersUser)));
         //when
         val result = navigationItemsSupplier.get();
         //then
@@ -95,7 +93,7 @@ public class NavigationItemsSupplierTest {
         //given
         given(currentContainer.getDn()).willReturn(usersOu.getDn());
         given(currentLdapContainerSupplier.get()).willReturn(
-                LdapEntityContainer.of(Arrays.asList(itUsersOu, bobUsersUser)));
+                LdapEntityContainer.of(Stream.of(itUsersOu, bobUsersUser)));
         //when
         navigationItemsSupplier.get()
                                .stream()
@@ -114,8 +112,7 @@ public class NavigationItemsSupplierTest {
     public void getShouldReturnRootWhenDnIsEmpty() {
         //given
         given(currentContainer.getDn()).willReturn(LdapNameUtil.empty());
-        given(currentLdapContainerSupplier.get()).willReturn(
-                LdapEntityContainer.of(Collections.singletonList(bobUsersUser)));
+        given(currentLdapContainerSupplier.get()).willReturn(LdapEntityContainer.of(Stream.of(bobUsersUser)));
         //when
         final List<NavigationItem> navigationItems = navigationItemsSupplier.get();
         //then
@@ -127,8 +124,7 @@ public class NavigationItemsSupplierTest {
     public void injectedParentItemsShouldPublishSwitchOuEventWhenRun() {
         //given
         given(currentContainer.getDn()).willReturn(itUsersOu.getDn());
-        given(currentLdapContainerSupplier.get()).willReturn(
-                LdapEntityContainer.of(Collections.singletonList(bobUsersUser)));
+        given(currentLdapContainerSupplier.get()).willReturn(LdapEntityContainer.of(Stream.of(bobUsersUser)));
         val navigationItem = navigationItemsSupplier.get()
                                                     .get(0);
         assertThat(navigationItem.getName()).as("first item is '..'")

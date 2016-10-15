@@ -24,7 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Stores log messages.
@@ -45,5 +45,12 @@ public interface LogMessages {
      *
      * @return the messages
      */
-    List<String> getMessages();
+    Stream<String> getMessages();
+
+    /**
+     * Returns the number of log messages.
+     *
+     * @return the number of messages
+     */
+    int getMessageCount();
 }

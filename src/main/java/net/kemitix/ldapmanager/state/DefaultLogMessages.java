@@ -30,7 +30,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * A list of log messages recorded.
@@ -40,7 +41,7 @@ import java.util.List;
 @Component
 class DefaultLogMessages implements LogMessages {
 
-    private final List<String> messages = new ArrayList<>();
+    private final Collection<String> messages = new ArrayList<>();
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -62,13 +63,18 @@ class DefaultLogMessages implements LogMessages {
     }
 
     @Override
-    public void add(final String message) {
+    public final void add(final String message) {
         messages.add(message);
         eventPublisher.publishEvent(LogMessageAddedEvent.create());
     }
 
     @Override
-    public List<String> getMessages() {
-        return new ArrayList<>(messages);
+    public Stream<String> getMessages() {
+        return messages.stream();
+    }
+
+    @Override
+    public int getMessageCount() {
+        return messages.size();
     }
 }

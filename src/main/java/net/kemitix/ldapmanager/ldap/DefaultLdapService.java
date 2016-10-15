@@ -37,7 +37,6 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -66,7 +65,7 @@ class DefaultLdapService implements LdapService {
 
     @Override
     public LdapEntityContainer getLdapEntityContainer(final Name dn) {
-        logMessages.add("Loading container: " + dn.toString());
+        logMessages.add(String.format("Loading container: %s", dn));
         val query = LdapQueryBuilder.query()
                                     .base(dn)
                                     .searchScope(SearchScope.ONELEVEL)
@@ -75,8 +74,7 @@ class DefaultLdapService implements LdapService {
         val ouList = ldapTemplate.find(query, OU.class);
         val userList = ldapTemplate.find(query, User.class);
         val ldapEntityContainer = LdapEntityContainer.of(Stream.of(ouList.stream(), userList.stream())
-                                                               .flatMap(Function.identity())
-                                                               .collect(Collectors.toList()));
+                                                               .flatMap(Function.identity()));
         logMessages.add(String.format("Loaded container: %d OU(s) and %d user(s)", ouList.size(), userList.size()));
         return ldapEntityContainer;
     }

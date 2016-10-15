@@ -8,8 +8,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -34,7 +33,6 @@ public class LogPanelTest {
         val uiProperties = new UiProperties();
         uiProperties.setLogLinesToShow(2);
         logPanel = new LogPanel(logMessages, uiProperties);
-        logPanel.init();
         messageLabel = logPanel.getMessageLabel();
     }
 
@@ -42,9 +40,10 @@ public class LogPanelTest {
     public void shouldUpdateWhenLessThanLinesToShow() throws Exception {
         //given
         assertThat(messageLabel.getText()).isEmpty();
-        given(logMessages.getMessages()).willReturn(Collections.singletonList("redrum"));
+        given(logMessages.getMessageCount()).willReturn(1);
+        given(logMessages.getMessages()).willReturn(Stream.of("redrum"));
         //when
-        logPanel.update();
+        logPanel.init();
         //then
         assertThat(messageLabel.getText()
                                .split("\n")).containsExactly("", "redrum");
@@ -53,9 +52,10 @@ public class LogPanelTest {
     @Test
     public void shouldUpdateWhenEqualsLinesToShow() throws Exception {
         //given
-        given(logMessages.getMessages()).willReturn(Arrays.asList("line 1", "line 2"));
+        given(logMessages.getMessageCount()).willReturn(2);
+        given(logMessages.getMessages()).willReturn(Stream.of("line 1", "line 2"));
         //when
-        logPanel.update();
+        logPanel.init();
         //then
         assertThat(messageLabel.getText()
                                .split("\n")).containsExactly("line 1", "line 2");
@@ -64,9 +64,10 @@ public class LogPanelTest {
     @Test
     public void shouldUpdateWhenMoreThanLinesToShow() throws Exception {
         //given
-        given(logMessages.getMessages()).willReturn(Arrays.asList("line 1", "line 2", "line 3"));
+        given(logMessages.getMessageCount()).willReturn(3);
+        given(logMessages.getMessages()).willReturn(Stream.of("line 1", "line 2", "line 3"));
         //when
-        logPanel.update();
+        logPanel.init();
         //then
         assertThat(messageLabel.getText()
                                .split("\n")).containsExactly("line 2", "line 3");
