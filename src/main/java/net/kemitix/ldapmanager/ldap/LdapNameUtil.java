@@ -110,4 +110,19 @@ public final class LdapNameUtil {
     public static Name empty() {
         return EMPTY;
     }
+
+    /**
+     * Returns a new Name with the CN attribute replaced.
+     *
+     * @param original The orginal Name
+     * @param cn       The new CN
+     *
+     * @return the new Name
+     */
+    public static Name replaceCn(final Name original, final String cn) {
+        return getParent(original).map(LdapNameBuilder::newInstance)
+                                  .orElseGet(LdapNameBuilder::newInstance)
+                                  .add("cn", cn)
+                                  .build();
+    }
 }
