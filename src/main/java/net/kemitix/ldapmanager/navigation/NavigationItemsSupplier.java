@@ -31,7 +31,6 @@ import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -50,7 +49,7 @@ import java.util.stream.Collectors;
  */
 @Log
 @Component
-class NavigationItemsSupplier implements Supplier<List<NamedItem<NavigationItem>>> {
+class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
 
     private static final String PARENT = "..";
 
@@ -83,31 +82,31 @@ class NavigationItemsSupplier implements Supplier<List<NamedItem<NavigationItem>
      * @return the list of items
      */
     @Override
-    public final List<NamedItem<NavigationItem>> get() {
+    public final List<NavigationItem> get() {
         log.log(Level.FINEST, "get()");
-        val items = new ArrayList<NamedItem<NavigationItem>>();
+        val items = new ArrayList<NavigationItem>();
         // Add '..' entry to parent container
         LdapNameUtil.getParent(currentContainer.getDn())
-                    .map(this::createParentItem)
+                    .map(this::createParentNavigationItem)
                     .ifPresent(items::add);
         // Add entity in container
         items.addAll(currentLdapContainerSupplier.get()
                                                  .getContents()
                                                  .stream()
-                                                 .map(this::createNamedItem)
+                                                 .map(this::asNavigationItem)
                                                  .collect(Collectors.toList()));
         return items;
     }
 
-    private NamedItem<NavigationItem> createParentItem(final Name parentName) {
-        return NamedItem.of(PARENT, OU.builder()
-                                      .dn(parentName)
-                                      .ou(PARENT)
-                                      .build()
-                                      .asNavigationItem(applicationEventPublisher));
+    private NavigationItem asNavigationItem(final LdapEntity ldapEntity) {
+        return ldapEntity.asNavigationItem(applicationEventPublisher);
     }
 
-    private NamedItem<NavigationItem> createNamedItem(final LdapEntity ldapEntity) {
-        return NamedItem.of(ldapEntity.name(), ldapEntity.asNavigationItem(applicationEventPublisher));
+    private NavigationItem createParentNavigationItem(final Name parentDn) {
+        return OU.builder()
+                 .dn(parentDn)
+                 .ou(PARENT)
+                 .build()
+                 .asNavigationItem(applicationEventPublisher);
     }
 }

@@ -7,7 +7,6 @@ import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -102,7 +101,6 @@ public class NavigationItemsSupplierTest {
                                .stream()
                                .filter(namedItem -> namedItem.getName()
                                                              .equals(itUsersOu.name()))
-                               .map(NamedItem::getItem)
                                .forEach(Runnable::run);
         //then
         val event = ArgumentCaptor.forClass(NavigationItemOuActionEvent.class);
@@ -119,10 +117,10 @@ public class NavigationItemsSupplierTest {
         given(currentLdapContainerSupplier.get()).willReturn(
                 LdapEntityContainer.of(Collections.singletonList(bobUsersUser)));
         //when
-        final List<NamedItem<NavigationItem>> namedItems = navigationItemsSupplier.get();
+        final List<NavigationItem> navigationItems = navigationItemsSupplier.get();
         //then
-        assertThat(namedItems.stream()
-                             .map(NamedItem::getName)).containsOnly(bobUsersUser.name());
+        assertThat(navigationItems.stream()
+                                  .map(NavigationItem::getName)).containsOnly(bobUsersUser.name());
     }
 
     @Test
@@ -131,11 +129,10 @@ public class NavigationItemsSupplierTest {
         given(currentContainer.getDn()).willReturn(itUsersOu.getDn());
         given(currentLdapContainerSupplier.get()).willReturn(
                 LdapEntityContainer.of(Collections.singletonList(bobUsersUser)));
-        val namedItem = navigationItemsSupplier.get()
-                                               .get(0);
-        assertThat(namedItem.getName()).as("first item is '..'")
-                                       .isEqualTo("..");
-        final NavigationItem navigationItem = namedItem.getItem();
+        val navigationItem = navigationItemsSupplier.get()
+                                                    .get(0);
+        assertThat(navigationItem.getName()).as("first item is '..'")
+                                            .isEqualTo("..");
         assertThat(navigationItem).isInstanceOf(OuNavigationItem.class);
         val ouNavigationItem = (OuNavigationItem) navigationItem;
         assertThat(ouNavigationItem.getOu()

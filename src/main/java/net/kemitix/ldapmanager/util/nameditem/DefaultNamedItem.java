@@ -37,6 +37,7 @@ import lombok.Getter;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Deprecated
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DefaultNamedItem<T> implements NamedItem<T> {
 

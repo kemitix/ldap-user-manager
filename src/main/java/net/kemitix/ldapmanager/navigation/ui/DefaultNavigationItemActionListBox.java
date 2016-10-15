@@ -38,7 +38,6 @@ import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.AbstractListenableListBox;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
-import net.kemitix.ldapmanager.util.nameditem.NamedItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -64,7 +63,7 @@ class DefaultNavigationItemActionListBox
 
     private static final Character CHAR_SPACE = ' ';
 
-    private final Supplier<List<NamedItem<NavigationItem>>> navigationItemSupplier;
+    private final Supplier<List<NavigationItem>> navigationItemSupplier;
 
     private final StartupExceptionsCollector startupExceptionsCollector;
 
@@ -81,7 +80,7 @@ class DefaultNavigationItemActionListBox
      */
     @Autowired
     DefaultNavigationItemActionListBox(
-            final Supplier<List<NamedItem<NavigationItem>>> navigationItemSupplier,
+            final Supplier<List<NavigationItem>> navigationItemSupplier,
             final StartupExceptionsCollector startupExceptionsCollector,
             final ApplicationEventPublisher applicationEventPublisher
                                       ) {
@@ -160,7 +159,7 @@ class DefaultNavigationItemActionListBox
         log.log(Level.FINEST, "onCurrentContainerChanged()");
         clearItems();
         navigationItemSupplier.get()
-                              .forEach(item -> addItem(item.getItem()));
+                              .forEach(this::addItem);
     }
 
     @Override
@@ -191,5 +190,4 @@ class DefaultNavigationItemActionListBox
         log.log(Level.FINEST, "performSelectedItem()");
         handleKeyStroke(new KeyStroke(KeyType.Enter));
     }
-
 }
