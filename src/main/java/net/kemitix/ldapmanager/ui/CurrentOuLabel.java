@@ -73,7 +73,7 @@ class CurrentOuLabel extends Label {
     @EventListener(CurrentContainerChangedEvent.class)
     public void onCurrentContainerChangerEventUpdateUiLabel() {
         final String dn = currentOuSupplier.get();
-        logMessages.add(Messages.LOG_CHANGED_TO_CONTAINER + dn);
+        logMessages.add(Messages.LOG_CHANGED_TO_CONTAINER.getValue() + dn);
         setText(LdapNameUtil.join(dn, baseDn)
                             .toString());
     }
