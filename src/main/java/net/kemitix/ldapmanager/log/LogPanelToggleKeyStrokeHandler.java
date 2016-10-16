@@ -40,6 +40,11 @@ class LogPanelToggleKeyStrokeHandler implements KeyStrokeHandler {
 
     private final LogPanel logPanel;
 
+    /**
+     * Constructor.
+     *
+     * @param logPanel The Log Panel.
+     */
     LogPanelToggleKeyStrokeHandler(final LogPanel logPanel) {
         this.logPanel = logPanel;
     }

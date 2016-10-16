@@ -107,6 +107,9 @@ class LogPanel extends Panel {
         return String.format("%s%n", line);
     }
 
+    /**
+     * Toggle the visibility of the log panel, alternating between showing or hiding it.
+     */
     void toggleVisibility() {
         if (visible) {
             hide();
@@ -115,12 +118,18 @@ class LogPanel extends Panel {
         }
     }
 
+    /**
+     * Hide the Log Panel.
+     */
     void hide() {
         visible = false;
         removeComponent(label);
         update();
     }
 
+    /**
+     * Show the Log Panel.
+     */
     void show() {
         visible = true;
         addComponent(label);
