@@ -86,6 +86,7 @@ public final class UserNavigationItem extends AbstractNavigationItem {
 
     @Override
     public String getSortableName() {
-        return String.format("%s-%s", Messages.SORTABLE_PREFIX_USER.getValue(), getName().toLowerCase(Locale.getDefault()));
+        return String.format(
+                "%s-%s", Messages.SORTABLE_PREFIX_USER.getValue(), getName().toLowerCase(Locale.getDefault()));
     }
 }
