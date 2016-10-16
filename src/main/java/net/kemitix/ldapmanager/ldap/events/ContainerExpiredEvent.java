@@ -28,8 +28,11 @@ import lombok.Getter;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 
 import javax.naming.Name;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Raised when the container on the server has been updated and the application needs to reload it.
@@ -39,13 +42,10 @@ import java.util.Set;
 public final class ContainerExpiredEvent {
 
     @Getter
-    private final Set<Name> containers = new HashSet<>();
+    private final Set<Name> containers;
 
-    private ContainerExpiredEvent(final Name... dn) {
-        for (final Name name : dn) {
-            LdapNameUtil.getParent(name)
-                        .ifPresent(containers::add);
-        }
+    private ContainerExpiredEvent(final Set<Name> containers) {
+        this.containers = containers;
     }
 
     /**
@@ -58,6 +58,22 @@ public final class ContainerExpiredEvent {
      */
     @SuppressWarnings("InstantiationOfUtilityClass")
     public static ContainerExpiredEvent containing(final Name... dn) {
-        return new ContainerExpiredEvent(dn);
+        return new ContainerExpiredEvent(Arrays.stream(dn)
+                                               .map(LdapNameUtil::getParent)
+                                               .filter(Optional::isPresent)
+                                               .map(Optional::get)
+                                               .collect(Collectors.toSet()));
+    }
+
+    /**
+     * Create a new {@link ContainerExpiredEvent} to indicate the the application needs to reload the container
+     * specified from the LDAP Server.
+     *
+     * @param dn the container that is now expired.
+     *
+     * @return the event
+     */
+    public static ContainerExpiredEvent of(final Name dn) {
+        return new ContainerExpiredEvent(Collections.singleton(dn));
     }
 }
