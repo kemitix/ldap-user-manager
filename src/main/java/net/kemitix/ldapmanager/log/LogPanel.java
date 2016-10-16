@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.log;
 
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Label;
@@ -33,6 +33,7 @@ import lombok.val;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
+import net.kemitix.ldapmanager.ui.UiProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

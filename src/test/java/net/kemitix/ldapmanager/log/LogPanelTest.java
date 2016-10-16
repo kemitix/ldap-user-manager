@@ -1,8 +1,9 @@
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.log;
 
 import com.googlecode.lanterna.gui2.Label;
 import lombok.val;
 import net.kemitix.ldapmanager.state.LogMessages;
+import net.kemitix.ldapmanager.ui.UiProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
