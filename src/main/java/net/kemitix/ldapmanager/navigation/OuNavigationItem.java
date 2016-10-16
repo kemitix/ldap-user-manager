@@ -75,7 +75,7 @@ public final class OuNavigationItem extends AbstractNavigationItem {
 
     @Override
     public String toString() {
-        return ou.name();
+        return String.format("[%s]", ou.name());
     }
 
     @Override
