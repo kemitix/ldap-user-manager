@@ -350,5 +350,10 @@ public class DefaultNavigationItemActionListBoxTest {
         public void publishAsSelected() {
             applicationEventPublisher.publishEvent(this);
         }
+
+        @Override
+        public String getSortableName() {
+            return null;
+        }
     }
 }

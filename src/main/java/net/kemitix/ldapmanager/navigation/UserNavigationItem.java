@@ -26,11 +26,13 @@ package net.kemitix.ldapmanager.navigation;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
+import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.util.Locale;
 import java.util.logging.Level;
 
 /**
@@ -80,5 +82,11 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     public void publishAsSelected() {
         log.log(Level.FINEST, "publishAsSelected(): %1", getName());
         applicationEventPublisher.publishEvent(NavigationItemUserSelectedEvent.of(this));
+    }
+
+    @Override
+    public String getSortableName() {
+        return String.format(
+                "%s-%s", Messages.SORTABLE_PREFIX_USER.getValue(), getName().toLowerCase(Locale.getDefault()));
     }
 }

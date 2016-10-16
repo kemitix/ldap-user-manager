@@ -46,7 +46,9 @@ public enum Messages {
     ENTERING_MAIN_LOOP("Entering main loop..."),
     LOG_CHANGED_TO_CONTAINER("Changed to container: "),
     KEYSTROKE_LABEL_DELIMITER(" | "),
-    PROMPT_RENAME_USER("Rename user: %s  ");
+    PROMPT_RENAME_USER("Rename user: %s  "),
+    SORTABLE_PREFIX_OU("ou"),
+    SORTABLE_PREFIX_USER("user");
 
     @Getter
     private final String value;
