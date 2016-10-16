@@ -36,6 +36,7 @@ public enum Messages {
 
     ERROR_AUTHENTICATION("Authentication error"),
     ERROR_UNHANDLED("Unhandled Error"),
+    ERROR_IS_EMPTY("Can not be empty"),
     CURRENT_OU("Current OU"),
     TIME("Time"),
     NAVIGATION("Navigation"),
@@ -44,7 +45,8 @@ public enum Messages {
     STARTING_LANTERNA_UI("Starting Lanterna UI...adding main window"),
     ENTERING_MAIN_LOOP("Entering main loop..."),
     LOG_CHANGED_TO_CONTAINER("Changed to container: "),
-    KEYSTROKE_LABEL_DELIMITER(" | ");
+    KEYSTROKE_LABEL_DELIMITER(" | "),
+    PROMPT_RENAME_USER("Rename user: %s  ");
 
     @Getter
     private final String value;

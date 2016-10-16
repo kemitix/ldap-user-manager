@@ -101,4 +101,16 @@ public class LdapNameUtilTest {
         //when
         LdapNameUtil.parse(name);
     }
+
+    @Test
+    public void shouldReplaceCn() throws Exception {
+        //given
+        val dn = LdapNameBuilder.newInstance("cn=bob,ou=users")
+                                .build();
+        val cn = "bobby";
+        //when
+        final Name result = LdapNameUtil.replaceCn(dn, cn);
+        //then
+        assertThat(result.toString()).isEqualTo("cn=bobby,ou=users");
+    }
 }

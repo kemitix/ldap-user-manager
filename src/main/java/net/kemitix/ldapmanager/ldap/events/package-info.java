@@ -22,34 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ldap;
-
-import net.kemitix.ldapmanager.domain.LdapEntity;
-import net.kemitix.ldapmanager.state.LdapEntityContainer;
-
-import javax.naming.Name;
-
 /**
- * Service for high level access to the LDAP server.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface LdapService {
 
-    /**
-     * Creates and populates an {@link LdapEntityContainer} for the named container.
-     *
-     * @param dn The DN of the container
-     *
-     * @return the container
-     */
-    LdapEntityContainer getLdapEntityContainer(Name dn);
+/**
+ * LDAP Events.
+ */
 
-    /**
-     * Rename the entity.
-     *
-     * @param ldapEntity The entity to be renamed
-     * @param dn         The new DN attribute
-     */
-    void rename(LdapEntity ldapEntity, Name dn);
-}
+package net.kemitix.ldapmanager.ldap.events;

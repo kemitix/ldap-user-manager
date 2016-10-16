@@ -27,6 +27,8 @@ package net.kemitix.ldapmanager.domain;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import org.springframework.context.ApplicationEventPublisher;
 
+import javax.naming.Name;
+
 /**
  * Common interface for LDAP Entities.
  *
@@ -51,4 +53,11 @@ public interface LdapEntity {
      * @return the navigation item
      */
     NavigationItem asNavigationItem(ApplicationEventPublisher eventPublisher);
+
+    /**
+     * Returns the DN attribute.
+     *
+     * @return the DN
+     */
+    Name getDn();
 }

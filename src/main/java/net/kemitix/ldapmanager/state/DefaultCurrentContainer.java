@@ -27,7 +27,7 @@ package net.kemitix.ldapmanager.state;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import org.springframework.beans.factory.annotation.Autowired;

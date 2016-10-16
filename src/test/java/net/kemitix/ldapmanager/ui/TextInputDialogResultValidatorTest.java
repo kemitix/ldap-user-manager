@@ -22,34 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ldap;
+package net.kemitix.ldapmanager.ui;
 
-import net.kemitix.ldapmanager.domain.LdapEntity;
-import net.kemitix.ldapmanager.state.LdapEntityContainer;
+import com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator;
+import net.kemitix.ldapmanager.Messages;
+import org.junit.Before;
+import org.junit.Test;
 
-import javax.naming.Name;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Service for high level access to the LDAP server.
+ * Tests for beans of {@link com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface LdapService {
+public class TextInputDialogResultValidatorTest {
 
-    /**
-     * Creates and populates an {@link LdapEntityContainer} for the named container.
-     *
-     * @param dn The DN of the container
-     *
-     * @return the container
-     */
-    LdapEntityContainer getLdapEntityContainer(Name dn);
+    private TextInputDialogResultValidator validateNameNotEmpty;
 
-    /**
-     * Rename the entity.
-     *
-     * @param ldapEntity The entity to be renamed
-     * @param dn         The new DN attribute
-     */
-    void rename(LdapEntity ldapEntity, Name dn);
+    @Before
+    public void setUp() {
+
+        validateNameNotEmpty = new LanternaConfiguration().validateNotEmpty();
+    }
+
+    @Test
+    public void shouldReturnNullWhenNotEmpty() {
+        assertThat(validateNameNotEmpty.validate("not empty")).isNull();
+    }
+
+    @Test
+    public void shouldReturnErrorMessageWhenEmpty() {
+        assertThat(validateNameNotEmpty.validate("")).isEqualTo(Messages.ERROR_IS_EMPTY.getValue());
+    }
 }

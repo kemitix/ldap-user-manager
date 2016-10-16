@@ -22,34 +22,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ldap;
+package net.kemitix.ldapmanager.ui;
 
-import net.kemitix.ldapmanager.domain.LdapEntity;
-import net.kemitix.ldapmanager.state.LdapEntityContainer;
-
-import javax.naming.Name;
+import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
+import com.googlecode.lanterna.gui2.dialogs.TextInputDialogBuilder;
+import com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator;
 
 /**
- * Service for high level access to the LDAP server.
+ * Factory for creating {@link TextInputDialog} objects.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface LdapService {
+public interface TextInputDialogFactory {
 
     /**
-     * Creates and populates an {@link LdapEntityContainer} for the named container.
+     * Displays a {@link TextInputDialog} and returns the value input, subject to
+     * the validator.
      *
-     * @param dn The DN of the container
+     * @param dialog The Text Input Dialog to show
      *
-     * @return the container
+     * @return the value entered in the dialog
      */
-    LdapEntityContainer getLdapEntityContainer(Name dn);
+    String getInput(TextInputDialog dialog);
 
     /**
-     * Rename the entity.
+     * Creates a {@link TextInputDialog}.
      *
-     * @param ldapEntity The entity to be renamed
-     * @param dn         The new DN attribute
+     * @param initialContent The initial content to show in the text input.
+     * @param validator      The validator to verify the new value.
+     *
+     * @return the dialog
      */
-    void rename(LdapEntity ldapEntity, Name dn);
+    TextInputDialog create(String initialContent, TextInputDialogResultValidator validator);
+
+    /**
+     * Create a new {@link TextInputDialogBuilder}.
+     *
+     * @return the dialog builder
+     */
+    TextInputDialogBuilder builder();
 }

@@ -22,39 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.events;
+package net.kemitix.ldapmanager.actions.user.rename;
 
-import lombok.Getter;
+import net.kemitix.ldapmanager.domain.User;
 
 import javax.naming.Name;
+import java.util.Optional;
 
 /**
- * Notification of a change to the current container.
+ * Dialog for prompting for a new {@link User} cn attribute value.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class CurrentContainerChangedEvent {
-
-    @Getter
-    private final Name newContainer;
+interface RenameUserDialog {
 
     /**
-     * Constructor.
+     * Display a dialog to get the new name for a user.
      *
-     * @param newContainer The name of the new container.
+     * @param user The user to be renamed
+     *
+     * @return an optional containing the new name, or empty if cancelled or the name wasn't changed.
      */
-    private CurrentContainerChangedEvent(final Name newContainer) {
-        this.newContainer = newContainer;
-    }
-
-    /**
-     * Creates a new {@link CurrentContainerChangedEvent}.
-     *
-     * @param newContainer The name of the new container.
-     *
-     * @return the event
-     */
-    public static CurrentContainerChangedEvent of(final Name newContainer) {
-        return new CurrentContainerChangedEvent(newContainer);
-    }
+    Optional<Name> getRenamedUserDn(User user);
 }

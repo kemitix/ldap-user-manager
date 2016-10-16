@@ -22,34 +22,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ldap;
+package net.kemitix.ldapmanager.ldap.events;
 
-import net.kemitix.ldapmanager.domain.LdapEntity;
-import net.kemitix.ldapmanager.state.LdapEntityContainer;
+import lombok.Getter;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 
 import javax.naming.Name;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Service for high level access to the LDAP server.
+ * Raised when the container on the server has been updated and the application needs to reload it.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface LdapService {
+public final class ContainerExpiredEvent {
+
+    @Getter
+    private final Set<Name> containers = new HashSet<>();
+
+    private ContainerExpiredEvent(final Name... dn) {
+        for (final Name name : dn) {
+            LdapNameUtil.getParent(name)
+                        .ifPresent(containers::add);
+        }
+    }
 
     /**
-     * Creates and populates an {@link LdapEntityContainer} for the named container.
+     * Create new {@link ContainerExpiredEvent} to indicate that the application needs to reload the
+     * containers containing the supplied names from the LDAP server.
      *
-     * @param dn The DN of the container
+     * @param dn varargs array of items whos containers are now expired
      *
-     * @return the container
+     * @return the event
      */
-    LdapEntityContainer getLdapEntityContainer(Name dn);
-
-    /**
-     * Rename the entity.
-     *
-     * @param ldapEntity The entity to be renamed
-     * @param dn         The new DN attribute
-     */
-    void rename(LdapEntity ldapEntity, Name dn);
+    @SuppressWarnings("InstantiationOfUtilityClass")
+    public static ContainerExpiredEvent containing(final Name... dn) {
+        return new ContainerExpiredEvent(dn);
+    }
 }

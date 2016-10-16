@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.events;
+package net.kemitix.ldapmanager.ldap.events;
 
 import com.googlecode.lanterna.gui2.Label;
 import lombok.val;

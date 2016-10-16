@@ -25,11 +25,14 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ldap;
 
 import lombok.val;
+import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.ldap.query.SearchScope;
@@ -51,20 +54,27 @@ class DefaultLdapService implements LdapService {
 
     private final LogMessages logMessages;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     /**
      * Constructor.
      *
-     * @param ldapTemplate The LDAP Template.
-     * @param logMessages  The Log Messages
+     * @param ldapTemplate              The LDAP Template.
+     * @param logMessages               The Log Messages
+     * @param applicationEventPublisher The Application Event Publisher
      */
     @Autowired
-    DefaultLdapService(final LdapTemplate ldapTemplate, final LogMessages logMessages) {
+    DefaultLdapService(
+            final LdapTemplate ldapTemplate, final LogMessages logMessages,
+            final ApplicationEventPublisher applicationEventPublisher
+                      ) {
         this.ldapTemplate = ldapTemplate;
         this.logMessages = logMessages;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
-    public LdapEntityContainer getLdapEntityContainer(final Name dn) {
+    public final LdapEntityContainer getLdapEntityContainer(final Name dn) {
         logMessages.add(String.format("Loading container: %s", dn));
         val query = LdapQueryBuilder.query()
                                     .base(dn)
@@ -77,5 +87,12 @@ class DefaultLdapService implements LdapService {
                                                                .flatMap(Function.identity()));
         logMessages.add(String.format("Loaded container: %d OU(s) and %d user(s)", ouList.size(), userList.size()));
         return ldapEntityContainer;
+    }
+
+    @Override
+    public final void rename(final LdapEntity ldapEntity, final Name dn) {
+        logMessages.add(String.format("Renaming %s as %s", ldapEntity.getDn(), dn));
+        ldapTemplate.rename(ldapEntity.getDn(), dn);
+        applicationEventPublisher.publishEvent(ContainerExpiredEvent.containing(ldapEntity.getDn(), dn));
     }
 }

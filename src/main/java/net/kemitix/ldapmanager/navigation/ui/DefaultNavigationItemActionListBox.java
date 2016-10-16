@@ -33,7 +33,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
-import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.AbstractListenableListBox;
