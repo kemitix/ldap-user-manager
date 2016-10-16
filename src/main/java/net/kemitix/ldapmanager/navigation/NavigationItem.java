@@ -53,9 +53,15 @@ public interface NavigationItem extends Runnable, Comparable<NavigationItem> {
      */
     String getSortableName();
 
+    /**
+     * Compare two NavigationItems using their {@link #getSortableName()}.
+     *
+     * @param other The other NavigationItem to compare with
+     *
+     * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than
+     * the specified object.
+     */
     default int compareTo(NavigationItem other) {
-        final String sortableName = getSortableName();
-        final String otherSortableName = other.getSortableName();
-        return sortableName.compareTo(otherSortableName);
+        return getSortableName().compareTo(other.getSortableName());
     }
 }
