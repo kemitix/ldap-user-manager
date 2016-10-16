@@ -176,8 +176,7 @@ class DefaultNavigationItemActionListBox
         log.log(Level.FINEST, "findItemPositionByName(%s)", name);
         int selected = 0;
         for (final NavigationItem navigationItem : getItems()) {
-            final String itemName = navigationItem.toString();
-            if (name.equals(itemName)) {
+            if (name.equals(navigationItem.getName())) {
                 return Optional.of(selected);
             }
             selected++;

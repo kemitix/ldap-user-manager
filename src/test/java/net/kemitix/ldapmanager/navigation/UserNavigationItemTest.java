@@ -58,7 +58,7 @@ public class UserNavigationItemTest {
     }
 
     @Test
-    public void toStringIsName() throws Exception {
-        assertThat(userNavigationItem.toString()).isEqualTo(name);
+    public void toStringContainsName() throws Exception {
+        assertThat(userNavigationItem.toString()).contains(name);
     }
 }

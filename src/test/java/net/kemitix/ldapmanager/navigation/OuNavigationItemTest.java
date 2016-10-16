@@ -58,7 +58,7 @@ public class OuNavigationItemTest {
     }
 
     @Test
-    public void toStringIsName() throws Exception {
-        assertThat(ouNavigationItem.toString()).isEqualTo(name);
+    public void toStringContainsName() throws Exception {
+        assertThat(ouNavigationItem.toString()).contains(name);
     }
 }

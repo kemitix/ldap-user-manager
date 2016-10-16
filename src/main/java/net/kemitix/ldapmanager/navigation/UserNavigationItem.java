@@ -75,7 +75,7 @@ public final class UserNavigationItem extends AbstractNavigationItem {
 
     @Override
     public String toString() {
-        return user.name();
+        return String.format(" %s ", user.name());
     }
 
     @Override

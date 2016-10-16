@@ -5,6 +5,8 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.domain.OU;
+import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
@@ -296,6 +298,25 @@ public class DefaultNavigationItemActionListBoxTest {
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
         assertThat(event.getOldItem()).isEmpty();
         assertThat(event.getNewItem()).isEmpty();
+    }
+
+    @SuppressWarnings("ObjectToString")
+    @Test
+    public void shouldShowOusWithBraces() {
+        //given
+        val ou = OU.builder()
+                   .ou("users")
+                   .build()
+                   .asNavigationItem(applicationEventPublisher);
+        val user = User.builder()
+                       .cn("bob")
+                       .build()
+                       .asNavigationItem(applicationEventPublisher);
+        //then
+        assertThat(ou.toString()).isEqualTo("[users]");
+        assertThat(user.toString()).isEqualTo(" bob ");
+        assertThat(ou.getName()).isEqualTo("users");
+        assertThat(user.getName()).isEqualTo("bob");
     }
 
     private void givenPopulatedList() {

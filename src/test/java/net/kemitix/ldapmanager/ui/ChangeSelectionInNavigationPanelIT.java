@@ -79,7 +79,7 @@ public class ChangeSelectionInNavigationPanelIT extends AbstractLdapConnectionIn
                                                              .containsExactly(OU_NAME, USER_NAME);
         assertThat(navigationItemActionListBox.getSelectedIndex()).isEqualTo(0);
         assertThat(navigationItemActionListBox.getSelectedItem()
-                                              .toString()).isEqualTo(OU_NAME);
+                                              .getName()).isEqualTo(OU_NAME);
     }
 
     @Test
