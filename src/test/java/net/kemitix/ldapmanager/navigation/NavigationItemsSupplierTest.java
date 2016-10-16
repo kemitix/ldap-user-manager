@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.navigation;
 
 import lombok.val;
+import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
@@ -16,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -142,5 +145,34 @@ public class NavigationItemsSupplierTest {
         assertThat(eventCaptor.getValue()
                               .getOu()
                               .getDn()).isEqualTo(usersOu.getDn());
+    }
+
+    @Test
+    public void shouldSortByOusThenByUsers() {
+        //given
+        val ou1 = OU.builder()
+                    .ou("alpha")
+                    .dn(LdapNameUtil.parse("ou=alpha"))
+                    .build();
+        val ou2 = OU.builder()
+                    .ou("beta")
+                    .dn(LdapNameUtil.parse("ou=beta"))
+                    .build();
+        val user1 = User.builder()
+                        .cn("alice")
+                        .dn(LdapNameUtil.parse("cn=alice"))
+                        .build();
+        val user2 = User.builder()
+                        .cn("bob")
+                        .dn(LdapNameUtil.parse("cn=bob"))
+                        .build();
+        val entities = new ArrayList<LdapEntity>(Arrays.asList(ou2, user2, user1, ou1));
+        given(currentLdapContainerSupplier.get()).willReturn(LdapEntityContainer.of(entities.stream()));
+        given(currentContainer.getDn()).willReturn(LdapNameUtil.empty());
+        //when
+        final List<NavigationItem> navigationItems = navigationItemsSupplier.get();
+        //then
+        assertThat(navigationItems.stream()
+                                  .map(NavigationItem::getName)).containsExactly("alpha", "beta", "alice", "bob");
     }
 }

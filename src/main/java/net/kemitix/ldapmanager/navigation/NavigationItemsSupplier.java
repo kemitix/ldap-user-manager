@@ -93,6 +93,7 @@ class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
         items.addAll(currentLdapContainerSupplier.get()
                                                  .getContents()
                                                  .map(this::asNavigationItem)
+                                                 .sorted()
                                                  .collect(Collectors.toList()));
         return items;
     }

@@ -29,7 +29,7 @@ package net.kemitix.ldapmanager.navigation;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface NavigationItem extends Runnable {
+public interface NavigationItem extends Runnable, Comparable<NavigationItem> {
 
     /**
      * Return the name of the item.
@@ -42,4 +42,20 @@ public interface NavigationItem extends Runnable {
      * Publish an event indicating that this item has been selected.
      */
     void publishAsSelected();
+
+    /**
+     * Returns the name of the NavigationItem suitable for sorting.
+     *
+     * <p>Names should be all lowercase and include a 'type' prefix to allow all items of a type to be grouped
+     * together. e.g. 'user-bob', 'ou-users'</p>
+     *
+     * @return the sortable name
+     */
+    String getSortableName();
+
+    default int compareTo(NavigationItem other) {
+        final String sortableName = getSortableName();
+        final String otherSortableName = other.getSortableName();
+        return sortableName.compareTo(otherSortableName);
+    }
 }
