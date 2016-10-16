@@ -22,44 +22,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
+package net.kemitix.ldapmanager.log;
 
-import lombok.Getter;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
+import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
+import org.springframework.stereotype.Component;
 
 /**
- * Text messages.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@SuppressWarnings("enumvaluename")
-public enum Messages {
+@Component
+class LogPanelToggleKeyStrokeHandler implements KeyStrokeHandler {
 
-    ERROR_AUTHENTICATION("Authentication error"),
-    ERROR_UNHANDLED("Unhandled Error"),
-    ERROR_IS_EMPTY("Can not be empty"),
-    CURRENT_OU("Current OU"),
-    TIME("Time"),
-    NAVIGATION("Navigation"),
-    APP_NAME("LDAP User Manager"),
-    LOG("Log"),
-    STARTING_LANTERNA_UI("Starting Lanterna UI...adding main window"),
-    ENTERING_MAIN_LOOP("Entering main loop..."),
-    LOG_CHANGED_TO_CONTAINER("Changed to container: "),
-    KEYSTROKE_LABEL_DELIMITER(" | "),
-    PROMPT_RENAME_USER("Rename user: %s  "),
-    SORTABLE_PREFIX_OU("ou"),
-    SORTABLE_PREFIX_USER("user"),
-    TOGGLE_LOG_PANEL("Toggle Log");
+    private final LogPanel logPanel;
 
-    @Getter
-    private final String value;
+    LogPanelToggleKeyStrokeHandler(final LogPanel logPanel) {
+        this.logPanel = logPanel;
+    }
 
-    /**
-     * Constructor.
-     *
-     * @param value The string value of the message.
-     */
-    Messages(final String value) {
-        this.value = value;
+    @Override
+    public boolean isActive() {
+        return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return Messages.TOGGLE_LOG_PANEL.getValue();
+    }
+
+    @Override
+    public String getKey() {
+        return "L";
+    }
+
+    @Override
+    public boolean canHandleKey(final KeyStroke key) {
+        return (key.getKeyType() == KeyType.Character) && (key.getCharacter() == 'L');
+    }
+
+    @Override
+    public void handleInput(final KeyStroke key) {
+        logPanel.toggleVisibility();
     }
 }
