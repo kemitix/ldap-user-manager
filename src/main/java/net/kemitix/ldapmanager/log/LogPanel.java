@@ -22,17 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.log;
 
+import com.googlecode.lanterna.gui2.Border;
 import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
-import lombok.val;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
+import net.kemitix.ldapmanager.ui.UiProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -54,6 +55,12 @@ class LogPanel extends Panel {
 
     private int linesToShow;
 
+    @Getter
+    private boolean visible;
+
+    @Getter
+    private Border label;
+
     /**
      * Constructor.
      *
@@ -71,11 +78,9 @@ class LogPanel extends Panel {
      */
     @PostConstruct
     public void init() {
-        val component = new Panel().addComponent(messageLabel)
-                                   .withBorder(Borders.singleLine(Messages.LOG.getValue()));
-        component.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
-        addComponent(component);
-        update();
+        label = new Panel().addComponent(messageLabel)
+                           .withBorder(Borders.singleLine(Messages.LOG.getValue()));
+        label.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
     }
 
     /**
@@ -83,19 +88,51 @@ class LogPanel extends Panel {
      */
     @EventListener(LogMessageAddedEvent.class)
     public void update() {
-        final int logSize = logMessages.getMessageCount();
-        final StringBuilder log = new StringBuilder(200);
-        for (int i = logSize; i < linesToShow; i++) {
-            log.append(appendNewLine(""));
+        if (visible) {
+            final int logSize = logMessages.getMessageCount();
+            final StringBuilder log = new StringBuilder(200);
+            for (int i = logSize; i < linesToShow; i++) {
+                log.append(appendNewLine(""));
+            }
+            logMessages.getMessages()
+                       .skip(Math.max(logSize - linesToShow, 0))
+                       .map(LogPanel::appendNewLine)
+                       .forEach(log::append);
+            messageLabel.setText(log.toString());
         }
-        logMessages.getMessages()
-                   .skip(Math.max(logSize - linesToShow, 0))
-                   .map(LogPanel::appendNewLine)
-                   .forEach(log::append);
-        messageLabel.setText(log.toString());
+        invalidate();
     }
 
     private static String appendNewLine(final String line) {
         return String.format("%s%n", line);
+    }
+
+    /**
+     * Toggle the visibility of the log panel, alternating between showing or hiding it.
+     */
+    void toggleVisibility() {
+        if (visible) {
+            hide();
+        } else {
+            show();
+        }
+    }
+
+    /**
+     * Hide the Log Panel.
+     */
+    void hide() {
+        visible = false;
+        removeComponent(label);
+        update();
+    }
+
+    /**
+     * Show the Log Panel.
+     */
+    void show() {
+        visible = true;
+        addComponent(label);
+        update();
     }
 }

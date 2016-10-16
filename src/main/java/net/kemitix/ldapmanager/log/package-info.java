@@ -22,44 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager;
-
-import lombok.Getter;
-
 /**
- * Text messages.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Log panel.
  */
-@SuppressWarnings("enumvaluename")
-public enum Messages {
 
-    ERROR_AUTHENTICATION("Authentication error"),
-    ERROR_UNHANDLED("Unhandled Error"),
-    ERROR_IS_EMPTY("Can not be empty"),
-    CURRENT_OU("Current OU"),
-    TIME("Time"),
-    NAVIGATION("Navigation"),
-    APP_NAME("LDAP User Manager"),
-    LOG("Log"),
-    STARTING_LANTERNA_UI("Starting Lanterna UI...adding main window"),
-    ENTERING_MAIN_LOOP("Entering main loop..."),
-    LOG_CHANGED_TO_CONTAINER("Changed to container: "),
-    KEYSTROKE_LABEL_DELIMITER(" | "),
-    PROMPT_RENAME_USER("Rename user: %s  "),
-    SORTABLE_PREFIX_OU("ou"),
-    SORTABLE_PREFIX_USER("user"),
-    TOGGLE_LOG_PANEL("Toggle Log");
-
-    @Getter
-    private final String value;
-
-    /**
-     * Constructor.
-     *
-     * @param value The string value of the message.
-     */
-    Messages(final String value) {
-        this.value = value;
-    }
-}
+package net.kemitix.ldapmanager.log;
