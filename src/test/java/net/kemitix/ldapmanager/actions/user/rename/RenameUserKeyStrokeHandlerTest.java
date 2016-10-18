@@ -11,6 +11,7 @@ import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
+import net.kemitix.ldapmanager.ui.RenameDnDialog;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 
 /**
  * Tests for {@link RenameUserKeyStrokeHandler}.
@@ -36,7 +38,7 @@ public class RenameUserKeyStrokeHandlerTest {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Mock
-    private RenameUserDialog renameUserDialog;
+    private RenameDnDialog renameDnDialog;
 
     @Mock
     private LdapService ldapService;
@@ -44,7 +46,7 @@ public class RenameUserKeyStrokeHandlerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        handler = new RenameUserKeyStrokeHandler(applicationEventPublisher, renameUserDialog, ldapService);
+        handler = new RenameUserKeyStrokeHandler(applicationEventPublisher, renameDnDialog, ldapService);
     }
 
     @Test
@@ -69,17 +71,29 @@ public class RenameUserKeyStrokeHandlerTest {
     }
 
     @Test
+    public void shouldPublishRenameRequestEventHandleInput() throws Exception {
+        //given
+        val keyStroke = new KeyStroke('r', false, false);
+        //when
+        handler.handleInput(keyStroke);
+        //then
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(RenameUserRequestEvent.class));
+    }
+
+    @Test
     public void shouldHandleInputWhenUserSelected() throws Exception {
         //given
         val user = User.builder()
+                       .dn(LdapNameUtil.parse("cn=bob,ou=users"))
                        .build();
-        val dn = LdapNameUtil.empty();
-        given(renameUserDialog.getRenamedUserDn(user)).willReturn(Optional.of(dn));
+        val dn = LdapNameUtil.parse("cn=bob,ou=users");
+        given(renameDnDialog.getRenamedDn(user.getDn())).willReturn(Optional.of(dn));
         /// inject user into handler
-        handler.onUserSelectedEvent(
-                NavigationItemUserSelectedEvent.of(UserNavigationItem.create(user, applicationEventPublisher)));
+        val userNavigationItem = UserNavigationItem.create(user, applicationEventPublisher);
+        val event = RenameUserRequestEvent.create(userNavigationItem);
         //when
-        handler.handleInput(new KeyStroke('r', false, false));
+        handler.onRenameUserRequest(event);
         //then
         then(ldapService).should()
                          .rename(user, dn);

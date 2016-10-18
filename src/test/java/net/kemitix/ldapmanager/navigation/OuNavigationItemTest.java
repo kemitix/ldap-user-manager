@@ -1,5 +1,6 @@
 package net.kemitix.ldapmanager.navigation;
 
+import net.kemitix.ldapmanager.actions.ou.rename.RenameOuRequestEvent;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.junit.Before;
@@ -60,5 +61,14 @@ public class OuNavigationItemTest {
     @Test
     public void toStringContainsName() throws Exception {
         assertThat(ouNavigationItem.toString()).contains(name);
+    }
+
+    @Test
+    public void publishRenameRequestShouldPublishEvent() {
+        //when
+        ouNavigationItem.publishRenameRequest();
+        //then
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(RenameOuRequestEvent.class));
     }
 }

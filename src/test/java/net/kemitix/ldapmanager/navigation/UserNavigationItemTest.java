@@ -1,5 +1,6 @@
 package net.kemitix.ldapmanager.navigation;
 
+import net.kemitix.ldapmanager.actions.user.rename.RenameUserRequestEvent;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
 import org.junit.Before;
@@ -60,5 +61,14 @@ public class UserNavigationItemTest {
     @Test
     public void toStringContainsName() throws Exception {
         assertThat(userNavigationItem.toString()).contains(name);
+    }
+
+    @Test
+    public void publishRenameRequestShouldPublishEvent() {
+        //when
+        userNavigationItem.publishRenameRequest();
+        //then
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(RenameUserRequestEvent.class));
     }
 }

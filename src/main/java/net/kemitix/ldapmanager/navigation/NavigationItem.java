@@ -64,4 +64,9 @@ public interface NavigationItem extends Runnable, Comparable<NavigationItem> {
     default int compareTo(NavigationItem other) {
         return getSortableName().compareTo(other.getSortableName());
     }
+
+    /**
+     * Publish an event requesting that the user wants to rename this item.
+     */
+    void publishRenameRequest();
 }

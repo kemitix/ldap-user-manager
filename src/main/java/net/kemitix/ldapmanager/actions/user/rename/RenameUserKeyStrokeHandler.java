@@ -35,6 +35,7 @@ import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
+import net.kemitix.ldapmanager.ui.RenameDnDialog;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -60,7 +61,7 @@ class RenameUserKeyStrokeHandler implements KeyStrokeHandler {
     @Getter
     private boolean active;
 
-    private final RenameUserDialog renameUserDialog;
+    private final RenameDnDialog renameDnDialog;
 
     private final LdapService ldapService;
 
@@ -68,15 +69,15 @@ class RenameUserKeyStrokeHandler implements KeyStrokeHandler {
      * Constructor.
      *
      * @param applicationEventPublisher The Application Event Publisher.
-     * @param renameUserDialog          The Dialog to get the new name.
+     * @param renameDnDialog            The Dialog to get the new name.
      * @param ldapService               The LDAP Service.
      */
     RenameUserKeyStrokeHandler(
-            final ApplicationEventPublisher applicationEventPublisher, final RenameUserDialog renameUserDialog,
+            final ApplicationEventPublisher applicationEventPublisher, final RenameDnDialog renameDnDialog,
             final LdapService ldapService
                               ) {
         this.applicationEventPublisher = applicationEventPublisher;
-        this.renameUserDialog = renameUserDialog;
+        this.renameDnDialog = renameDnDialog;
         this.ldapService = ldapService;
     }
 
@@ -98,9 +99,20 @@ class RenameUserKeyStrokeHandler implements KeyStrokeHandler {
 
     @Override
     public final void handleInput(final KeyStroke key) {
-        val user = lastSelectedUserNavigationItem.getUser();
-        renameUserDialog.getRenamedUserDn(user)
-                        .ifPresent(dn -> ldapService.rename(user, dn));
+        applicationEventPublisher.publishEvent(RenameUserRequestEvent.create(lastSelectedUserNavigationItem));
+    }
+
+    /**
+     * Listener for {@link RenameUserRequestEvent} to display the rename dialog and update the LDAP server.
+     *
+     * @param event the event
+     */
+    @EventListener(RenameUserRequestEvent.class)
+    public final void onRenameUserRequest(final RenameUserRequestEvent event) {
+        val user = event.getUserNavigationItem()
+                        .getUser();
+        renameDnDialog.getRenamedDn(user.getDn())
+                      .ifPresent(dn -> ldapService.rename(user, dn));
     }
 
     /**

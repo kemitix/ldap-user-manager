@@ -22,26 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.rename;
-
-import net.kemitix.ldapmanager.domain.User;
-
-import javax.naming.Name;
-import java.util.Optional;
-
 /**
- * Dialog for prompting for a new {@link User} cn attribute value.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Context menu popup.
  */
-interface RenameUserDialog {
 
-    /**
-     * Display a dialog to get the new name for a user.
-     *
-     * @param user The user to be renamed
-     *
-     * @return an optional containing the new name, or empty if cancelled or the name wasn't changed.
-     */
-    Optional<Name> getRenamedUserDn(User user);
-}
+package net.kemitix.ldapmanager.context;

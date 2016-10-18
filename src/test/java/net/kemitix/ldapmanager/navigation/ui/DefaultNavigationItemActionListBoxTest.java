@@ -376,5 +376,10 @@ public class DefaultNavigationItemActionListBoxTest {
         public String getSortableName() {
             return null;
         }
+
+        @Override
+        public void publishRenameRequest() {
+            applicationEventPublisher.publishEvent(this);
+        }
     }
 }

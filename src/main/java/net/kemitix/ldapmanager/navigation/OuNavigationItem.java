@@ -25,8 +25,10 @@ SOFTWARE.
 package net.kemitix.ldapmanager.navigation;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.actions.ou.rename.RenameOuRequestEvent;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
@@ -62,7 +64,9 @@ public final class OuNavigationItem extends AbstractNavigationItem {
      *
      * @return The ou navigation item.
      */
-    public static OuNavigationItem create(final OU ou, final ApplicationEventPublisher eventPublisher) {
+    public static OuNavigationItem create(
+            @NonNull final OU ou, @NonNull final ApplicationEventPublisher eventPublisher
+                                         ) {
         log.log(Level.FINEST, "create(%s, ...)", ou.name());
         return new OuNavigationItem(ou, eventPublisher);
     }
@@ -88,5 +92,11 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     public String getSortableName() {
         return String.format(
                 "%s-%s", Messages.SORTABLE_PREFIX_OU.getValue(), getName().toLowerCase(Locale.getDefault()));
+    }
+
+    @Override
+    public void publishRenameRequest() {
+        log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
+        applicationEventPublisher.publishEvent(RenameOuRequestEvent.create(this));
     }
 }
