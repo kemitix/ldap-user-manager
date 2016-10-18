@@ -23,6 +23,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 
 /**
  * Tests for {@link RenameUserKeyStrokeHandler}.
@@ -70,17 +71,29 @@ public class RenameUserKeyStrokeHandlerTest {
     }
 
     @Test
+    public void shouldPublishRenameRequestEventHandleInput() throws Exception {
+        //given
+        val keyStroke = new KeyStroke('r', false, false);
+        //when
+        handler.handleInput(keyStroke);
+        //then
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(RenameUserRequestEvent.class));
+    }
+
+    @Test
     public void shouldHandleInputWhenUserSelected() throws Exception {
         //given
         val user = User.builder()
+                       .dn(LdapNameUtil.parse("cn=bob,ou=users"))
                        .build();
-        val dn = LdapNameUtil.empty();
+        val dn = LdapNameUtil.parse("cn=bob,ou=users");
         given(renameDnDialog.getRenamedDn(user.getDn())).willReturn(Optional.of(dn));
         /// inject user into handler
-        handler.onUserSelectedEvent(
-                NavigationItemUserSelectedEvent.of(UserNavigationItem.create(user, applicationEventPublisher)));
+        val userNavigationItem = UserNavigationItem.create(user, applicationEventPublisher);
+        val event = RenameUserRequestEvent.create(userNavigationItem);
         //when
-        handler.handleInput(new KeyStroke('r', false, false));
+        handler.onRenameUserRequest(event);
         //then
         then(ldapService).should()
                          .rename(user, dn);

@@ -99,7 +99,18 @@ class RenameUserKeyStrokeHandler implements KeyStrokeHandler {
 
     @Override
     public final void handleInput(final KeyStroke key) {
-        val user = lastSelectedUserNavigationItem.getUser();
+        applicationEventPublisher.publishEvent(RenameUserRequestEvent.create(lastSelectedUserNavigationItem));
+    }
+
+    /**
+     * Listener for {@link RenameUserRequestEvent} to display the rename dialog and update the LDAP server.
+     *
+     * @param event the event
+     */
+    @EventListener(RenameUserRequestEvent.class)
+    public final void onRenameUserRequest(final RenameUserRequestEvent event) {
+        val user = event.getUserNavigationItem()
+                        .getUser();
         renameDnDialog.getRenamedDn(user.getDn())
                       .ifPresent(dn -> ldapService.rename(user, dn));
     }
