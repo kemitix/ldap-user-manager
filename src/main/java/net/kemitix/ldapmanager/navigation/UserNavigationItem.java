@@ -50,7 +50,7 @@ public final class UserNavigationItem extends AbstractNavigationItem {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private UserNavigationItem(@NonNull final User user, @NonNull final ApplicationEventPublisher eventPublisher) {
+    private UserNavigationItem(final User user, final ApplicationEventPublisher eventPublisher) {
         super(user.getCn());
         this.user = user;
         applicationEventPublisher = eventPublisher;
@@ -64,7 +64,9 @@ public final class UserNavigationItem extends AbstractNavigationItem {
      *
      * @return The user navigation item.
      */
-    public static UserNavigationItem create(final User user, final ApplicationEventPublisher eventPublisher) {
+    public static UserNavigationItem create(
+            @NonNull final User user, @NonNull final ApplicationEventPublisher eventPublisher
+                                           ) {
         log.log(Level.FINEST, "create(%s,...)", user.name());
         return new UserNavigationItem(user, eventPublisher);
     }
