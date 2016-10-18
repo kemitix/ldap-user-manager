@@ -1,13 +1,14 @@
-package net.kemitix.ldapmanager.actions.user.rename;
+package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import net.kemitix.ldapmanager.ui.TextInputDialogFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -16,17 +17,19 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 
 /**
- * Tests for {@link DefaultRenameUserDialog}.
+ * Tests for {@link RenameDnDialog}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class DefaultRenameUserDialogTest {
+public class DefaultRenameDnDialogTest {
 
-    private DefaultRenameUserDialog dialog;
+    private RenameDnDialog dialog;
 
     @Mock
     private TextInputDialogFactory textInputDialogFactory;
@@ -37,11 +40,26 @@ public class DefaultRenameUserDialogTest {
     @Mock
     private TextInputDialog textInputDialog;
 
+    @Captor
+    private ArgumentCaptor<String> stringArgumentCaptor;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        dialog = new DefaultRenameUserDialog(textInputDialogFactory, validateNameNotEmpty);
+        dialog = new DefaultRenameDnDialog(textInputDialogFactory, validateNameNotEmpty);
         given(textInputDialogFactory.create(anyString(), any())).willReturn(textInputDialog);
+    }
+
+    @Test
+    public void shouldPromptToChangeOnlyTheCn() {
+        //given
+        val dn = LdapNameUtil.parse("cn=bob,ou=users");
+        given(textInputDialogFactory.getInput(any(TextInputDialog.class))).willReturn("bob");
+        //when
+        dialog.getRenamedDn(dn);
+        //then
+        then(textInputDialogFactory).should().create(stringArgumentCaptor.capture(), eq(validateNameNotEmpty));
+        assertThat(stringArgumentCaptor.getValue()).isEqualTo("bob");
     }
 
     @Test
@@ -53,13 +71,13 @@ public class DefaultRenameUserDialogTest {
                        .build();
         given(textInputDialogFactory.getInput(any(TextInputDialog.class))).willReturn("bobby");
         //when
-        final Optional<Name> renamedUserDn = dialog.getRenamedUserDn(user);
+        final Optional<Name> renamedUserDn = dialog.getRenamedDn(user.getDn());
         //then
         assertThat(renamedUserDn.toString()).contains("cn=bobby,ou=users");
     }
 
     @Test
-    public void shouldGetRenamedUserDnWhenCnNotChanged() throws Exception {
+    public void shouldGetEmptyWhenNotChanged() throws Exception {
         //when
         val user = User.builder()
                        .dn(LdapNameUtil.parse("cn=bob,ou=users"))
@@ -67,7 +85,7 @@ public class DefaultRenameUserDialogTest {
                        .build();
         given(textInputDialogFactory.getInput(any(TextInputDialog.class))).willReturn("bob");
         //when
-        final Optional<Name> renamedUserDn = dialog.getRenamedUserDn(user);
+        final Optional<Name> renamedUserDn = dialog.getRenamedDn(user.getDn());
         //then
         assertThat(renamedUserDn).isEmpty();
     }
@@ -81,7 +99,7 @@ public class DefaultRenameUserDialogTest {
                        .build();
         given(textInputDialogFactory.getInput(any(TextInputDialog.class))).willReturn(null);
         //when
-        final Optional<Name> renamedUserDn = dialog.getRenamedUserDn(user);
+        final Optional<Name> renamedUserDn = dialog.getRenamedDn(user.getDn());
         //then
         assertThat(renamedUserDn).isEmpty();
 

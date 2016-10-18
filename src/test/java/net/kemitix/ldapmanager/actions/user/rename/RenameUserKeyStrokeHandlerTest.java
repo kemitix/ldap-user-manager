@@ -11,6 +11,7 @@ import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
+import net.kemitix.ldapmanager.ui.RenameDnDialog;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -36,7 +37,7 @@ public class RenameUserKeyStrokeHandlerTest {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Mock
-    private RenameUserDialog renameUserDialog;
+    private RenameDnDialog renameDnDialog;
 
     @Mock
     private LdapService ldapService;
@@ -44,7 +45,7 @@ public class RenameUserKeyStrokeHandlerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        handler = new RenameUserKeyStrokeHandler(applicationEventPublisher, renameUserDialog, ldapService);
+        handler = new RenameUserKeyStrokeHandler(applicationEventPublisher, renameDnDialog, ldapService);
     }
 
     @Test
@@ -74,7 +75,7 @@ public class RenameUserKeyStrokeHandlerTest {
         val user = User.builder()
                        .build();
         val dn = LdapNameUtil.empty();
-        given(renameUserDialog.getRenamedUserDn(user)).willReturn(Optional.of(dn));
+        given(renameDnDialog.getRenamedDn(user.getDn())).willReturn(Optional.of(dn));
         /// inject user into handler
         handler.onUserSelectedEvent(
                 NavigationItemUserSelectedEvent.of(UserNavigationItem.create(user, applicationEventPublisher)));

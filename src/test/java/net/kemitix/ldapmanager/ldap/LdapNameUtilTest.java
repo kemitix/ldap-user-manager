@@ -103,13 +103,13 @@ public class LdapNameUtilTest {
     }
 
     @Test
-    public void shouldReplaceCn() throws Exception {
+    public void shouldReplaceIdAttribute() throws Exception {
         //given
         val dn = LdapNameBuilder.newInstance("cn=bob,ou=users")
                                 .build();
         val cn = "bobby";
         //when
-        final Name result = LdapNameUtil.replaceCn(dn, cn);
+        final Name result = LdapNameUtil.replaceIdAttribute(dn, "cn", cn);
         //then
         assertThat(result.toString()).isEqualTo("cn=bobby,ou=users");
     }

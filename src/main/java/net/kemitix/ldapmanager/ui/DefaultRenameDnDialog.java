@@ -22,15 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.rename;
+package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
-import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import net.kemitix.ldapmanager.ui.TextInputDialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,12 +36,12 @@ import javax.naming.Name;
 import java.util.Optional;
 
 /**
- * Implementation of dialog for prompting for a new {@link User} cn attribute value.
+ * Implementation of dialog for prompting for a new name.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class DefaultRenameUserDialog implements RenameUserDialog {
+class DefaultRenameDnDialog implements RenameDnDialog {
 
     private final TextInputDialogFactory textInputDialogFactory;
 
@@ -56,22 +54,34 @@ class DefaultRenameUserDialog implements RenameUserDialog {
      * @param validateNameNotEmpty   The Validator to ensure name is not empty.
      */
     @Autowired
-    DefaultRenameUserDialog(
+    DefaultRenameDnDialog(
             final TextInputDialogFactory textInputDialogFactory,
             final TextInputDialogResultValidator validateNameNotEmpty
-                           ) {
+                         ) {
         this.textInputDialogFactory = textInputDialogFactory;
         this.validateNameNotEmpty = validateNameNotEmpty;
     }
 
-    @Override
-    public final Optional<Name> getRenamedUserDn(final User user) {
-        final TextInputDialog dialog = textInputDialogFactory.create(user.getCn(), validateNameNotEmpty);
-        dialog.setTitle(String.format(Messages.PROMPT_RENAME_USER.getValue(), user.getCn()));
+    /**
+     * Prompt the used with a dialog to provide the new DN.
+     *
+     * <p>If the user cancels the dialog, or the value is left unchanged, then an empty optional will be returned.</p>
+     *
+     * @param name The user to be renamed
+     *
+     * @return an optional containing the new name, or empty if dialog cancelled or the name was unchanged.
+     */
+    public final Optional<Name> getRenamedDn(final Name name) {
+        val rdn = name.get(name.size() - 1)
+                      .split("=");
+        val attribute = rdn[0];
+        val oldName = rdn[1];
+        final TextInputDialog dialog = textInputDialogFactory.create(oldName, validateNameNotEmpty);
+        dialog.setTitle(String.format(Messages.PROMPT_RENAME_USER.getValue(), name));
         val cn = textInputDialogFactory.getInput(dialog);
-        if ((cn == null) || cn.equals(user.getCn())) {
+        if ((cn == null) || cn.equals(oldName)) {
             return Optional.empty();
         }
-        return Optional.of(LdapNameUtil.replaceCn(user.getDn(), cn));
+        return Optional.of(LdapNameUtil.replaceIdAttribute(name, attribute, cn));
     }
 }

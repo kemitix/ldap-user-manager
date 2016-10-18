@@ -112,17 +112,18 @@ public final class LdapNameUtil {
     }
 
     /**
-     * Returns a new Name with the CN attribute replaced.
+     * Returns a new Name with the identifying attribute replaced.
      *
-     * @param original The orginal Name
-     * @param cn       The new CN
+     * @param original  The original Name
+     * @param attribute The identifying attribute (e.g. 'cn' or 'ou')
+     * @param value     The new attribute value
      *
      * @return the new Name
      */
-    public static Name replaceCn(final Name original, final String cn) {
+    public static Name replaceIdAttribute(final Name original, final String attribute, final String value) {
         return getParent(original).map(LdapNameBuilder::newInstance)
                                   .orElseGet(LdapNameBuilder::newInstance)
-                                  .add("cn", cn)
+                                  .add(attribute, value)
                                   .build();
     }
 }

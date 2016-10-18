@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.rename;
+package net.kemitix.ldapmanager.ui;
 
 import net.kemitix.ldapmanager.domain.User;
 
@@ -34,14 +34,14 @@ import java.util.Optional;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-interface RenameUserDialog {
+public interface RenameDnDialog {
 
     /**
      * Display a dialog to get the new name for a user.
      *
-     * @param user The user to be renamed
+     * @param name The user to be renamed
      *
      * @return an optional containing the new name, or empty if cancelled or the name wasn't changed.
      */
-    Optional<Name> getRenamedUserDn(User user);
+    Optional<Name> getRenamedDn(Name name);
 }
