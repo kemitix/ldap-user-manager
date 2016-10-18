@@ -25,8 +25,10 @@ SOFTWARE.
 package net.kemitix.ldapmanager.navigation;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.actions.user.rename.RenameUserRequestEvent;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
@@ -48,7 +50,7 @@ public final class UserNavigationItem extends AbstractNavigationItem {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private UserNavigationItem(final User user, final ApplicationEventPublisher eventPublisher) {
+    private UserNavigationItem(@NonNull final User user, @NonNull final ApplicationEventPublisher eventPublisher) {
         super(user.getCn());
         this.user = user;
         applicationEventPublisher = eventPublisher;
@@ -88,5 +90,11 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     public String getSortableName() {
         return String.format(
                 "%s-%s", Messages.SORTABLE_PREFIX_USER.getValue(), getName().toLowerCase(Locale.getDefault()));
+    }
+
+    @Override
+    public void publishRenameRequest() {
+        log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
+        applicationEventPublisher.publishEvent(RenameUserRequestEvent.create(this));
     }
 }
