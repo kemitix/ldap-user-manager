@@ -1,10 +1,14 @@
 package net.kemitix.ldapmanager.navigation;
 
 import net.kemitix.ldapmanager.actions.ou.rename.RenameOuRequestEvent;
+import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.domain.OU;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
@@ -12,6 +16,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
 
 /**
  * Tests for {@link OuNavigationItem}.
@@ -29,6 +34,9 @@ public class OuNavigationItemTest {
 
     private String name;
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -43,6 +51,25 @@ public class OuNavigationItemTest {
     public void create() throws Exception {
         assertThat(ouNavigationItem).isInstanceOf(OuNavigationItem.class);
     }
+
+    @Test
+    public void createWithNullUserThrowsNPE() throws Exception {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("ou");
+        //when
+        OuNavigationItem.create(null, applicationEventPublisher);
+    }
+
+    @Test
+    public void createWithNullEventPublisherThrowsNPE() throws Exception {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("eventPublisher");
+        //when
+        OuNavigationItem.create(ou, null);
+    }
+
 
     @Test
     public void run() throws Exception {
@@ -64,11 +91,29 @@ public class OuNavigationItemTest {
     }
 
     @Test
+    public void publishAsSelectedShouldPublishEvent() throws Exception {
+        //when
+        ouNavigationItem.publishAsSelected();
+        //then
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(NavigationItemOuSelectedEvent.class));
+    }
+
+    @Test
     public void publishRenameRequestShouldPublishEvent() {
         //when
         ouNavigationItem.publishRenameRequest();
         //then
         then(applicationEventPublisher).should()
                                        .publishEvent(any(RenameOuRequestEvent.class));
+    }
+
+    @Test
+    public void publishChangePasswordRequestShouldPublishEvent() {
+        //when
+        ouNavigationItem.publishChangePasswordRequest();
+        //then
+        then(applicationEventPublisher).should(never())
+                                       .publishEvent(any(ChangePasswordRequestEvent.class));
     }
 }

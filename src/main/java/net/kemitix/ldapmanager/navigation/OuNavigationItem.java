@@ -99,4 +99,9 @@ public final class OuNavigationItem extends AbstractNavigationItem {
         log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
         applicationEventPublisher.publishEvent(RenameOuRequestEvent.create(this));
     }
+
+    @Override
+    public void publishChangePasswordRequest() {
+        // does not support passwords
+    }
 }

@@ -1,10 +1,14 @@
 package net.kemitix.ldapmanager.navigation;
 
+import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.actions.user.rename.RenameUserRequestEvent;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,6 +33,9 @@ public class UserNavigationItemTest {
 
     private String name;
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -42,6 +49,24 @@ public class UserNavigationItemTest {
     @Test
     public void create() throws Exception {
         assertThat(userNavigationItem).isInstanceOf(UserNavigationItem.class);
+    }
+
+    @Test
+    public void createWithNullUserThrowsNPE() throws Exception {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("user");
+        //when
+        UserNavigationItem.create(null, applicationEventPublisher);
+    }
+
+    @Test
+    public void createWithNullEventPublisherThrowsNPE() throws Exception {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("eventPublisher");
+        //when
+        UserNavigationItem.create(user, null);
     }
 
     @Test
@@ -64,11 +89,29 @@ public class UserNavigationItemTest {
     }
 
     @Test
+    public void publishAsSelectedShouldPublishEvent() throws Exception {
+        //when
+        userNavigationItem.publishAsSelected();
+        //then
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(NavigationItemUserSelectedEvent.class));
+    }
+
+    @Test
     public void publishRenameRequestShouldPublishEvent() {
         //when
         userNavigationItem.publishRenameRequest();
         //then
         then(applicationEventPublisher).should()
                                        .publishEvent(any(RenameUserRequestEvent.class));
+    }
+
+    @Test
+    public void publishChangePasswordRequestShouldPublishEvent() {
+        //when
+        userNavigationItem.publishChangePasswordRequest();
+        //then
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(ChangePasswordRequestEvent.class));
     }
 }

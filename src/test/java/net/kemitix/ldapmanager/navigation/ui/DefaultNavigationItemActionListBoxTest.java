@@ -381,5 +381,10 @@ public class DefaultNavigationItemActionListBoxTest {
         public void publishRenameRequest() {
             applicationEventPublisher.publishEvent(this);
         }
+
+        @Override
+        public void publishChangePasswordRequest() {
+            applicationEventPublisher.publishEvent(this);
+        }
     }
 }
