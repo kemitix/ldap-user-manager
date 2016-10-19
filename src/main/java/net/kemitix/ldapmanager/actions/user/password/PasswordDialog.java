@@ -22,47 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import org.springframework.stereotype.Component;
-
-import java.util.stream.Stream;
+import java.util.Optional;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * Dialog for prompting for a new password.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class RenameMenuItemFactory implements MenuItemFactory {
-
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        return Stream.of(new RenameMenuItemFactory.RenameMenuItem(navigationItem));
-    }
+interface PasswordDialog {
 
     /**
-     * Menu item for renaming a Navigation Item.
+     * Prompt the used with a dialog to provide the new password.
+     *
+     * <p>If the user cancels the dialog then an empty optional will be returned.</p>
+     *
+     * @param description The description to display.
+     *
+     * @return an optional containing the new password, or empty if dialog cancelled.
      */
-    private static class RenameMenuItem implements MenuItem {
-
-        private static final String LABEL = "Rename";
-
-        private final NavigationItem navigationItem;
-
-        RenameMenuItem(final NavigationItem navigationItem) {
-            this.navigationItem = navigationItem;
-        }
-
-        @Override
-        public final String getLabel() {
-            return LABEL;
-        }
-
-        @Override
-        public final Runnable getAction() {
-            return navigationItem::publishRenameRequest;
-        }
-    }
+    Optional<String> getPassword(String description);
 }

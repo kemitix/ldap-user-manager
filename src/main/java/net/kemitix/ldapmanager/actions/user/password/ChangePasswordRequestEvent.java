@@ -22,47 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import org.springframework.stereotype.Component;
-
-import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.NonNull;
+import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * Raised when the user want the change the {@link net.kemitix.ldapmanager.domain.User} password.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class RenameMenuItemFactory implements MenuItemFactory {
+public final class ChangePasswordRequestEvent {
 
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        return Stream.of(new RenameMenuItemFactory.RenameMenuItem(navigationItem));
+    @Getter
+    private final UserNavigationItem userNavigationItem;
+
+    private ChangePasswordRequestEvent(final UserNavigationItem userNavigationItem) {
+        this.userNavigationItem = userNavigationItem;
     }
 
     /**
-     * Menu item for renaming a Navigation Item.
+     * Constructor.
+     *
+     * @param userNavigationItem The User Navigation Item to change the password of.
+     *
+     * @return the event
      */
-    private static class RenameMenuItem implements MenuItem {
-
-        private static final String LABEL = "Rename";
-
-        private final NavigationItem navigationItem;
-
-        RenameMenuItem(final NavigationItem navigationItem) {
-            this.navigationItem = navigationItem;
-        }
-
-        @Override
-        public final String getLabel() {
-            return LABEL;
-        }
-
-        @Override
-        public final Runnable getAction() {
-            return navigationItem::publishRenameRequest;
-        }
+    public static ChangePasswordRequestEvent create(@NonNull final UserNavigationItem userNavigationItem) {
+        return new ChangePasswordRequestEvent(userNavigationItem);
     }
 }

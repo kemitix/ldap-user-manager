@@ -22,47 +22,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.actions.user.password;
 
+import net.kemitix.ldapmanager.context.MenuItem;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
-import org.springframework.stereotype.Component;
-
-import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * MenuItem for changing the NavigationItem's password.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class RenameMenuItemFactory implements MenuItemFactory {
+class ChangePasswordMenuItem implements MenuItem {
 
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        return Stream.of(new RenameMenuItemFactory.RenameMenuItem(navigationItem));
-    }
+    private static final String LABEL = "Change Password";
+
+    private final NavigationItem navigationItem;
 
     /**
-     * Menu item for renaming a Navigation Item.
+     * Constructor.
+     *
+     * @param navigationItem The Navigation Item
      */
-    private static class RenameMenuItem implements MenuItem {
+    ChangePasswordMenuItem(final NavigationItem navigationItem) {
+        this.navigationItem = navigationItem;
+    }
 
-        private static final String LABEL = "Rename";
+    @Override
+    public final String getLabel() {
+        return LABEL;
+    }
 
-        private final NavigationItem navigationItem;
-
-        RenameMenuItem(final NavigationItem navigationItem) {
-            this.navigationItem = navigationItem;
-        }
-
-        @Override
-        public final String getLabel() {
-            return LABEL;
-        }
-
-        @Override
-        public final Runnable getAction() {
-            return navigationItem::publishRenameRequest;
-        }
+    @Override
+    public final Runnable getAction() {
+        return navigationItem::publishChangePasswordRequest;
     }
 }

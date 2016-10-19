@@ -22,47 +22,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Stream;
+import java.util.Optional;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * Implementation of dialog for prompting for a new password.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class RenameMenuItemFactory implements MenuItemFactory {
+class DefaultPasswordDialog implements PasswordDialog {
 
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        return Stream.of(new RenameMenuItemFactory.RenameMenuItem(navigationItem));
-    }
+    private static final String TITLE = "Change Password";
+
+    private static final String INITIAL_CONTENT = "";
+
+    private final WindowBasedTextGUI gui;
 
     /**
-     * Menu item for renaming a Navigation Item.
+     * Constructor.
+     *
+     * @param gui The GUI to display the dialog.
      */
-    private static class RenameMenuItem implements MenuItem {
+    @Autowired
+    DefaultPasswordDialog(final WindowBasedTextGUI gui) {
+        this.gui = gui;
+    }
 
-        private static final String LABEL = "Rename";
-
-        private final NavigationItem navigationItem;
-
-        RenameMenuItem(final NavigationItem navigationItem) {
-            this.navigationItem = navigationItem;
-        }
-
-        @Override
-        public final String getLabel() {
-            return LABEL;
-        }
-
-        @Override
-        public final Runnable getAction() {
-            return navigationItem::publishRenameRequest;
-        }
+    @Override
+    public final Optional<String> getPassword(final String description) {
+        return Optional.ofNullable(TextInputDialog.showPasswordDialog(gui, TITLE, description, INITIAL_CONTENT));
     }
 }

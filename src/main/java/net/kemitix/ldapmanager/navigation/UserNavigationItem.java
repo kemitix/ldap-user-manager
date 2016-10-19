@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.actions.user.rename.RenameUserRequestEvent;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
@@ -98,5 +99,11 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     public void publishRenameRequest() {
         log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
         applicationEventPublisher.publishEvent(RenameUserRequestEvent.create(this));
+    }
+
+    @Override
+    public void publishChangePasswordRequest() {
+        log.log(Level.FINEST, "publishChangePasswordRequest(): %1", getName());
+        applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.create(this));
     }
 }

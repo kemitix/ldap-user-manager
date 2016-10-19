@@ -69,4 +69,11 @@ public interface NavigationItem extends Runnable, Comparable<NavigationItem> {
      * Publish an event requesting that the user wants to rename this item.
      */
     void publishRenameRequest();
+
+    /**
+     * Publish an event requesting that the user wants to change the password of this item.
+     *
+     * <p>If the child class does not support passwords, then it can simply return after doing nothing.</p>
+     */
+    void publishChangePasswordRequest();
 }

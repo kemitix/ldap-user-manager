@@ -22,47 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import org.springframework.stereotype.Component;
-
-import java.util.stream.Stream;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.encoding.LdapShaPasswordEncoder;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * Configuration for the Change Password action.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class RenameMenuItemFactory implements MenuItemFactory {
-
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        return Stream.of(new RenameMenuItemFactory.RenameMenuItem(navigationItem));
-    }
+@SuppressWarnings("DesignForExtension")
+@Configuration
+class PasswordConfiguration {
 
     /**
-     * Menu item for renaming a Navigation Item.
+     * Create a SHA-1 password encoder.
+     *
+     * @return the encoder
      */
-    private static class RenameMenuItem implements MenuItem {
-
-        private static final String LABEL = "Rename";
-
-        private final NavigationItem navigationItem;
-
-        RenameMenuItem(final NavigationItem navigationItem) {
-            this.navigationItem = navigationItem;
-        }
-
-        @Override
-        public final String getLabel() {
-            return LABEL;
-        }
-
-        @Override
-        public final Runnable getAction() {
-            return navigationItem::publishRenameRequest;
-        }
+    @Bean
+    public LdapShaPasswordEncoder passwordEncoder() {
+        final LdapShaPasswordEncoder passwordEncoder = new LdapShaPasswordEncoder();
+        passwordEncoder.setForceLowerCasePrefix(true);
+        return passwordEncoder;
     }
 }
