@@ -1,9 +1,12 @@
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.ActionListDialogBuilder;
 import lombok.val;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.popupmenus.PopupMenu;
 import net.kemitix.ldapmanager.ui.ActionListDialogBuilderFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,13 +22,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 /**
- * Tests for {@link DefaultContextMenu}.
+ * Tests for {@link PopupMenu}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class DefaultContextMenuTest {
+public class ContextMenuTest {
 
-    private DefaultContextMenu contextMenu;
+    private ContextMenu contextMenu;
 
     @Mock
     private WindowBasedTextGUI gui;
@@ -84,7 +87,7 @@ public class DefaultContextMenuTest {
 
     private void prepareCallToDisplay() {
         menuItemsFactories.add(menuItemFactory);
-        contextMenu = new DefaultContextMenu(gui, dialogBuilderFactory, menuItemsFactories);
+        contextMenu = new ContextMenu(gui, dialogBuilderFactory, menuItemsFactories);
 
         given(dialogBuilderFactory.create()).willReturn(actionListDialogBuilder);
         given(menuItemFactory.create(navigationItem)).willReturn(Stream.of(menuItem));

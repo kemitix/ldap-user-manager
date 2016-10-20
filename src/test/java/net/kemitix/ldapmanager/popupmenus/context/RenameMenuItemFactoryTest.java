@@ -1,6 +1,7 @@
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.popupmenus.context;
 
 import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

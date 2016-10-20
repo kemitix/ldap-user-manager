@@ -22,8 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/**
- * Context menu popup.
- */
+package net.kemitix.ldapmanager.popupmenus.context;
 
-package net.kemitix.ldapmanager.context;
+import lombok.Getter;
+import net.kemitix.ldapmanager.navigation.NavigationItem;
+
+/**
+ * Raised when a context menu is wanted for a {@link NavigationItem}.
+ *
+ * @author Paul Campbell (pcampbell@kemitix.net)
+ */
+public final class DisplayContextMenuEvent {
+
+    @Getter
+    private final NavigationItem navigationItem;
+
+    private DisplayContextMenuEvent(final NavigationItem navigationItem) {
+        this.navigationItem = navigationItem;
+    }
+
+    /**
+     * Create a new DisplayContextMenuEvent.
+     *
+     * @param navigationItem The Navigation Item to display the context menu for.
+     *
+     * @return the event
+     */
+    public static DisplayContextMenuEvent of(final NavigationItem navigationItem) {
+        return new DisplayContextMenuEvent(navigationItem);
+    }
+}

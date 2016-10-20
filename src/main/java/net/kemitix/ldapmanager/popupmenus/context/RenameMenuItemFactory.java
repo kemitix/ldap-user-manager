@@ -22,33 +22,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.popupmenus.context;
 
-import lombok.Getter;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import org.springframework.stereotype.Component;
+
+import java.util.stream.Stream;
 
 /**
- * Raised when a context menu is wanted for a {@link NavigationItem}.
+ * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class DisplayContextMenuEvent {
+@Component
+class RenameMenuItemFactory implements MenuItemFactory {
 
-    @Getter
-    private final NavigationItem navigationItem;
-
-    private DisplayContextMenuEvent(final NavigationItem navigationItem) {
-        this.navigationItem = navigationItem;
+    @Override
+    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
+        return Stream.of(new RenameMenuItemFactory.RenameMenuItem(navigationItem));
     }
 
     /**
-     * Create a new DisplayContextMenuEvent.
-     *
-     * @param navigationItem The Navigation Item to display the context menu for.
-     *
-     * @return the event
+     * Menu item for renaming a Navigation Item.
      */
-    public static DisplayContextMenuEvent of(final NavigationItem navigationItem) {
-        return new DisplayContextMenuEvent(navigationItem);
+    private static class RenameMenuItem implements MenuItem {
+
+        private static final String LABEL = "Rename";
+
+        private final NavigationItem navigationItem;
+
+        RenameMenuItem(final NavigationItem navigationItem) {
+            this.navigationItem = navigationItem;
+        }
+
+        @Override
+        public final String getLabel() {
+            return LABEL;
+        }
+
+        @Override
+        public final Runnable getAction() {
+            return navigationItem::publishRenameRequest;
+        }
     }
 }

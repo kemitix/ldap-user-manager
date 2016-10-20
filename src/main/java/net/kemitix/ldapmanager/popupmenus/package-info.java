@@ -22,26 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
-
 /**
- * Interface for actions that appear in context menu.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Popup menus.
  */
-public interface MenuItem {
 
-    /**
-     * Returns the label.
-     *
-     * @return the label.
-     */
-    String getLabel();
-
-    /**
-     * Returns the runnable action to perform.
-     *
-     * @return the action
-     */
-    Runnable getAction();
-}
+package net.kemitix.ldapmanager.popupmenus;

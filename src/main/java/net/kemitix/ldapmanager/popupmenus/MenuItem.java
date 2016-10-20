@@ -22,26 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
-
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-
-import java.util.stream.Stream;
+package net.kemitix.ldapmanager.popupmenus;
 
 /**
- * Factory for creating {@link MenuItem}s from {@link NavigationItem}s.
+ * Interface for actions that appear in context menu.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@FunctionalInterface
-public interface MenuItemFactory {
+public interface MenuItem {
 
     /**
-     * Create any {@link MenuItem}s for the {@link NavigationItem}.
+     * Returns the label.
      *
-     * @param navigationItem The Navigation Item to create MenuItems for.
-     *
-     * @return a stream of MenuItems, may be empty.
+     * @return the label.
      */
-    Stream<MenuItem> create(NavigationItem navigationItem);
+    String getLabel();
+
+    /**
+     * Returns the runnable action to perform.
+     *
+     * @return the action
+     */
+    Runnable getAction();
 }

@@ -22,21 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
-
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-
 /**
- * .
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Context menu popup.
  */
-public interface ContextMenu {
 
-    /**
-     * Display a popup context menu for the {@link NavigationItem}.
-     *
-     * @param navigationItem The Navigation Item to display menu for.
-     */
-    void display(NavigationItem navigationItem);
-}
+package net.kemitix.ldapmanager.popupmenus.context;

@@ -22,26 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.popupmenus;
 
-import net.kemitix.ldapmanager.popupmenus.MenuItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
-import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to change the password of
- * {@link net.kemitix.ldapmanager.navigation.UserNavigationItem}s.
+ * Factory for creating {@link MenuItem}s from {@link NavigationItem}s.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class ChangePasswordMenuItemFactory implements MenuItemFactory {
+@FunctionalInterface
+public interface MenuItemFactory {
 
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        return Stream.of(new ChangePasswordMenuItem(navigationItem));
-    }
+    /**
+     * Create any {@link MenuItem}s for the {@link NavigationItem}.
+     *
+     * @param navigationItem The Navigation Item to create MenuItems for.
+     *
+     * @return a stream of MenuItems, may be empty.
+     */
+    Stream<MenuItem> create(NavigationItem navigationItem);
 }

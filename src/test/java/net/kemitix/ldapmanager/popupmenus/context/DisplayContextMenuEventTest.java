@@ -1,4 +1,4 @@
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.popupmenus.context;
 
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import org.junit.Test;

@@ -24,7 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.context.MenuItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 
 /**
