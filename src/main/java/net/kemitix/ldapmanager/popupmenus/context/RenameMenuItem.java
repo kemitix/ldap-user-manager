@@ -24,30 +24,42 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.popupmenus.context;
 
-import lombok.val;
-import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * Menu item for renaming a Navigation Item.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class RenameMenuItemFactory implements MenuItemFactory {
+final class RenameMenuItem implements MenuItem {
+
+    private static final String LABEL = "Rename";
+
+    private final NavigationItem navigationItem;
+
+    private RenameMenuItem(final NavigationItem navigationItem) {
+        this.navigationItem = navigationItem;
+    }
+
+    /**
+     * Create a new RenameMenuUtem.
+     *
+     * @param navigationItem The NavigationItem to rename.
+     *
+     * @return the menu item.
+     */
+    public static RenameMenuItem create(final NavigationItem navigationItem) {
+        return new RenameMenuItem(navigationItem);
+    }
 
     @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        val items = new ArrayList<MenuItem>();
-        if (navigationItem.hasFeature(Features.RENAME)) {
-            items.add(RenameMenuItem.create(navigationItem));
-        }
-        return items.stream();
+    public String getLabel() {
+        return LABEL;
+    }
+
+    @Override
+    public Runnable getAction() {
+        return navigationItem::publishRenameRequest;
     }
 }

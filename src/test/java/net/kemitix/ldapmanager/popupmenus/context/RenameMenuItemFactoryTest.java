@@ -1,5 +1,6 @@
 package net.kemitix.ldapmanager.popupmenus.context;
 
+import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 /**
@@ -32,7 +34,9 @@ public class RenameMenuItemFactoryTest {
     }
 
     @Test
-    public void labelisRename() throws Exception {
+    public void labelIsRename() throws Exception {
+        //given
+        given(navigationItem.hasFeature(Features.RENAME)).willReturn(true);
         //when
         final List<MenuItem> menuItems = menuItemFactory.create(navigationItem)
                                                         .collect(Collectors.toList());
@@ -44,6 +48,8 @@ public class RenameMenuItemFactoryTest {
 
     @Test
     public void runActionShouldPublishRenameRequest() throws Exception {
+        //given
+        given(navigationItem.hasFeature(Features.RENAME)).willReturn(true);
         //when
         final List<MenuItem> menuItems = menuItemFactory.create(navigationItem)
                                                         .collect(Collectors.toList());
