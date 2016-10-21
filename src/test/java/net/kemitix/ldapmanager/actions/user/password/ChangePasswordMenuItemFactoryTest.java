@@ -7,9 +7,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.never;
 
 /**
  * .
@@ -43,15 +43,10 @@ public class ChangePasswordMenuItemFactoryTest {
     }
 
     @Test
-    public void whenNavigationItemHasNoPasswordFeatureThenDoNotPublishChangeRequest() throws Exception {
+    public void whenNavigationItemHasNoPasswordFeatureThenDoNotCreateMenuItem() throws Exception {
         //given
         given(navigationItem.hasFeature(Features.PASSWORD)).willReturn(false);
-        //when
-        factory.create(navigationItem)
-               .forEach(menuItem -> menuItem.getAction()
-                                            .run());
         //then
-        then(navigationItem).should(never())
-                            .publishChangePasswordRequest();
+        assertThat(factory.create(navigationItem)).isEmpty();
     }
 }

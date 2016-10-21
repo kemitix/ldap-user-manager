@@ -24,7 +24,7 @@ public class ChangePasswordMenuItemTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        menuItem = new ChangePasswordMenuItem(navigationItem);
+        menuItem = ChangePasswordMenuItem.create(navigationItem);
     }
 
     @Test

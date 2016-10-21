@@ -24,36 +24,42 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItem;
 
 /**
  * MenuItem for changing the NavigationItem's password.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-class ChangePasswordMenuItem implements MenuItem {
+final class ChangePasswordMenuItem implements MenuItem {
 
     private static final String LABEL = "Change Password";
 
     private final NavigationItem navigationItem;
 
-    /**
-     * Constructor.
-     *
-     * @param navigationItem The Navigation Item
-     */
-    ChangePasswordMenuItem(final NavigationItem navigationItem) {
+    private ChangePasswordMenuItem(final NavigationItem navigationItem) {
         this.navigationItem = navigationItem;
     }
 
+    /**
+     * Create a new ChangePasswordMenuItem.
+     *
+     * @param navigationItem The Navigation Item that would renamed.
+     *
+     * @return the menu item
+     */
+    public static ChangePasswordMenuItem create(final NavigationItem navigationItem) {
+        return new ChangePasswordMenuItem(navigationItem);
+    }
+
     @Override
-    public final String getLabel() {
+    public String getLabel() {
         return LABEL;
     }
 
     @Override
-    public final Runnable getAction() {
+    public Runnable getAction() {
         return navigationItem::publishChangePasswordRequest;
     }
 }

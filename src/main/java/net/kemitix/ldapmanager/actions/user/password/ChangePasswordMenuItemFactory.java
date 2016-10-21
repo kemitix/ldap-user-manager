@@ -47,7 +47,7 @@ class ChangePasswordMenuItemFactory implements MenuItemFactory {
     public final Stream<MenuItem> create(final NavigationItem navigationItem) {
         val items = new ArrayList<MenuItem>();
         if (navigationItem.hasFeature(Features.PASSWORD)) {
-            items.add(new ChangePasswordMenuItem(navigationItem));
+            items.add(ChangePasswordMenuItem.create(navigationItem));
         }
         return items.stream();
     }
