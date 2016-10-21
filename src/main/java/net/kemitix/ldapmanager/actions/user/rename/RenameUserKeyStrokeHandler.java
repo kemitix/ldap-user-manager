@@ -28,6 +28,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.Getter;
 import lombok.val;
+import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.events.KeyStrokeHandlerUpdateEvent;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
@@ -135,6 +136,9 @@ class RenameUserKeyStrokeHandler implements KeyStrokeHandler {
     @EventListener(NavigationItemSelectionChangedEvent.class)
     public final void onSelectionChanged(final NavigationItemSelectionChangedEvent event) {
         active = false;
-        applicationEventPublisher.publishEvent(KeyStrokeHandlerUpdateEvent.of(this));
+        event.getNewItem()
+             .filter(navigationItem -> navigationItem instanceof UserNavigationItem)
+             .filter(navigationItem -> navigationItem.hasFeature(Features.RENAME))
+             .ifPresent(navigationItem -> active = true);
     }
 }

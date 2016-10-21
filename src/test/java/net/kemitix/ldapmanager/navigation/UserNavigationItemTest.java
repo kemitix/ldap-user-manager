@@ -2,6 +2,7 @@ package net.kemitix.ldapmanager.navigation;
 
 import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.actions.user.rename.RenameUserRequestEvent;
+import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
@@ -113,5 +114,15 @@ public class UserNavigationItemTest {
         //then
         then(applicationEventPublisher).should()
                                        .publishEvent(any(ChangePasswordRequestEvent.class));
+    }
+
+    @Test
+    public void shouldHaveFeatureRename() {
+        assertThat(userNavigationItem.hasFeature(Features.RENAME)).isTrue();
+    }
+
+    @Test
+    public void shouldHaveFeaturePassword() {
+        assertThat(userNavigationItem.hasFeature(Features.PASSWORD)).isTrue();
     }
 }

@@ -22,33 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
-
-import lombok.val;
-import net.kemitix.ldapmanager.domain.Features;
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.stream.Stream;
+package net.kemitix.ldapmanager.domain;
 
 /**
- * Factory for creating {@link MenuItem}s to change the password of
- * {@link net.kemitix.ldapmanager.navigation.UserNavigationItem}s.
+ * Set of features that an LdapEntity may possess.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class ChangePasswordMenuItemFactory implements MenuItemFactory {
+public enum Features {
 
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        val items = new ArrayList<MenuItem>();
-        if (navigationItem.hasFeature(Features.PASSWORD)) {
-            items.add(new ChangePasswordMenuItem(navigationItem));
-        }
-        return items.stream();
-    }
+    PASSWORD,
+    RENAME
 }

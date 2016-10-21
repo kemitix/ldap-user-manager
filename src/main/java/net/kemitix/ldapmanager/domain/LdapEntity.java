@@ -34,7 +34,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface LdapEntity {
+public interface LdapEntity extends FeatureSet {
 
     /**
      * Returns the name of an entity.

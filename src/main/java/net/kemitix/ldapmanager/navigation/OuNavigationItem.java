@@ -29,6 +29,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.actions.ou.rename.RenameOuRequestEvent;
+import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
@@ -103,5 +104,15 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     @Override
     public void publishChangePasswordRequest() {
         // does not support passwords
+    }
+
+    @Override
+    public boolean hasFeature(final Features feature) {
+        return ou.hasFeature(feature);
+    }
+
+    @Override
+    public void removeFeature(final Features feature) {
+        ou.removeFeature(feature);
     }
 }
