@@ -22,8 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/**
- * Action for renaming a {@link net.kemitix.ldapmanager.domain.User}.
- */
+package net.kemitix.ldapmanager.ldap;
 
-package net.kemitix.ldapmanager.actions.user.rename;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextOperations;
+
+/**
+ * Type wrapper for ContextMappers that can say if they can handle a given context.
+ *
+ * @param <T> The entity type.
+ *
+ * @author Paul Campbell (pcampbell@kemitix.net)
+ */
+interface PreCheckContextMapper<T> extends ContextMapper<T> {
+
+    /**
+     * Checks if the mapper can map the context.
+     *
+     * @param ctx The context to be mapped.
+     *
+     * @return true if the mapper can map the context, otherwise false.
+     */
+    boolean canMapContext(DirContextOperations ctx);
+}

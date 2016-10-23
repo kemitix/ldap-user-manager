@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.val;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
 import org.springframework.context.ApplicationEventPublisher;
@@ -85,7 +86,8 @@ class ContextKeyStrokeHandler implements KeyStrokeHandler {
 
     @Override
     public final void handleInput(final KeyStroke key) {
+        val selectedItem = navigationItemActionListBox.getSelectedItem();
         applicationEventPublisher.publishEvent(
-                DisplayContextMenuEvent.of(navigationItemActionListBox.getSelectedItem()));
+                DisplayContextMenuEvent.of(selectedItem.getDn(), selectedItem.getName()));
     }
 }

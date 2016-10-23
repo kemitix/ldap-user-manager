@@ -23,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.AuthenticationException;
 
+import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -361,6 +362,11 @@ public class DefaultNavigationItemActionListBoxTest {
         @Deprecated
         public String toString() {
             return name;
+        }
+
+        @Override
+        public Name getDn() {
+            return null;
         }
 
         @Override

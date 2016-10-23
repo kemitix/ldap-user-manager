@@ -1,7 +1,6 @@
 package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.domain.User;
-import net.kemitix.ldapmanager.navigation.UserNavigationItem;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,8 +61,7 @@ public class ChangePasswordActionTest {
     public void whenUserCancelsFirstDialogShouldNotDisplaySecond() throws Exception {
         //given
         given(passwordDialog.getPassword(anyString())).willReturn(Optional.empty());
-        event = ChangePasswordRequestEvent.create(UserNavigationItem.create(User.builder()
-                                                                                .build(), applicationEventPublisher));
+        event = ChangePasswordRequestEvent.create(LdapNameUtil.empty());
         //when
         action.onChangeUserPasswordRequest(event);
         //then
@@ -76,8 +74,7 @@ public class ChangePasswordActionTest {
         //given
         given(passwordDialog.getPassword(anyString())).willReturn(Optional.of("password"))
                                                       .willReturn(Optional.empty());
-        event = ChangePasswordRequestEvent.create(UserNavigationItem.create(User.builder()
-                                                                                .build(), applicationEventPublisher));
+        event = ChangePasswordRequestEvent.create(LdapNameUtil.empty());
         //when
         action.onChangeUserPasswordRequest(event);
         //then
@@ -91,8 +88,7 @@ public class ChangePasswordActionTest {
         //given
         given(passwordDialog.getPassword(anyString())).willReturn(Optional.of("password"))
                                                       .willReturn(Optional.of("different"));
-        event = ChangePasswordRequestEvent.create(UserNavigationItem.create(User.builder()
-                                                                                .build(), applicationEventPublisher));
+        event = ChangePasswordRequestEvent.create(LdapNameUtil.empty());
         //when
         action.onChangeUserPasswordRequest(event);
         //then
@@ -106,8 +102,7 @@ public class ChangePasswordActionTest {
         //given
         given(passwordDialog.getPassword(anyString())).willReturn(Optional.of("password"))
                                                       .willReturn(Optional.of("password"));
-        event = ChangePasswordRequestEvent.create(UserNavigationItem.create(User.builder()
-                                                                                .build(), applicationEventPublisher));
+        event = ChangePasswordRequestEvent.create(LdapNameUtil.empty());
         given(passwordEncoder.encodePassword(anyString(), eq(null))).willReturn("encoded");
         given(ldapTemplate.lookupContext(any(Name.class))).willReturn(context);
         //when

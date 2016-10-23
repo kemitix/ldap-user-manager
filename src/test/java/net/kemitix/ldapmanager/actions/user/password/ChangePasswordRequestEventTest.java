@@ -1,15 +1,10 @@
 package net.kemitix.ldapmanager.actions.user.password;
 
 import lombok.val;
-import net.kemitix.ldapmanager.domain.User;
-import net.kemitix.ldapmanager.navigation.UserNavigationItem;
-import org.junit.Before;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.context.ApplicationEventPublisher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,29 +18,20 @@ public class ChangePasswordRequestEventTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    @Mock
-    private ApplicationEventPublisher applicationEventPublisher;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
     public void shouldCreateAndGetNavigationItemBackOut() throws Exception {
         //when
-        val userNavigationItem = UserNavigationItem.create(User.builder()
-                                                               .build(), applicationEventPublisher);
-        val event = ChangePasswordRequestEvent.create(userNavigationItem);
+        val dn = LdapNameUtil.parse("cn=user");
+        val event = ChangePasswordRequestEvent.create(dn);
         //then
-        assertThat(event.getUserNavigationItem()).isSameAs(userNavigationItem);
+        assertThat(event.getDn()).isSameAs(dn);
     }
 
     @Test
     public void shouldThrowNPEWhenNavigationItemIsNull() throws Exception {
         //given
         exception.expect(NullPointerException.class);
-        exception.expectMessage("userNavigationItem");
+        exception.expectMessage("dn");
         //when
         ChangePasswordRequestEvent.create(null);
     }

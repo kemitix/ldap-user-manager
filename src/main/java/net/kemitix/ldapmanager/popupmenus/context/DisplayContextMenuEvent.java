@@ -25,30 +25,36 @@ SOFTWARE.
 package net.kemitix.ldapmanager.popupmenus.context;
 
 import lombok.Getter;
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+
+import javax.naming.Name;
 
 /**
- * Raised when a context menu is wanted for a {@link NavigationItem}.
+ * Raised when a context menu is wanted.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 public final class DisplayContextMenuEvent {
 
     @Getter
-    private final NavigationItem navigationItem;
+    private final Name dn;
 
-    private DisplayContextMenuEvent(final NavigationItem navigationItem) {
-        this.navigationItem = navigationItem;
+    @Getter
+    private final String title;
+
+    private DisplayContextMenuEvent(final Name dn, final String title) {
+        this.dn = dn;
+        this.title = title;
     }
 
     /**
      * Create a new DisplayContextMenuEvent.
      *
-     * @param navigationItem The Navigation Item to display the context menu for.
+     * @param dn    The DN to display the context menu for.
+     * @param title The title of the menu.
      *
      * @return the event
      */
-    public static DisplayContextMenuEvent of(final NavigationItem navigationItem) {
-        return new DisplayContextMenuEvent(navigationItem);
+    public static DisplayContextMenuEvent of(final Name dn, final String title) {
+        return new DisplayContextMenuEvent(dn, title);
     }
 }

@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 /**
- * Action for renaming a {@link net.kemitix.ldapmanager.domain.OU}.
+ * Action for renaming an {@link net.kemitix.ldapmanager.domain.LdapEntity}.
  */
 
-package net.kemitix.ldapmanager.actions.ou.rename;
+package net.kemitix.ldapmanager.actions.rename;

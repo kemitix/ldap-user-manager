@@ -22,52 +22,62 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.actions.rename;
 
 import lombok.val;
-import net.kemitix.ldapmanager.domain.Features;
-import net.kemitix.ldapmanager.ldap.NameLookupService;
-import net.kemitix.ldapmanager.popupmenus.MenuItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.ui.RenameDnDialog;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
+import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to change the password of an entity.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class ChangePasswordMenuItemFactory implements MenuItemFactory {
+class RenameAction {
 
-    private final NameLookupService nameLookupService;
+    private final RenameDnDialog renameDnDialog;
+
+    private final LdapTemplate ldapTemplate;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Constructor.
      *
-     * @param nameLookupService         The Name Lookup Service.
+     * @param renameDnDialog            The Dialog to get the new name.
+     * @param ldapTemplate              The LDAP Template.
      * @param applicationEventPublisher The Application Event Publisher.
      */
-    ChangePasswordMenuItemFactory(
-            final NameLookupService nameLookupService, final ApplicationEventPublisher applicationEventPublisher
-                                 ) {
-        this.nameLookupService = nameLookupService;
+    RenameAction(
+            final RenameDnDialog renameDnDialog, final LdapTemplate ldapTemplate,
+            final ApplicationEventPublisher applicationEventPublisher
+                ) {
+        this.renameDnDialog = renameDnDialog;
+        this.ldapTemplate = ldapTemplate;
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    @Override
-    public final Stream<MenuItem> create(final Name dn) {
-        val items = new ArrayList<MenuItem>();
-        nameLookupService.findByDn(dn)
-                         .filter(ldapEntity -> ldapEntity.hasFeature(Features.PASSWORD))
-                         .map(ldapEntity -> ChangePasswordMenuItem.create(dn, applicationEventPublisher))
-                         .ifPresent(items::add);
-        return items.stream();
+    /**
+     * Listener for {@link RenameRequestEvent} to display the rename dialog and update the LDAP server.
+     *
+     * @param event the event
+     */
+    @EventListener(RenameRequestEvent.class)
+    public final void onRenameRequest(final RenameRequestEvent event) {
+        val dn = event.getDn();
+        renameDnDialog.getRenamedDn(dn)
+                      .ifPresent(newDn -> rename(dn, newDn));
+    }
+
+    private void rename(final Name oldDn, final Name newDn) {
+        ldapTemplate.rename(oldDn, newDn);
+        applicationEventPublisher.publishEvent(ContainerExpiredEvent.containing(oldDn, newDn));
     }
 }

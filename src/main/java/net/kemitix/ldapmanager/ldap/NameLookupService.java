@@ -22,33 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.ou.rename;
+package net.kemitix.ldapmanager.ldap;
 
-import lombok.Getter;
-import net.kemitix.ldapmanager.navigation.OuNavigationItem;
+import net.kemitix.ldapmanager.domain.LdapEntity;
+
+import javax.naming.Name;
+import java.util.Optional;
 
 /**
- * Raised when the user wants to rename an {@link OuNavigationItem}.
+ * Service to lookup LdapEntities from their Names.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class RenameOuRequestEvent {
-
-    @Getter
-    private final OuNavigationItem ouNavigationItem;
-
-    private RenameOuRequestEvent(final OuNavigationItem ouNavigationItem) {
-        this.ouNavigationItem = ouNavigationItem;
-    }
+public interface NameLookupService {
 
     /**
-     * Create a new RenameOuRequestEvent.
+     * Finds an LDAP Entity by its name.
      *
-     * @param ouNavigationItem The OU Navigation Item to be renamed.
+     * @param dn The DN to find.
      *
-     * @return the event
+     * @return an optional containing the entity if one was found, or empty if not.
      */
-    public static RenameOuRequestEvent create(final OuNavigationItem ouNavigationItem) {
-        return new RenameOuRequestEvent(ouNavigationItem);
-    }
+    Optional<LdapEntity> findByDn(Name dn);
 }

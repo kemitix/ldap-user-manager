@@ -29,13 +29,14 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
-import net.kemitix.ldapmanager.actions.user.rename.RenameUserRequestEvent;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
+import javax.naming.Name;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -85,6 +86,11 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     }
 
     @Override
+    public Name getDn() {
+        return user.getDn();
+    }
+
+    @Override
     public void publishAsSelected() {
         log.log(Level.FINEST, "publishAsSelected(): %1", getName());
         applicationEventPublisher.publishEvent(NavigationItemUserSelectedEvent.of(this));
@@ -99,13 +105,13 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     @Override
     public void publishRenameRequest() {
         log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
-        applicationEventPublisher.publishEvent(RenameUserRequestEvent.create(this));
+        applicationEventPublisher.publishEvent(RenameRequestEvent.create(getDn()));
     }
 
     @Override
     public void publishChangePasswordRequest() {
         log.log(Level.FINEST, "publishChangePasswordRequest(): %1", getName());
-        applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.create(this));
+        applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.create(getDn()));
     }
 
     @Override

@@ -28,13 +28,14 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
-import net.kemitix.ldapmanager.actions.ou.rename.RenameOuRequestEvent;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
+import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
+import javax.naming.Name;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -84,6 +85,11 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     }
 
     @Override
+    public Name getDn() {
+        return ou.getDn();
+    }
+
+    @Override
     public void publishAsSelected() {
         log.log(Level.FINEST, "publishAsSelected(): %1", getName());
         applicationEventPublisher.publishEvent(NavigationItemOuSelectedEvent.of(this));
@@ -98,7 +104,7 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     @Override
     public void publishRenameRequest() {
         log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
-        applicationEventPublisher.publishEvent(RenameOuRequestEvent.create(this));
+        applicationEventPublisher.publishEvent(RenameRequestEvent.create(getDn()));
     }
 
     @Override

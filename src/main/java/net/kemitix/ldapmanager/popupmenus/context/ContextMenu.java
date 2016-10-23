@@ -26,13 +26,13 @@ package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import lombok.val;
-import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
 import net.kemitix.ldapmanager.popupmenus.PopupMenu;
 import net.kemitix.ldapmanager.ui.ActionListDialogBuilderFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import javax.naming.Name;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,14 +67,14 @@ class ContextMenu implements PopupMenu {
     }
 
     @Override
-    public final void display(final NavigationItem navigationItem) {
+    public final void display(final Name dn, final String title) {
         val dialogBuilder = dialogBuilderFactory.create();
         menuItemFactories.stream()
-                         .flatMap(menuItemFactory -> menuItemFactory.create(navigationItem))
+                         .flatMap(menuItemFactory -> menuItemFactory.create(dn))
                          .forEach(menuItem -> dialogBuilder.addAction(menuItem.getLabel(), menuItem.getAction()));
         if (!dialogBuilder.getActions()
                           .isEmpty()) {
-            dialogBuilder.setTitle(navigationItem.getName())
+            dialogBuilder.setTitle(title)
                          .build()
                          .showDialog(gui);
         }
@@ -87,6 +87,6 @@ class ContextMenu implements PopupMenu {
      */
     @EventListener(DisplayContextMenuEvent.class)
     public final void onDisplayContextMenu(final DisplayContextMenuEvent event) {
-        display(event.getNavigationItem());
+        display(event.getDn(), event.getTitle());
     }
 }

@@ -1,13 +1,19 @@
 package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationEventPublisher;
+
+import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 
 /**
  * Tests for {@link ChangePasswordMenuItem}.
@@ -16,15 +22,22 @@ import static org.mockito.BDDMockito.then;
  */
 public class ChangePasswordMenuItemTest {
 
-    @Mock
-    private NavigationItem navigationItem;
-
     private ChangePasswordMenuItem menuItem;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    @Mock
+    private Name dn;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
+
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        menuItem = new ChangePasswordMenuItem(navigationItem);
+        menuItem = ChangePasswordMenuItem.create(dn, applicationEventPublisher);
     }
 
     @Test
@@ -38,7 +51,25 @@ public class ChangePasswordMenuItemTest {
         menuItem.getAction()
                 .run();
         //then
-        then(navigationItem).should()
-                            .publishChangePasswordRequest();
+        then(applicationEventPublisher).should()
+                                       .publishEvent(any(RenameRequestEvent.class));
+    }
+
+    @Test
+    public void createShouldThrowNPEWhenDnIsNull() {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("dn");
+        //when
+        ChangePasswordMenuItem.create(null, applicationEventPublisher);
+    }
+
+    @Test
+    public void createShouldThrowNPEWhenPublisherIsNull() {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("applicationEventPublisher");
+        //when
+        ChangePasswordMenuItem.create(dn, null);
     }
 }

@@ -1,10 +1,11 @@
 package net.kemitix.ldapmanager.popupmenus.context;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.annotation.Bean;
+
+import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DisplayContextMenuEventTest {
 
     @Mock
-    private NavigationItem navigationItem;
+    private Name dn;
 
     @Bean
     public void setUp() {
@@ -24,8 +25,14 @@ public class DisplayContextMenuEventTest {
     }
 
     @Test
-    public void shouldCreateAndGetNavigationItemBackOut() throws Exception {
-        assertThat(DisplayContextMenuEvent.of(navigationItem)
-                                          .getNavigationItem()).isSameAs(navigationItem);
+    public void shouldCreateAndGetDnBackOut() throws Exception {
+        assertThat(DisplayContextMenuEvent.of(dn, "title")
+                                          .getDn()).isSameAs(dn);
+    }
+
+    @Test
+    public void shouldCreateAndGetTitleBackOut() throws Exception {
+        assertThat(DisplayContextMenuEvent.of(dn, "title")
+                                          .getTitle()).isEqualTo("title");
     }
 }

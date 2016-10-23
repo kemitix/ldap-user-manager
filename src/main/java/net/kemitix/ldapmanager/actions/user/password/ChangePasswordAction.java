@@ -85,9 +85,7 @@ class ChangePasswordAction {
      */
     @EventListener(ChangePasswordRequestEvent.class)
     public final void onChangeUserPasswordRequest(final ChangePasswordRequestEvent event) {
-        val dn = event.getUserNavigationItem()
-                      .getUser()
-                      .getDn();
+        val dn = event.getDn();
         log.log(Level.FINEST, "onChangeUserPasswordRequest(%s)", dn);
         getPassword(PROMPT1).ifPresent(pass -> getPassword(PROMPT2).filter(pass::equals)
                                                                    .map(this::encodePassword)

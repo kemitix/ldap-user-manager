@@ -22,13 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.actions.rename;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -37,12 +38,12 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to change the password of an entity.
+ * Factory for creating {@link MenuItem}s to rename entities.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class ChangePasswordMenuItemFactory implements MenuItemFactory {
+class RenameMenuItemFactory implements MenuItemFactory {
 
     private final NameLookupService nameLookupService;
 
@@ -54,9 +55,10 @@ class ChangePasswordMenuItemFactory implements MenuItemFactory {
      * @param nameLookupService         The Name Lookup Service.
      * @param applicationEventPublisher The Application Event Publisher.
      */
-    ChangePasswordMenuItemFactory(
+    @Autowired
+    RenameMenuItemFactory(
             final NameLookupService nameLookupService, final ApplicationEventPublisher applicationEventPublisher
-                                 ) {
+                         ) {
         this.nameLookupService = nameLookupService;
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -65,8 +67,8 @@ class ChangePasswordMenuItemFactory implements MenuItemFactory {
     public final Stream<MenuItem> create(final Name dn) {
         val items = new ArrayList<MenuItem>();
         nameLookupService.findByDn(dn)
-                         .filter(ldapEntity -> ldapEntity.hasFeature(Features.PASSWORD))
-                         .map(ldapEntity -> ChangePasswordMenuItem.create(dn, applicationEventPublisher))
+                         .filter(ldapEntity -> ldapEntity.hasFeature(Features.RENAME))
+                         .map(ldapEntity -> RenameMenuItem.create(dn, applicationEventPublisher))
                          .ifPresent(items::add);
         return items.stream();
     }

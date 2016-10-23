@@ -24,12 +24,13 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
-import org.springframework.ldap.core.ContextMapper;
-import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.stereotype.Service;
 
-import javax.naming.NamingException;
+import java.util.stream.Stream;
 
 /**
  * Context Mapper for Users.
@@ -37,14 +38,20 @@ import javax.naming.NamingException;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Service
-class OuContextMapper implements ContextMapper<OU> {
+class OuContextMapper extends AbstractContextMapper<OU> implements PreCheckContextMapper<OU> {
 
     @Override
-    public OU mapFromContext(final Object ctx) throws NamingException {
-            final DirContextAdapter adapter = (DirContextAdapter) ctx;
-            return OU.builder()
-                     .dn(adapter.getDn())
-                     .ou(adapter.getStringAttribute(LdapAttribute.OU))
-                     .build();
+    protected OU doMapFromContext(final DirContextOperations ctx) {
+        return OU.builder()
+                 .dn(ctx.getDn())
+                 .ou(ctx.getStringAttribute(LdapAttribute.OU))
+                 .build();
+    }
+
+    @Override
+    public boolean canMapContext(final DirContextOperations ctx) {
+        val attributes = ctx.getAttributes();
+        return Stream.of("ou")
+                     .allMatch(attribute -> attributes.get(attribute) != null);
     }
 }

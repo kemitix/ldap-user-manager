@@ -22,52 +22,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.actions.rename;
 
-import lombok.val;
-import net.kemitix.ldapmanager.domain.Features;
-import net.kemitix.ldapmanager.ldap.NameLookupService;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to change the password of an entity.
+ * Menu item for renaming a Navigation Item.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class ChangePasswordMenuItemFactory implements MenuItemFactory {
+final class RenameMenuItem implements MenuItem {
 
-    private final NameLookupService nameLookupService;
+    private static final String LABEL = "Rename";
+
+    private final Name dn;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    /**
-     * Constructor.
-     *
-     * @param nameLookupService         The Name Lookup Service.
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    ChangePasswordMenuItemFactory(
-            final NameLookupService nameLookupService, final ApplicationEventPublisher applicationEventPublisher
-                                 ) {
-        this.nameLookupService = nameLookupService;
+    private RenameMenuItem(final Name dn, final ApplicationEventPublisher applicationEventPublisher) {
+        this.dn = dn;
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    /**
+     * Create a new RenameMenuItem.
+     *
+     * @param dn                        The DN to rename.
+     * @param applicationEventPublisher The Application Event Publisher.
+     *
+     * @return the menu item.
+     */
+    public static RenameMenuItem create(final Name dn, final ApplicationEventPublisher applicationEventPublisher) {
+        return new RenameMenuItem(dn, applicationEventPublisher);
+    }
+
     @Override
-    public final Stream<MenuItem> create(final Name dn) {
-        val items = new ArrayList<MenuItem>();
-        nameLookupService.findByDn(dn)
-                         .filter(ldapEntity -> ldapEntity.hasFeature(Features.PASSWORD))
-                         .map(ldapEntity -> ChangePasswordMenuItem.create(dn, applicationEventPublisher))
-                         .ifPresent(items::add);
-        return items.stream();
+    public String getLabel() {
+        return LABEL;
+    }
+
+    @Override
+    public Runnable getAction() {
+        return this::publishRenameRequest;
+    }
+
+    private void publishRenameRequest() {
+        applicationEventPublisher.publishEvent(RenameRequestEvent.create(dn));
     }
 }

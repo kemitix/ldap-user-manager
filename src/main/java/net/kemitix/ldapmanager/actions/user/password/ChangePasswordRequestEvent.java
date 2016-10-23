@@ -26,7 +26,8 @@ package net.kemitix.ldapmanager.actions.user.password;
 
 import lombok.Getter;
 import lombok.NonNull;
-import net.kemitix.ldapmanager.navigation.UserNavigationItem;
+
+import javax.naming.Name;
 
 /**
  * Raised when the user want the change the {@link net.kemitix.ldapmanager.domain.User} password.
@@ -36,20 +37,20 @@ import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 public final class ChangePasswordRequestEvent {
 
     @Getter
-    private final UserNavigationItem userNavigationItem;
+    private final Name dn;
 
-    private ChangePasswordRequestEvent(final UserNavigationItem userNavigationItem) {
-        this.userNavigationItem = userNavigationItem;
+    private ChangePasswordRequestEvent(final Name dn) {
+        this.dn = dn;
     }
 
     /**
      * Constructor.
      *
-     * @param userNavigationItem The User Navigation Item to change the password of.
+     * @param dn The DN to change the password of.
      *
      * @return the event
      */
-    public static ChangePasswordRequestEvent create(@NonNull final UserNavigationItem userNavigationItem) {
-        return new ChangePasswordRequestEvent(userNavigationItem);
+    public static ChangePasswordRequestEvent create(@NonNull final Name dn) {
+        return new ChangePasswordRequestEvent(dn);
     }
 }

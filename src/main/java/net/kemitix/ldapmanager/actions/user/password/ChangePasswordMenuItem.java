@@ -24,36 +24,51 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.password;
 
+import lombok.NonNull;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+import org.springframework.context.ApplicationEventPublisher;
+
+import javax.naming.Name;
 
 /**
- * MenuItem for changing the NavigationItem's password.
+ * MenuItem for changing the entity's password.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-class ChangePasswordMenuItem implements MenuItem {
+final class ChangePasswordMenuItem implements MenuItem {
 
     private static final String LABEL = "Change Password";
 
-    private final NavigationItem navigationItem;
+    private final Name dn;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private ChangePasswordMenuItem(final Name dn, final ApplicationEventPublisher applicationEventPublisher) {
+        this.dn = dn;
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
 
     /**
-     * Constructor.
+     * Create a new ChangePasswordMenuItem.
      *
-     * @param navigationItem The Navigation Item
+     * @param dn                        The DN that would renamed.
+     * @param applicationEventPublisher The Application Event Publisher.
+     *
+     * @return the menu item
      */
-    ChangePasswordMenuItem(final NavigationItem navigationItem) {
-        this.navigationItem = navigationItem;
+    public static ChangePasswordMenuItem create(
+            @NonNull final Name dn, @NonNull final ApplicationEventPublisher applicationEventPublisher
+                                               ) {
+        return new ChangePasswordMenuItem(dn, applicationEventPublisher);
     }
 
     @Override
-    public final String getLabel() {
+    public String getLabel() {
         return LABEL;
     }
 
     @Override
-    public final Runnable getAction() {
-        return navigationItem::publishChangePasswordRequest;
+    public Runnable getAction() {
+        return () -> applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.create(dn));
     }
 }
