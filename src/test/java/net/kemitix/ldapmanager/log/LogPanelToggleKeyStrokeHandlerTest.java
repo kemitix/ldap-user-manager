@@ -62,4 +62,9 @@ public class LogPanelToggleKeyStrokeHandlerTest {
         then(logPanel).should()
                       .toggleVisibility();
     }
+
+    @Test
+    public void getPromptShouldBeEmpty() {
+        assertThat(handler.getPrompt()).isEmpty();
+    }
 }

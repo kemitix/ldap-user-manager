@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +54,7 @@ public class BottomPanelTest {
         handlers.add(handler);
         given(keyStrokeHandlers.getKeyStrokeHandlers()).willReturn(handlers);
         given(handler.isActive()).willReturn(true);
-        given(handler.getPrompt()).willReturn("prompt");
+        given(handler.getPrompt()).willReturn(Optional.of("prompt"));
         //when
         bottomPanel.init();
         //then

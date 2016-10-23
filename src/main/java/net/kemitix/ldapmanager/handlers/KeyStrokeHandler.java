@@ -26,6 +26,8 @@ package net.kemitix.ldapmanager.handlers;
 
 import com.googlecode.lanterna.input.KeyStroke;
 
+import java.util.Optional;
+
 /**
  * Handles when a keystroke is made.
  *
@@ -47,8 +49,8 @@ public interface KeyStrokeHandler {
      *
      * @return the prompt
      */
-    default String getPrompt() {
-        return String.format("[%s] %s", getKey(), getDescription());
+    default Optional<String> getPrompt() {
+        return Optional.of(String.format("[%s] %s", getKey(), getDescription()));
     }
 
     /**
