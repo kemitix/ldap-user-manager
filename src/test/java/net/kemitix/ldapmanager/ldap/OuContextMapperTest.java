@@ -1,13 +1,11 @@
 package net.kemitix.ldapmanager.ldap;
 
-import net.kemitix.ldapmanager.domain.OU;
+import lombok.val;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ldap.core.DirContextAdapter;
-
-import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,17 +25,33 @@ public class OuContextMapperTest {
     }
 
     @Test
+    public void canMapShouldReturnTrueWhenCanMap() {
+        //given
+        val ctx = new DirContextAdapter();
+        ctx.setAttributeValue(LdapAttribute.OU, "container");
+        //then
+        assertThat(contextMapper.canMapContext(ctx)).isTrue();
+    }
+
+    @Test
+    public void canMapShouldReturnFalseWhenOuMissing() {
+        //given
+        val ctx = new DirContextAdapter();
+        //then
+        assertThat(contextMapper.canMapContext(ctx)).isFalse();
+    }
+
+    @Test
     public void shouldMapFromContext() throws Exception {
         //given
-        DirContextAdapter ctx = new DirContextAdapter();
-        final Name dn = LdapNameUtil.parse("dn=ou=container");
-        final String name = "container";
+        val ctx = new DirContextAdapter();
+        val dn = LdapNameUtil.parse("dn=ou=container");
         ctx.setDn(dn);
-        ctx.setAttributeValue(LdapAttribute.OU, name);
+        ctx.setAttributeValue(LdapAttribute.OU, "container");
         //when
-        final OU ou = contextMapper.mapFromContext(ctx);
+        val ou = contextMapper.mapFromContext(ctx);
         //then
         assertThat(ou.getDn()).isEqualTo(dn);
-        assertThat(ou.getOu()).isEqualTo(name);
+        assertThat(ou.getOu()).isEqualTo("container");
     }
 }

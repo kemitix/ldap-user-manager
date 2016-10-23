@@ -24,12 +24,13 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
-import org.springframework.ldap.core.ContextMapper;
-import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.stereotype.Service;
 
-import javax.naming.NamingException;
+import java.util.stream.Stream;
 
 /**
  * Context Mapper for Users.
@@ -37,15 +38,21 @@ import javax.naming.NamingException;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Service
-class UserContextMapper implements ContextMapper<User> {
+class UserContextMapper extends AbstractContextMapper<User> implements PreCheckContextMapper<User> {
 
     @Override
-    public User mapFromContext(final Object ctx) throws NamingException {
-        final DirContextAdapter adapter = (DirContextAdapter) ctx;
+    protected User doMapFromContext(final DirContextOperations ctx) {
         return User.builder()
-                   .dn(adapter.getDn())
-                   .cn(adapter.getStringAttribute(LdapAttribute.CN))
-                   .sn(adapter.getStringAttribute(LdapAttribute.SN))
+                   .dn(ctx.getDn())
+                   .cn(ctx.getStringAttribute(LdapAttribute.CN))
+                   .sn(ctx.getStringAttribute(LdapAttribute.SN))
                    .build();
+    }
+
+    @Override
+    public boolean canMapContext(final DirContextOperations ctx) {
+        val attributes = ctx.getAttributes();
+        return Stream.of("cn", "sn")
+                     .allMatch(attribute -> attributes.get(attribute) != null);
     }
 }

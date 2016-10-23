@@ -24,34 +24,24 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
-import lombok.val;
-import net.kemitix.ldapmanager.domain.OU;
+import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.ldap.core.support.AbstractContextMapper;
-import org.springframework.stereotype.Service;
-
-import java.util.stream.Stream;
 
 /**
- * Context Mapper for Users.
+ * Type wrapper for ContextMappers that can say if they can handle a given context.
+ *
+ * @param <T> The entity type.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Service
-class OuContextMapper extends AbstractContextMapper<OU> implements PreCheckContextMapper<OU> {
+interface PreCheckContextMapper<T> extends ContextMapper<T> {
 
-    @Override
-    protected OU doMapFromContext(final DirContextOperations ctx) {
-        return OU.builder()
-                 .dn(ctx.getDn())
-                 .ou(ctx.getStringAttribute(LdapAttribute.OU))
-                 .build();
-    }
-
-    @Override
-    public boolean canMapContext(final DirContextOperations ctx) {
-        val attributes = ctx.getAttributes();
-        return Stream.of("ou")
-                     .allMatch(attribute -> attributes.get(attribute) != null);
-    }
+    /**
+     * Checks if the mapper can map the context.
+     *
+     * @param ctx The context to be mapped.
+     *
+     * @return true if the mapper can map the context, otherwise false.
+     */
+    boolean canMapContext(DirContextOperations ctx);
 }

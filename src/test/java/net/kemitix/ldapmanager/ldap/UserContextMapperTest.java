@@ -1,13 +1,12 @@
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ldap.core.DirContextAdapter;
-
-import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,20 +26,47 @@ public class UserContextMapperTest {
     }
 
     @Test
+    public void canMapShouldReturnTrueWhenCanMap() {
+        //given
+        val ctx = new DirContextAdapter();
+        ctx.setAttributeValue(LdapAttribute.CN, "common name");
+        ctx.setAttributeValue(LdapAttribute.SN, "surname");
+        //then
+        assertThat(contextMapper.canMapContext(ctx)).isTrue();
+    }
+
+    @Test
+    public void canMapShouldReturnFalseWhenCnMissing() {
+        //given
+        val ctx = new DirContextAdapter();
+        ctx.setAttributeValue(LdapAttribute.SN, "surname");
+        //then
+        assertThat(contextMapper.canMapContext(ctx)).isFalse();
+    }
+
+    @Test
+    public void canMapShouldReturnFalseWhenSnMissing() {
+        //given
+        val ctx = new DirContextAdapter();
+        ctx.setAttributeValue(LdapAttribute.CN, "common name");
+        //then
+        assertThat(contextMapper.canMapContext(ctx)).isFalse();
+    }
+
+    @Test
     public void shouldMapFromContext() throws Exception {
         //given
-        DirContextAdapter ctx = new DirContextAdapter();
-        final Name dn = LdapNameUtil.parse("dn=cn=name");
-        final String cn = "common name";
-        final String sn = "surname";
+        val ctx = new DirContextAdapter();
+        val dn = LdapNameUtil.parse("cn=name");
         ctx.setDn(dn);
-        ctx.setAttributeValue(LdapAttribute.CN, cn);
-        ctx.setAttributeValue(LdapAttribute.SN, sn);
+        ctx.setAttributeValue(LdapAttribute.CN, "common name");
+        ctx.setAttributeValue(LdapAttribute.SN, "surname");
         //when
-        final User user = contextMapper.mapFromContext(ctx);
+        val user = contextMapper.mapFromContext(ctx);
         //then
         assertThat(user.getDn()).isEqualTo(dn);
-        assertThat(user.getCn()).isEqualTo(cn);
-        assertThat(user.getSn()).isEqualTo(sn);
+        assertThat(user).isInstanceOf(User.class);
+        assertThat(user.getCn()).isEqualTo("common name");
+        assertThat(user.getSn()).isEqualTo("surname");
     }
 }

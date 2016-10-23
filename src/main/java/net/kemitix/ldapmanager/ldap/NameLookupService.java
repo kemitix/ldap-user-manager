@@ -24,34 +24,24 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
-import lombok.val;
-import net.kemitix.ldapmanager.domain.OU;
-import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.ldap.core.support.AbstractContextMapper;
-import org.springframework.stereotype.Service;
+import net.kemitix.ldapmanager.domain.LdapEntity;
 
-import java.util.stream.Stream;
+import javax.naming.Name;
+import java.util.Optional;
 
 /**
- * Context Mapper for Users.
+ * Service to lookup LdapEntities from their Names.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Service
-class OuContextMapper extends AbstractContextMapper<OU> implements PreCheckContextMapper<OU> {
+public interface NameLookupService {
 
-    @Override
-    protected OU doMapFromContext(final DirContextOperations ctx) {
-        return OU.builder()
-                 .dn(ctx.getDn())
-                 .ou(ctx.getStringAttribute(LdapAttribute.OU))
-                 .build();
-    }
-
-    @Override
-    public boolean canMapContext(final DirContextOperations ctx) {
-        val attributes = ctx.getAttributes();
-        return Stream.of("ou")
-                     .allMatch(attribute -> attributes.get(attribute) != null);
-    }
+    /**
+     * Finds an LDAP Entity by its name.
+     *
+     * @param dn The DN to find.
+     *
+     * @return an optional containing the entity if one was found, or empty if not.
+     */
+    Optional<LdapEntity> findByDn(Name dn);
 }
