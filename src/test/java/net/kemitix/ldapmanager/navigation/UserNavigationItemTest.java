@@ -1,9 +1,10 @@
 package net.kemitix.ldapmanager.navigation;
 
 import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
-import net.kemitix.ldapmanager.actions.user.rename.RenameUserRequestEvent;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.junit.Before;
@@ -42,6 +43,7 @@ public class UserNavigationItemTest {
         MockitoAnnotations.initMocks(this);
         name = "name";
         user = User.builder()
+                   .dn(LdapNameUtil.parse("cn=name"))
                    .cn(name)
                    .build();
         userNavigationItem = UserNavigationItem.create(user, applicationEventPublisher);
@@ -104,7 +106,7 @@ public class UserNavigationItemTest {
         userNavigationItem.publishRenameRequest();
         //then
         then(applicationEventPublisher).should()
-                                       .publishEvent(any(RenameUserRequestEvent.class));
+                                       .publishEvent(any(RenameRequestEvent.class));
     }
 
     @Test

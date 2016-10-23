@@ -22,15 +22,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.popupmenus.context;
+package net.kemitix.ldapmanager.actions.rename;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
+import net.kemitix.ldapmanager.ldap.NameLookupService;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -42,12 +46,31 @@ import java.util.stream.Stream;
 @Component
 class RenameMenuItemFactory implements MenuItemFactory {
 
+    private final NameLookupService nameLookupService;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    /**
+     * Constructor.
+     *
+     * @param nameLookupService         The Name Lookup Service.
+     * @param applicationEventPublisher The Application Event Publisher.
+     */
+    @Autowired
+    RenameMenuItemFactory(
+            final NameLookupService nameLookupService, final ApplicationEventPublisher applicationEventPublisher
+                         ) {
+        this.nameLookupService = nameLookupService;
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
+
     @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
+    public final Stream<MenuItem> create(final Name dn) {
         val items = new ArrayList<MenuItem>();
-        if (navigationItem.hasFeature(Features.RENAME)) {
-            items.add(RenameMenuItem.create(navigationItem));
-        }
+        nameLookupService.findByDn(dn)
+                         .filter(ldapEntity -> ldapEntity.hasFeature(Features.RENAME))
+                         .map(ldapEntity -> RenameMenuItem.create(dn, applicationEventPublisher))
+                         .ifPresent(items::add);
         return items.stream();
     }
 }

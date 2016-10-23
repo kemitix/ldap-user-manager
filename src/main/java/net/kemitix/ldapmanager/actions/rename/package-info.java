@@ -22,33 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.rename;
-
-import lombok.Getter;
-import net.kemitix.ldapmanager.navigation.UserNavigationItem;
-
 /**
- * Raised when the user wants to rename a {@link UserNavigationItem}.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Action for renaming an {@link net.kemitix.ldapmanager.domain.LdapEntity}.
  */
-public final class RenameUserRequestEvent {
 
-    @Getter
-    private final UserNavigationItem userNavigationItem;
-
-    private RenameUserRequestEvent(final UserNavigationItem userNavigationItem) {
-        this.userNavigationItem = userNavigationItem;
-    }
-
-    /**
-     * Create a new RenameUserRequestEvent.
-     *
-     * @param userNavigationItem The User Navigation Item to be renamed.
-     *
-     * @return the event
-     */
-    public static RenameUserRequestEvent create(final UserNavigationItem userNavigationItem) {
-        return new RenameUserRequestEvent(userNavigationItem);
-    }
-}
+package net.kemitix.ldapmanager.actions.rename;

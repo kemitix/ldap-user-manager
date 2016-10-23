@@ -26,12 +26,21 @@ package net.kemitix.ldapmanager.navigation;
 
 import net.kemitix.ldapmanager.domain.FeatureSet;
 
+import javax.naming.Name;
+
 /**
  * Item that can appear on the Navigation panel.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 public interface NavigationItem extends Runnable, Comparable<NavigationItem>, FeatureSet {
+
+    /**
+     * Return the DN of the item.
+     *
+     * @return The DN of the item.
+     */
+    Name getDn();
 
     /**
      * Return the name of the item.

@@ -22,8 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/**
- * Action for renaming a {@link net.kemitix.ldapmanager.domain.User}.
- */
+package net.kemitix.ldapmanager.actions.rename;
 
-package net.kemitix.ldapmanager.actions.user.rename;
+import lombok.Getter;
+
+import javax.naming.Name;
+
+/**
+ * Raised when a Name is to be renamed.
+ *
+ * @author Paul Campbell (pcampbell@kemitix.net)
+ */
+public final class RenameRequestEvent {
+
+    @Getter
+    private final Name dn;
+
+    private RenameRequestEvent(final Name dn) {
+        this.dn = dn;
+    }
+
+    /**
+     * Create new RenameRequestEvent.
+     *
+     * @param dn The DN to be renamed.
+     *
+     * @return the event.
+     */
+    public static RenameRequestEvent create(final Name dn) {
+        return new RenameRequestEvent(dn);
+    }
+}

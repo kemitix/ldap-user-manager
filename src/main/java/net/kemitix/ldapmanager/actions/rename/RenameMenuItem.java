@@ -22,10 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.popupmenus.context;
+package net.kemitix.ldapmanager.actions.rename;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
+import org.springframework.context.ApplicationEventPublisher;
+
+import javax.naming.Name;
 
 /**
  * Menu item for renaming a Navigation Item.
@@ -36,21 +38,25 @@ final class RenameMenuItem implements MenuItem {
 
     private static final String LABEL = "Rename";
 
-    private final NavigationItem navigationItem;
+    private final Name dn;
 
-    private RenameMenuItem(final NavigationItem navigationItem) {
-        this.navigationItem = navigationItem;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private RenameMenuItem(final Name dn, final ApplicationEventPublisher applicationEventPublisher) {
+        this.dn = dn;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     /**
-     * Create a new RenameMenuUtem.
+     * Create a new RenameMenuItem.
      *
-     * @param navigationItem The NavigationItem to rename.
+     * @param dn                        The NavigationItem to rename.
+     * @param applicationEventPublisher The Application Event Publisher.
      *
      * @return the menu item.
      */
-    public static RenameMenuItem create(final NavigationItem navigationItem) {
-        return new RenameMenuItem(navigationItem);
+    public static RenameMenuItem create(final Name dn, final ApplicationEventPublisher applicationEventPublisher) {
+        return new RenameMenuItem(dn, applicationEventPublisher);
     }
 
     @Override
@@ -60,6 +66,10 @@ final class RenameMenuItem implements MenuItem {
 
     @Override
     public Runnable getAction() {
-        return navigationItem::publishRenameRequest;
+        return this::publishRenameRequest;
+    }
+
+    private void publishRenameRequest() {
+        applicationEventPublisher.publishEvent(RenameRequestEvent.create(dn));
     }
 }

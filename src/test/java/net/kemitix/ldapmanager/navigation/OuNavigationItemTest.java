@@ -1,9 +1,9 @@
 package net.kemitix.ldapmanager.navigation;
 
-import net.kemitix.ldapmanager.actions.ou.rename.RenameOuRequestEvent;
 import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
+import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.junit.Before;
@@ -106,7 +106,7 @@ public class OuNavigationItemTest {
         ouNavigationItem.publishRenameRequest();
         //then
         then(applicationEventPublisher).should()
-                                       .publishEvent(any(RenameOuRequestEvent.class));
+                                       .publishEvent(any(RenameRequestEvent.class));
     }
 
     @Test
