@@ -22,26 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.domain;
 
 /**
- * Interface for actions that appear in context menu.
+ * Represents a set of features.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface MenuItem {
+public interface FeatureSet {
 
     /**
-     * Returns the label.
+     * Checks if a feature is present.
      *
-     * @return the label.
+     * @param feature The Feature to check for.
+     *
+     * @return true if the feature is present, otherwise false.
      */
-    String getLabel();
+    boolean hasFeature(Features feature);
 
     /**
-     * Returns the runnable action to perform.
+     * Removes the feature from the feature set.
      *
-     * @return the action
+     * @param feature The feature to remove.
      */
-    Runnable getAction();
+    void removeFeature(Features feature);
 }

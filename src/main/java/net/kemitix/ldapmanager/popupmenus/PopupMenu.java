@@ -22,33 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.popupmenus;
 
-import lombok.val;
-import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItem;
-import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to change the password of
- * {@link net.kemitix.ldapmanager.navigation.UserNavigationItem}s.
+ * .
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class ChangePasswordMenuItemFactory implements MenuItemFactory {
+public interface PopupMenu {
 
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        val items = new ArrayList<MenuItem>();
-        if (navigationItem.hasFeature(Features.PASSWORD)) {
-            items.add(new ChangePasswordMenuItem(navigationItem));
-        }
-        return items.stream();
-    }
+    /**
+     * Display a popup context menu for the {@link NavigationItem}.
+     *
+     * @param navigationItem The Navigation Item to display menu for.
+     */
+    void display(NavigationItem navigationItem);
 }

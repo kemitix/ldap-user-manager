@@ -64,4 +64,22 @@ public class UserTest {
         //then
         assertThat(user.name()).isEqualTo("name");
     }
+
+    @Test
+    public void shouldHaveFeatureRename() {
+        //given
+        val user = User.builder()
+                       .build();
+        //then
+        assertThat(user.hasFeature(Features.RENAME)).isTrue();
+    }
+
+    @Test
+    public void shouldHaveFeaturePassword() {
+        //given
+        val user = User.builder()
+                       .build();
+        //then
+        assertThat(user.hasFeature(Features.PASSWORD)).isTrue();
+    }
 }

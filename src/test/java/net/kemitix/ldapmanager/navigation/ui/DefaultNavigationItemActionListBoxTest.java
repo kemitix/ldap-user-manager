@@ -5,6 +5,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
@@ -385,6 +386,16 @@ public class DefaultNavigationItemActionListBoxTest {
         @Override
         public void publishChangePasswordRequest() {
             applicationEventPublisher.publishEvent(this);
+        }
+
+        @Override
+        public boolean hasFeature(final Features feature) {
+            return false;
+        }
+
+        @Override
+        public void removeFeature(final Features feature) {
+
         }
     }
 }

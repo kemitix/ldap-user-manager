@@ -22,21 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
-
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+package net.kemitix.ldapmanager.domain;
 
 /**
- * .
+ * Set of features that an LdapEntity may possess.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface ContextMenu {
+public enum Features {
 
-    /**
-     * Display a popup context menu for the {@link NavigationItem}.
-     *
-     * @param navigationItem The Navigation Item to display menu for.
-     */
-    void display(NavigationItem navigationItem);
+    PASSWORD,
+    RENAME
 }

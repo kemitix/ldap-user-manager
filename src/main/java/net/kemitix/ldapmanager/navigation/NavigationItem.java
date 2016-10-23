@@ -24,12 +24,14 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
+import net.kemitix.ldapmanager.domain.FeatureSet;
+
 /**
  * Item that can appear on the Navigation panel.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface NavigationItem extends Runnable, Comparable<NavigationItem> {
+public interface NavigationItem extends Runnable, Comparable<NavigationItem>, FeatureSet {
 
     /**
      * Return the name of the item.

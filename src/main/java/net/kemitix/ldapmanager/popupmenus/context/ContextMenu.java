@@ -22,11 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
+package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import lombok.val;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.popupmenus.PopupMenu;
 import net.kemitix.ldapmanager.ui.ActionListDialogBuilderFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -35,12 +37,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * .
+ * The Default Context Menu for Navigation Items.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class DefaultContextMenu implements ContextMenu {
+class ContextMenu implements PopupMenu {
 
     private final WindowBasedTextGUI gui;
 
@@ -55,10 +57,10 @@ class DefaultContextMenu implements ContextMenu {
      * @param dialogBuilderFactory The Action List Dialog Builder Factory.
      * @param menuItemFactories    The Factories for creating menu items.
      */
-    DefaultContextMenu(
+    ContextMenu(
             final WindowBasedTextGUI gui, final ActionListDialogBuilderFactory dialogBuilderFactory,
             final Set<MenuItemFactory> menuItemFactories
-                      ) {
+               ) {
         this.gui = gui;
         this.dialogBuilderFactory = dialogBuilderFactory;
         this.menuItemFactories = new HashSet<>(menuItemFactories);

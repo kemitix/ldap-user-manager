@@ -51,11 +51,29 @@ public class OUTest {
     @Test
     public void shouldGetOuForName() {
         //given
-        val user = OU.builder()
-                     .dn(LdapNameUtil.parse("ou=name"))
-                     .ou("name")
-                     .build();
+        val ou = OU.builder()
+                   .dn(LdapNameUtil.parse("ou=name"))
+                   .ou("name")
+                   .build();
         //then
-        assertThat(user.name()).isEqualTo("name");
+        assertThat(ou.name()).isEqualTo("name");
+    }
+
+    @Test
+    public void shouldHaveFeatureRename() {
+        //given
+        val ou = OU.builder()
+                   .build();
+        //then
+        assertThat(ou.hasFeature(Features.RENAME)).isTrue();
+    }
+
+    @Test
+    public void shouldNotHaveFeaturePassword() {
+        //given
+        val ou = OU.builder()
+                   .build();
+        //then
+        assertThat(ou.hasFeature(Features.PASSWORD)).isFalse();
     }
 }

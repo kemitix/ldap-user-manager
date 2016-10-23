@@ -22,26 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
-
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-
-import java.util.stream.Stream;
-
 /**
- * Factory for creating {@link MenuItem}s from {@link NavigationItem}s.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Popup menus.
  */
-@FunctionalInterface
-public interface MenuItemFactory {
 
-    /**
-     * Create any {@link MenuItem}s for the {@link NavigationItem}.
-     *
-     * @param navigationItem The Navigation Item to create MenuItems for.
-     *
-     * @return a stream of MenuItems, may be empty.
-     */
-    Stream<MenuItem> create(NavigationItem navigationItem);
-}
+package net.kemitix.ldapmanager.popupmenus;

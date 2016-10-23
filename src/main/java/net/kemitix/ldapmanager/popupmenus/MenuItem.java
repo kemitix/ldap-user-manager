@@ -22,47 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.context;
-
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import org.springframework.stereotype.Component;
-
-import java.util.stream.Stream;
+package net.kemitix.ldapmanager.popupmenus;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * Interface for actions that appear in context menu.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class RenameMenuItemFactory implements MenuItemFactory {
-
-    @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
-        return Stream.of(new RenameMenuItemFactory.RenameMenuItem(navigationItem));
-    }
+public interface MenuItem {
 
     /**
-     * Menu item for renaming a Navigation Item.
+     * Returns the label.
+     *
+     * @return the label.
      */
-    private static class RenameMenuItem implements MenuItem {
+    String getLabel();
 
-        private static final String LABEL = "Rename";
-
-        private final NavigationItem navigationItem;
-
-        RenameMenuItem(final NavigationItem navigationItem) {
-            this.navigationItem = navigationItem;
-        }
-
-        @Override
-        public final String getLabel() {
-            return LABEL;
-        }
-
-        @Override
-        public final Runnable getAction() {
-            return navigationItem::publishRenameRequest;
-        }
-    }
+    /**
+     * Returns the runnable action to perform.
+     *
+     * @return the action
+     */
+    Runnable getAction();
 }

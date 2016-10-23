@@ -36,8 +36,11 @@ import net.kemitix.ldapmanager.navigation.NavigationItemFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
+import org.springframework.ldap.odm.annotations.Transient;
 
 import javax.naming.Name;
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -62,6 +65,9 @@ public final class User implements LdapEntity {
 
     private String sn;
 
+    @Transient
+    private final Set<Features> featureSet = EnumSet.of(Features.PASSWORD, Features.RENAME);
+
     @Override
     public String name() {
         log.log(Level.FINEST, "name(): %1", cn);
@@ -71,5 +77,15 @@ public final class User implements LdapEntity {
     @Override
     public NavigationItem asNavigationItem(final ApplicationEventPublisher eventPublisher) {
         return NavigationItemFactory.create(this, eventPublisher);
+    }
+
+    @Override
+    public boolean hasFeature(final Features feature) {
+        return featureSet.contains(feature);
+    }
+
+    @Override
+    public void removeFeature(final Features feature) {
+        featureSet.remove(feature);
     }
 }
