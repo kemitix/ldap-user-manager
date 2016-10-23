@@ -24,11 +24,14 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+import lombok.NonNull;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
+import org.springframework.context.ApplicationEventPublisher;
+
+import javax.naming.Name;
 
 /**
- * MenuItem for changing the NavigationItem's password.
+ * MenuItem for changing the entity's password.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
@@ -36,21 +39,27 @@ final class ChangePasswordMenuItem implements MenuItem {
 
     private static final String LABEL = "Change Password";
 
-    private final NavigationItem navigationItem;
+    private final Name dn;
 
-    private ChangePasswordMenuItem(final NavigationItem navigationItem) {
-        this.navigationItem = navigationItem;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private ChangePasswordMenuItem(final Name dn, final ApplicationEventPublisher applicationEventPublisher) {
+        this.dn = dn;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     /**
      * Create a new ChangePasswordMenuItem.
      *
-     * @param navigationItem The Navigation Item that would renamed.
+     * @param dn                        The DN that would renamed.
+     * @param applicationEventPublisher The Application Event Publisher.
      *
      * @return the menu item
      */
-    public static ChangePasswordMenuItem create(final NavigationItem navigationItem) {
-        return new ChangePasswordMenuItem(navigationItem);
+    public static ChangePasswordMenuItem create(
+            @NonNull final Name dn, @NonNull final ApplicationEventPublisher applicationEventPublisher
+                                               ) {
+        return new ChangePasswordMenuItem(dn, applicationEventPublisher);
     }
 
     @Override
@@ -60,6 +69,6 @@ final class ChangePasswordMenuItem implements MenuItem {
 
     @Override
     public Runnable getAction() {
-        return navigationItem::publishChangePasswordRequest;
+        return () -> applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.create(dn));
     }
 }

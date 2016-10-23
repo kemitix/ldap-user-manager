@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import javax.naming.Name;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -53,6 +54,9 @@ public class ContextMenuTest {
     @Mock
     private Runnable action;
 
+    @Mock
+    private Name dn;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -64,33 +68,36 @@ public class ContextMenuTest {
         //given
         prepareCallToDisplay();
         //when
-        contextMenu.display(navigationItem);
+        contextMenu.display(dn, "item");
 
         //then
         then(actionListDialogBuilder).should()
                                      .addAction("label", action);
-        then(actionListDialogBuilder).should().setTitle("item");
+        then(actionListDialogBuilder).should()
+                                     .setTitle("item");
     }
 
     @Test
     public void onDisplayContextMenu() throws Exception {
         //given
         prepareCallToDisplay();
-        val event = DisplayContextMenuEvent.of(navigationItem);
+        val event = DisplayContextMenuEvent.of(dn, "item");
         //when
         contextMenu.onDisplayContextMenu(event);
         //then
         then(actionListDialogBuilder).should()
                                      .addAction("label", action);
-        then(actionListDialogBuilder).should().setTitle("item");
+        then(actionListDialogBuilder).should()
+                                     .setTitle("item");
     }
 
     private void prepareCallToDisplay() {
         menuItemsFactories.add(menuItemFactory);
         contextMenu = new ContextMenu(gui, dialogBuilderFactory, menuItemsFactories);
+        given(navigationItem.getDn()).willReturn(dn);
 
         given(dialogBuilderFactory.create()).willReturn(actionListDialogBuilder);
-        given(menuItemFactory.create(navigationItem)).willReturn(Stream.of(menuItem));
+        given(menuItemFactory.create(dn)).willReturn(Stream.of(menuItem));
         given(menuItem.getLabel()).willReturn("label");
         given(menuItem.getAction()).willReturn(action);
         given(navigationItem.getName()).willReturn("item");

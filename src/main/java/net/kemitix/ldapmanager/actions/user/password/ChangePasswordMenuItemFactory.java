@@ -26,29 +26,48 @@ package net.kemitix.ldapmanager.actions.user.password;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.ldap.NameLookupService;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to change the password of
- * {@link net.kemitix.ldapmanager.navigation.UserNavigationItem}s.
+ * Factory for creating {@link MenuItem}s to change the password of an entity.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
 class ChangePasswordMenuItemFactory implements MenuItemFactory {
 
+    private final NameLookupService nameLookupService;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    /**
+     * Constructor.
+     *
+     * @param nameLookupService         The Name Lookup Service.
+     * @param applicationEventPublisher The Application Event Publisher.
+     */
+    ChangePasswordMenuItemFactory(
+            final NameLookupService nameLookupService, final ApplicationEventPublisher applicationEventPublisher
+                                 ) {
+        this.nameLookupService = nameLookupService;
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
+
     @Override
-    public final Stream<MenuItem> create(final NavigationItem navigationItem) {
+    public final Stream<MenuItem> create(final Name dn) {
         val items = new ArrayList<MenuItem>();
-        if (navigationItem.hasFeature(Features.PASSWORD)) {
-            items.add(ChangePasswordMenuItem.create(navigationItem));
-        }
+        nameLookupService.findByDn(dn)
+                         .filter(ldapEntity -> ldapEntity.hasFeature(Features.PASSWORD))
+                         .map(ldapEntity -> ChangePasswordMenuItem.create(dn, applicationEventPublisher))
+                         .ifPresent(items::add);
         return items.stream();
     }
 }

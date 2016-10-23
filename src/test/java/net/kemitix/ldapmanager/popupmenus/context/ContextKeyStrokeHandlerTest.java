@@ -2,6 +2,7 @@ package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.val;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
 import org.junit.Before;
@@ -11,6 +12,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
+
+import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -36,6 +39,9 @@ public class ContextKeyStrokeHandlerTest {
 
     @Captor
     private ArgumentCaptor<DisplayContextMenuEvent> displayContextMenuEventArgumentCaptor;
+
+    @Mock
+    private Name dn;
 
     @Before
     public void setUp() throws Exception {
@@ -68,12 +74,15 @@ public class ContextKeyStrokeHandlerTest {
     public void shouldHandleInput() throws Exception {
         //given
         given(navigationItemActionListBox.getSelectedItem()).willReturn(navigationItem);
+        given(navigationItem.getDn()).willReturn(dn);
+        given(navigationItem.getName()).willReturn("title");
         //when
         handler.handleInput(new KeyStroke(KeyType.F2));
         //then
         then(applicationEventPublisher).should()
                                        .publishEvent(displayContextMenuEventArgumentCaptor.capture());
-        assertThat(displayContextMenuEventArgumentCaptor.getValue()
-                                                        .getNavigationItem()).isSameAs(navigationItem);
+        val event = displayContextMenuEventArgumentCaptor.getValue();
+        assertThat(event.getDn()).isSameAs(dn);
+        assertThat(event.getTitle()).isEqualTo("title");
     }
 }

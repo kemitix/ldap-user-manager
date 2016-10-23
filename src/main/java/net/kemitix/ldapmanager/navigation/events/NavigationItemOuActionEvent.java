@@ -29,7 +29,7 @@ import lombok.NonNull;
 import net.kemitix.ldapmanager.domain.OU;
 
 /**
- * Raised when the switching context from one OU to another.
+ * Raised when an OU is actioned.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */

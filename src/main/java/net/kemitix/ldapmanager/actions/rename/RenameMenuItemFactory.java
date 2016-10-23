@@ -27,7 +27,6 @@ package net.kemitix.ldapmanager.actions.rename;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
-import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,7 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s to rename {@link NavigationItem}s.
+ * Factory for creating {@link MenuItem}s to rename entities.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */

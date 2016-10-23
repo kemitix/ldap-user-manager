@@ -24,19 +24,21 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.popupmenus;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
+import javax.naming.Name;
 
 /**
- * .
+ * A Popup Menu.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@FunctionalInterface
 public interface PopupMenu {
 
     /**
-     * Display a popup context menu for the {@link NavigationItem}.
+     * Display a popup context menu for the DN.
      *
-     * @param navigationItem The Navigation Item to display menu for.
+     * @param dn    The DN to display menu for.
+     * @param title The title of the menu.
      */
-    void display(NavigationItem navigationItem);
+    void display(Name dn, String title);
 }

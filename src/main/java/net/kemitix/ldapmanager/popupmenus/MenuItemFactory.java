@@ -24,12 +24,11 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.popupmenus;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-
+import javax.naming.Name;
 import java.util.stream.Stream;
 
 /**
- * Factory for creating {@link MenuItem}s from {@link NavigationItem}s.
+ * Factory for creating {@link MenuItem}s from {@link Name}s.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
@@ -37,11 +36,11 @@ import java.util.stream.Stream;
 public interface MenuItemFactory {
 
     /**
-     * Create any {@link MenuItem}s for the {@link NavigationItem}.
+     * Create any {@link MenuItem}s for the DN.
      *
-     * @param navigationItem The Navigation Item to create MenuItems for.
+     * @param dn The DN to create MenuItems for.
      *
      * @return a stream of MenuItems, may be empty.
      */
-    Stream<MenuItem> create(NavigationItem navigationItem);
+    Stream<MenuItem> create(Name dn);
 }

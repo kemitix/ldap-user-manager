@@ -50,7 +50,7 @@ final class RenameMenuItem implements MenuItem {
     /**
      * Create a new RenameMenuItem.
      *
-     * @param dn                        The NavigationItem to rename.
+     * @param dn                        The DN to rename.
      * @param applicationEventPublisher The Application Event Publisher.
      *
      * @return the menu item.
