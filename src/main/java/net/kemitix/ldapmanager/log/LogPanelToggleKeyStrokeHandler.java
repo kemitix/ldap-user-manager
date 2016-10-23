@@ -30,8 +30,10 @@ import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
- * .
+ * KeyStroke Handler for showing/hiding the log panel.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
@@ -47,6 +49,11 @@ class LogPanelToggleKeyStrokeHandler implements KeyStrokeHandler {
      */
     LogPanelToggleKeyStrokeHandler(final LogPanel logPanel) {
         this.logPanel = logPanel;
+    }
+
+    @Override
+    public Optional<String> getPrompt() {
+        return Optional.empty();
     }
 
     @Override

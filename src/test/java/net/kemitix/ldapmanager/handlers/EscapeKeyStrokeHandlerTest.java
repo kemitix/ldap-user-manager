@@ -63,6 +63,6 @@ public class EscapeKeyStrokeHandlerTest {
 
     @Test
     public void shouldGetPrompt() throws Exception {
-        assertThat(handler.getPrompt()).isEqualTo("[esc] Exit");
+        assertThat(handler.getPrompt()).contains("[esc] Exit");
     }
 }

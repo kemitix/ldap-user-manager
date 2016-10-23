@@ -40,6 +40,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,8 @@ class BottomPanel extends Panel {
                                                 .filter(KeyStrokeHandler::isActive)
                                                 //.sorted()
                                                 .map(KeyStrokeHandler::getPrompt)
+                                                .filter(Optional::isPresent)
+                                                .map(Optional::get)
                                                 .collect(Collectors.joining(
                                                         Messages.KEYSTROKE_LABEL_DELIMITER.getValue())));
     }
