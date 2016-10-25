@@ -47,4 +47,13 @@ public class DefaultLogMessagesTest {
     public void shouldGetMessages() throws Exception {
         assertThat(logMessages.getMessages()).hasSize(1);
     }
+
+    @Test
+    public void shouldGetMessageCount() throws Exception {
+        //given
+        logMessages.add("for");
+        logMessages.add("bar");
+        //then
+        assertThat(logMessages.getMessageCount()).isEqualTo(3);
+    }
 }

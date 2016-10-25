@@ -82,4 +82,13 @@ public class UserTest {
         //then
         assertThat(user.hasFeature(Features.PASSWORD)).isTrue();
     }
+
+    @Test
+    public void shouldGetFeatureSet() {
+        //given
+        val user = User.builder()
+                       .build();
+        //then
+        assertThat(user.getFeatureSet()).containsExactly(Features.PASSWORD, Features.RENAME);
+    }
 }

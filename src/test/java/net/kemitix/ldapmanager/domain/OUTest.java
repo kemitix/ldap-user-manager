@@ -76,4 +76,13 @@ public class OUTest {
         //then
         assertThat(ou.hasFeature(Features.PASSWORD)).isFalse();
     }
+
+    @Test
+    public void shouldGetFeatureSet() {
+        //given
+        val ou = OU.builder()
+                   .build();
+        //then
+        assertThat(ou.getFeatureSet()).containsExactly(Features.RENAME);
+    }
 }
