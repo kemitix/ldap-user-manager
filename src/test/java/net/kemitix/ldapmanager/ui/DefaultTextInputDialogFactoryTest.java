@@ -4,7 +4,9 @@ import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
 import lombok.val;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -19,6 +21,9 @@ import static org.mockito.BDDMockito.given;
 public class DefaultTextInputDialogFactoryTest {
 
     private DefaultTextInputDialogFactory dialogFactory;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Mock
     private WindowBasedTextGUI gui;
@@ -38,6 +43,15 @@ public class DefaultTextInputDialogFactoryTest {
         final TextInputDialog dialog = dialogFactory.create("", null);
         //then
         assertThat(dialog).isNotNull();
+    }
+
+    @Test
+    public void shouldGetDialogShouldThrowNPEWhenInitialContentIsNull() throws Exception {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("initialContent");
+        //when
+        dialogFactory.create(null, null);
     }
 
     @Test

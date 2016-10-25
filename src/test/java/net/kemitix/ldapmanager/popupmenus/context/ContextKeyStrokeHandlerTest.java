@@ -50,6 +50,11 @@ public class ContextKeyStrokeHandlerTest {
     }
 
     @Test
+    public void shouldBeActive() throws Exception {
+        assertThat(handler.isActive()).isTrue();
+    }
+
+    @Test
     public void shouldGetDescription() throws Exception {
         assertThat(handler.getDescription()).isEqualTo("Menu");
     }

@@ -127,4 +127,12 @@ public class OuNavigationItemTest {
     public void shouldNotHaveFeaturePassword() {
         assertThat(ouNavigationItem.hasFeature(Features.PASSWORD)).isFalse();
     }
+
+    @Test
+    public void shouldRemoveFeature() {
+        //given
+        ouNavigationItem.removeFeature(Features.RENAME);
+        //then
+        assertThat(ouNavigationItem.hasFeature(Features.RENAME)).isFalse();
+    }
 }

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.popupmenus.context;
+package net.kemitix.ldapmanager.popupmenus.insert;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -30,32 +30,27 @@ import lombok.NonNull;
 import javax.naming.Name;
 
 /**
- * Raised when a context menu is wanted.
+ * Raised when an insert menu is wanted.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class DisplayContextMenuEvent {
+public final class DisplayInsertMenuEvent {
 
     @Getter
     private final Name dn;
 
-    @Getter
-    private final String title;
-
-    private DisplayContextMenuEvent(final Name dn, final String title) {
+    private DisplayInsertMenuEvent(final Name dn) {
         this.dn = dn;
-        this.title = title;
     }
 
     /**
-     * Create a new DisplayContextMenuEvent.
+     * Create a new DisplayInsertMenuEvent.
      *
-     * @param dn    The DN to display the context menu for.
-     * @param title The title of the menu.
+     * @param dn The DN of the container to insert an object into.
      *
      * @return the event
      */
-    public static DisplayContextMenuEvent of(@NonNull final Name dn, @NonNull final String title) {
-        return new DisplayContextMenuEvent(dn, title);
+    public static DisplayInsertMenuEvent create(@NonNull final Name dn) {
+        return new DisplayInsertMenuEvent(dn);
     }
 }
