@@ -1,9 +1,12 @@
 package net.kemitix.ldapmanager.popupmenus.context;
 
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.Bean;
 
 import javax.naming.Name;
 
@@ -16,23 +19,45 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class DisplayContextMenuEventTest {
 
+    private DisplayContextMenuEvent event;
+
     @Mock
     private Name dn;
 
-    @Bean
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        event = DisplayContextMenuEvent.of(dn, "title");
     }
 
     @Test
     public void shouldCreateAndGetDnBackOut() throws Exception {
-        assertThat(DisplayContextMenuEvent.of(dn, "title")
-                                          .getDn()).isSameAs(dn);
+        assertThat(event.getDn()).isSameAs(dn);
     }
 
     @Test
     public void shouldCreateAndGetTitleBackOut() throws Exception {
-        assertThat(DisplayContextMenuEvent.of(dn, "title")
-                                          .getTitle()).isEqualTo("title");
+        assertThat(event.getTitle()).isEqualTo("title");
+    }
+
+    @Test
+    public void shouldThrowNPEWhenDnIsNull() throws Exception {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("dn");
+        //when
+        DisplayContextMenuEvent.of(null, "title");
+    }
+
+    @Test
+    public void shouldThrowNPEWhenTitleIsNull() throws Exception {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("title");
+        //when
+        DisplayContextMenuEvent.of(LdapNameUtil.empty(), null);
     }
 }

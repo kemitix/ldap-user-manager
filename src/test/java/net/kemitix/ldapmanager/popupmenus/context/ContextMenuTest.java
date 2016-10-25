@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.gui2.dialogs.ActionListDialog;
 import com.googlecode.lanterna.gui2.dialogs.ActionListDialogBuilder;
 import lombok.val;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 
 /**
  * Tests for {@link PopupMenu}.
@@ -46,7 +48,7 @@ public class ContextMenuTest {
     private NavigationItem navigationItem;
 
     @Spy
-    private ActionListDialogBuilder actionListDialogBuilder = new MyActionListDialogBuilder();
+    private ActionListDialogBuilder dialogBuilder = new MyActionListDialogBuilder();
 
     @Mock
     private MenuItem menuItem;
@@ -57,10 +59,14 @@ public class ContextMenuTest {
     @Mock
     private Name dn;
 
+    @Mock
+    private ActionListDialog dialog;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         menuItemsFactories = new HashSet<>();
+        contextMenu = new ContextMenu(gui, dialogBuilderFactory, menuItemsFactories);
     }
 
     @Test
@@ -71,10 +77,10 @@ public class ContextMenuTest {
         contextMenu.display(dn, "item");
 
         //then
-        then(actionListDialogBuilder).should()
-                                     .addAction("label", action);
-        then(actionListDialogBuilder).should()
-                                     .setTitle("item");
+        then(dialogBuilder).should()
+                           .addAction("label", action);
+        then(dialogBuilder).should()
+                           .setTitle("item");
     }
 
     @Test
@@ -85,10 +91,10 @@ public class ContextMenuTest {
         //when
         contextMenu.onDisplayContextMenu(event);
         //then
-        then(actionListDialogBuilder).should()
-                                     .addAction("label", action);
-        then(actionListDialogBuilder).should()
-                                     .setTitle("item");
+        then(dialogBuilder).should()
+                           .addAction("label", action);
+        then(dialogBuilder).should()
+                           .setTitle("item");
     }
 
     private void prepareCallToDisplay() {
@@ -96,11 +102,23 @@ public class ContextMenuTest {
         contextMenu = new ContextMenu(gui, dialogBuilderFactory, menuItemsFactories);
         given(navigationItem.getDn()).willReturn(dn);
 
-        given(dialogBuilderFactory.create()).willReturn(actionListDialogBuilder);
+        given(dialogBuilderFactory.create()).willReturn(dialogBuilder);
         given(menuItemFactory.create(dn)).willReturn(Stream.of(menuItem));
         given(menuItem.getLabel()).willReturn("label");
         given(menuItem.getAction()).willReturn(action);
         given(navigationItem.getName()).willReturn("item");
+    }
+
+    @Test
+    public void displayShouldNoShowWhenNothingToInsert() {
+        //given
+        given(dialogBuilderFactory.create()).willReturn(dialogBuilder);
+        given(menuItemFactory.create(dn)).willReturn(Stream.empty());
+        //when
+        contextMenu.onDisplayContextMenu(DisplayContextMenuEvent.of(dn, "title"));
+        //then
+        then(dialog).should(never())
+                    .showDialog(gui);
     }
 
     private class MyActionListDialogBuilder extends ActionListDialogBuilder {

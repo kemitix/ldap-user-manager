@@ -25,6 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.popupmenus.context;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 import javax.naming.Name;
 
@@ -54,7 +55,7 @@ public final class DisplayContextMenuEvent {
      *
      * @return the event
      */
-    public static DisplayContextMenuEvent of(final Name dn, final String title) {
+    public static DisplayContextMenuEvent of(@NonNull final Name dn, @NonNull final String title) {
         return new DisplayContextMenuEvent(dn, title);
     }
 }
