@@ -5,6 +5,8 @@ import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
+import net.kemitix.ldapmanager.popupmenus.MenuItemReceiver;
+import net.kemitix.ldapmanager.popupmenus.MenuItemType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -36,10 +38,14 @@ public class ChangePasswordMenuItemFactoryTest {
     @Mock
     private LdapEntity ldapEntity;
 
+    @Mock
+    private MenuItemReceiver menu;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         factory = new ChangePasswordMenuItemFactory(nameLookupService, applicationEventPublisher);
+        given(menu.canReceive(MenuItemType.MODIFY)).willReturn(true);
     }
 
     @Test
@@ -49,7 +55,7 @@ public class ChangePasswordMenuItemFactoryTest {
         val dn = LdapNameUtil.parse("dn=user");
         given(nameLookupService.findByDn(dn)).willReturn(Optional.of(ldapEntity));
         //when
-        factory.create(dn)
+        factory.create(dn, menu)
                .forEach(menuItem -> menuItem.getAction()
                                             .run());
         //then
@@ -64,6 +70,14 @@ public class ChangePasswordMenuItemFactoryTest {
         val dn = LdapNameUtil.parse("dn=user");
         given(nameLookupService.findByDn(dn)).willReturn(Optional.of(ldapEntity));
         //then
-        assertThat(factory.create(dn)).isEmpty();
+        assertThat(factory.create(dn, menu)).isEmpty();
+    }
+
+    @Test
+    public void whenMenuWillNotAcceptMenuItemThenDoNotCreateMenuItem() throws Exception {
+        //given
+        given(menu.canReceive(any())).willReturn(false);
+        //then
+        assertThat(factory.create(LdapNameUtil.parse("dn=user"), menu)).isEmpty();
     }
 }

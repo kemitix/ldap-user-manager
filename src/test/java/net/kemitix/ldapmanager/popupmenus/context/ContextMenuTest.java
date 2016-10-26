@@ -7,10 +7,13 @@ import lombok.val;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.popupmenus.MenuItemType;
 import net.kemitix.ldapmanager.popupmenus.PopupMenu;
 import net.kemitix.ldapmanager.ui.ActionListDialogBuilderFactory;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -20,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -32,6 +36,9 @@ import static org.mockito.Mockito.never;
 public class ContextMenuTest {
 
     private ContextMenu contextMenu;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Mock
     private WindowBasedTextGUI gui;
@@ -75,7 +82,6 @@ public class ContextMenuTest {
         prepareCallToDisplay();
         //when
         contextMenu.display(dn, "item");
-
         //then
         then(dialogBuilder).should()
                            .addAction("label", action);
@@ -103,7 +109,7 @@ public class ContextMenuTest {
         given(navigationItem.getDn()).willReturn(dn);
 
         given(dialogBuilderFactory.create()).willReturn(dialogBuilder);
-        given(menuItemFactory.create(dn)).willReturn(Stream.of(menuItem));
+        given(menuItemFactory.create(dn, contextMenu)).willReturn(Stream.of(menuItem));
         given(menuItem.getLabel()).willReturn("label");
         given(menuItem.getAction()).willReturn(action);
         given(navigationItem.getName()).willReturn("item");
@@ -113,12 +119,31 @@ public class ContextMenuTest {
     public void displayShouldNoShowWhenNothingToInsert() {
         //given
         given(dialogBuilderFactory.create()).willReturn(dialogBuilder);
-        given(menuItemFactory.create(dn)).willReturn(Stream.empty());
+        given(menuItemFactory.create(dn, contextMenu)).willReturn(Stream.empty());
         //when
         contextMenu.onDisplayContextMenu(DisplayContextMenuEvent.of(dn, "title"));
         //then
         then(dialog).should(never())
                     .showDialog(gui);
+    }
+
+    @Test
+    public void canReceiveWillNotAcceptCreateMenuItems() {
+        assertThat(contextMenu.canReceive(MenuItemType.CREATE)).isFalse();
+    }
+
+    @Test
+    public void canReceiveWillAcceptModifyMenuItems() {
+        assertThat(contextMenu.canReceive(MenuItemType.MODIFY)).isTrue();
+    }
+
+    @Test
+    public void canReceiveWillThrowNPEWhenTypeIsNull() {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("type");
+        //when
+        contextMenu.canReceive(null);
     }
 
     private class MyActionListDialogBuilder extends ActionListDialogBuilder {

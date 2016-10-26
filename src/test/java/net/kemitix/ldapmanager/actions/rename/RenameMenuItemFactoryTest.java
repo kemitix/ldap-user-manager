@@ -7,6 +7,8 @@ import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItemReceiver;
+import net.kemitix.ldapmanager.popupmenus.MenuItemType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -43,10 +45,14 @@ public class RenameMenuItemFactoryTest {
     @Mock
     private LdapEntity ldapEntity;
 
+    @Mock
+    private MenuItemReceiver menu;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         menuItemFactory = new RenameMenuItemFactory(nameLookupService, applicationEventPublisher);
+        given(menu.canReceive(MenuItemType.MODIFY)).willReturn(true);
     }
 
     @Test
@@ -56,7 +62,7 @@ public class RenameMenuItemFactoryTest {
         val dn = LdapNameUtil.parse("dn=user");
         given(nameLookupService.findByDn(dn)).willReturn(Optional.of(ldapEntity));
         //when
-        final List<MenuItem> menuItems = menuItemFactory.create(dn)
+        final List<MenuItem> menuItems = menuItemFactory.create(dn, menu)
                                                         .collect(Collectors.toList());
         //then
         assertThat(menuItems).hasSize(1);
@@ -71,7 +77,7 @@ public class RenameMenuItemFactoryTest {
         val dn = LdapNameUtil.parse("dn=user");
         given(nameLookupService.findByDn(dn)).willReturn(Optional.of(ldapEntity));
         //when
-        final List<MenuItem> menuItems = menuItemFactory.create(dn)
+        final List<MenuItem> menuItems = menuItemFactory.create(dn, menu)
                                                         .collect(Collectors.toList());
         //then
         assertThat(menuItems).hasSize(1);
@@ -80,5 +86,13 @@ public class RenameMenuItemFactoryTest {
                  .run();
         then(applicationEventPublisher).should()
                                        .publishEvent(any(RenameRequestEvent.class));
+    }
+
+    @Test
+    public void whenMenuWillNotAcceptMenuItemThenDoNotCreateMenuItem() throws Exception {
+        //given
+        given(menu.canReceive(any())).willReturn(false);
+        //then
+        assertThat(menuItemFactory.create(LdapNameUtil.parse("dn=user"), menu)).isEmpty();
     }
 }

@@ -29,6 +29,8 @@ import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.popupmenus.MenuItemReceiver;
+import net.kemitix.ldapmanager.popupmenus.MenuItemType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -64,12 +66,14 @@ class RenameMenuItemFactory implements MenuItemFactory {
     }
 
     @Override
-    public final Stream<MenuItem> create(final Name dn) {
+    public final Stream<MenuItem> create(final Name dn, final MenuItemReceiver menu) {
         val items = new ArrayList<MenuItem>();
-        nameLookupService.findByDn(dn)
-                         .filter(ldapEntity -> ldapEntity.hasFeature(Features.RENAME))
-                         .map(ldapEntity -> RenameMenuItem.create(dn, applicationEventPublisher))
-                         .ifPresent(items::add);
+        if (menu.canReceive(MenuItemType.MODIFY)) {
+            nameLookupService.findByDn(dn)
+                             .filter(ldapEntity -> ldapEntity.hasFeature(Features.RENAME))
+                             .map(ldapEntity -> RenameMenuItem.create(dn, applicationEventPublisher))
+                             .ifPresent(items::add);
+        }
         return items.stream();
     }
 }

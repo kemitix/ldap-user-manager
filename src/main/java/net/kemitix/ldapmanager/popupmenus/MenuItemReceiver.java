@@ -24,24 +24,20 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.popupmenus;
 
-import javax.naming.Name;
-import java.util.stream.Stream;
-
 /**
- * Factory for creating {@link MenuItem}s from {@link Name}s.
+ * Represents something that can receive {@link MenuItem}s of certain types.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @FunctionalInterface
-public interface MenuItemFactory {
+public interface MenuItemReceiver {
 
     /**
-     * Create any {@link MenuItem}s for the DN.
+     * Checks if the menu supports the type of menu item.
      *
-     * @param dn   The DN to create MenuItems for.
-     * @param menu The menu to item will appear on.
+     * @param type The type of menu item.
      *
-     * @return a stream of MenuItems, may be empty.
+     * @return true if the type is accepted, otherwise false.
      */
-    Stream<MenuItem> create(Name dn, MenuItemReceiver menu);
+    boolean canReceive(MenuItemType type);
 }
