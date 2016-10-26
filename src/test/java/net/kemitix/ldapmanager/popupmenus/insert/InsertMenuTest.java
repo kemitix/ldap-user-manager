@@ -5,9 +5,12 @@ import com.googlecode.lanterna.gui2.dialogs.ActionListDialog;
 import com.googlecode.lanterna.gui2.dialogs.ActionListDialogBuilder;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.popupmenus.MenuItemType;
 import net.kemitix.ldapmanager.ui.ActionListDialogBuilderFactory;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -16,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -28,6 +32,9 @@ import static org.mockito.Mockito.never;
 public class InsertMenuTest {
 
     private InsertMenu insertMenu;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Mock
     private WindowBasedTextGUI gui;
@@ -66,7 +73,7 @@ public class InsertMenuTest {
     public void displayShouldShowDialog() {
         //given
         given(dialogBuilderFactory.create()).willReturn(dialogBuilder);
-        given(menuItemFactory.create(dn)).willReturn(Stream.of(menuItem));
+        given(menuItemFactory.create(dn, insertMenu)).willReturn(Stream.of(menuItem));
         given(menuItem.getLabel()).willReturn("label");
         given(menuItem.getAction()).willReturn(action);
         //when
@@ -80,12 +87,31 @@ public class InsertMenuTest {
     public void displayShouldNoShowWhenNothingToInsert() {
         //given
         given(dialogBuilderFactory.create()).willReturn(dialogBuilder);
-        given(menuItemFactory.create(dn)).willReturn(Stream.empty());
+        given(menuItemFactory.create(dn, insertMenu)).willReturn(Stream.empty());
         //when
         insertMenu.onDisplayInsertMenu(DisplayInsertMenuEvent.create(dn));
         //then
         then(dialog).should(never())
                     .showDialog(gui);
+    }
+
+    @Test
+    public void canReceiveWillAcceptCreateMenuItems() {
+        assertThat(insertMenu.canReceive(MenuItemType.CREATE)).isTrue();
+    }
+
+    @Test
+    public void canReceiveWillNotAcceptModifyMenuItems() {
+        assertThat(insertMenu.canReceive(MenuItemType.MODIFY)).isFalse();
+    }
+
+    @Test
+    public void canReceiveWillThrowNPEWhenTypeIsNull() {
+        //given
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("type");
+        //when
+        insertMenu.canReceive(null);
     }
 
     private class MyDialogBuilder extends ActionListDialogBuilder {

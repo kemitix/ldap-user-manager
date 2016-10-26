@@ -25,14 +25,18 @@ SOFTWARE.
 package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import lombok.NonNull;
 import lombok.val;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.popupmenus.MenuItemReceiver;
+import net.kemitix.ldapmanager.popupmenus.MenuItemType;
 import net.kemitix.ldapmanager.popupmenus.PopupMenu;
 import net.kemitix.ldapmanager.ui.ActionListDialogBuilderFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,13 +46,15 @@ import java.util.Set;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
-class ContextMenu implements PopupMenu {
+class ContextMenu implements PopupMenu, MenuItemReceiver {
 
     private final WindowBasedTextGUI gui;
 
     private final ActionListDialogBuilderFactory dialogBuilderFactory;
 
     private final Set<MenuItemFactory> menuItemFactories;
+
+    private final Set<MenuItemType> menuItemTypes;
 
     /**
      * Constructor.
@@ -64,13 +70,14 @@ class ContextMenu implements PopupMenu {
         this.gui = gui;
         this.dialogBuilderFactory = dialogBuilderFactory;
         this.menuItemFactories = new HashSet<>(menuItemFactories);
+        menuItemTypes = EnumSet.of(MenuItemType.MODIFY);
     }
 
     @Override
     public final void display(final Name dn, final String title) {
         val dialogBuilder = dialogBuilderFactory.create();
         menuItemFactories.stream()
-                         .flatMap(menuItemFactory -> menuItemFactory.create(dn))
+                         .flatMap(menuItemFactory -> menuItemFactory.create(dn, this))
                          .forEach(menuItem -> dialogBuilder.addAction(menuItem.getLabel(), menuItem.getAction()));
         if (!dialogBuilder.getActions()
                           .isEmpty()) {
@@ -88,5 +95,10 @@ class ContextMenu implements PopupMenu {
     @EventListener(DisplayContextMenuEvent.class)
     public final void onDisplayContextMenu(final DisplayContextMenuEvent event) {
         display(event.getDn(), event.getTitle());
+    }
+
+    @Override
+    public final boolean canReceive(@NonNull final MenuItemType type) {
+        return menuItemTypes.contains(type);
     }
 }

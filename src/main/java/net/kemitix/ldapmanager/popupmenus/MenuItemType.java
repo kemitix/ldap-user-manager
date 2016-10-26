@@ -24,24 +24,19 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.popupmenus;
 
-import javax.naming.Name;
-import java.util.stream.Stream;
-
 /**
- * Factory for creating {@link MenuItem}s from {@link Name}s.
+ * Represents the general types of {@link MenuItem}s.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@FunctionalInterface
-public interface MenuItemFactory {
+public enum MenuItemType {
+    /**
+     * The menu item will modify the currently selected DN in some way.
+     */
+    MODIFY,
 
     /**
-     * Create any {@link MenuItem}s for the DN.
-     *
-     * @param dn   The DN to create MenuItems for.
-     * @param menu The menu to item will appear on.
-     *
-     * @return a stream of MenuItems, may be empty.
+     * The menu item will create something within the selected DN.
      */
-    Stream<MenuItem> create(Name dn, MenuItemReceiver menu);
+    CREATE
 }
