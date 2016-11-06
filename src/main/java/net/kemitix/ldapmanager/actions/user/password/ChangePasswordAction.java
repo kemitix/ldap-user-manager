@@ -52,6 +52,7 @@ class ChangePasswordAction {
 
     private final PasswordDialog passwordDialog;
 
+    @SuppressWarnings("deprecation")
     private final PasswordEncoder passwordEncoder;
 
     private final LdapTemplate ldapTemplate;
