@@ -26,10 +26,12 @@ public class MainPanelTest {
 
     private Panel logPanel = new Panel();
 
+    private Panel centerPanel = new Panel();
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mainPanel = new MainPanel(topPanel, bottomPanel, navigationPanel, logPanel);
+        mainPanel = new MainPanel(topPanel, bottomPanel, navigationPanel, logPanel, centerPanel);
     }
 
     @Test

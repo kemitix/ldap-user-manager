@@ -57,6 +57,8 @@ class MainPanel extends Panel {
 
     private final LayoutManager layoutManager = new BorderLayout();
 
+    private final Panel centerPanel;
+
     /**
      * Constructor.
      *
@@ -64,13 +66,18 @@ class MainPanel extends Panel {
      * @param bottomPanel     The bottom panel
      * @param navigationPanel The navigation panel
      * @param logPanel        The log panel
+     * @param centerPanel     The center panel
      */
     @Autowired
-    MainPanel(final Panel topPanel, final Panel bottomPanel, final Panel navigationPanel, final Panel logPanel) {
+    MainPanel(
+            final Panel topPanel, final Panel bottomPanel, final Panel navigationPanel, final Panel logPanel,
+            final Panel centerPanel
+             ) {
         this.topPanel = topPanel;
         this.bottomPanel = bottomPanel;
         this.navigationPanel = navigationPanel;
         this.logPanel = logPanel;
+        this.centerPanel = centerPanel;
     }
 
     /**
@@ -84,6 +91,7 @@ class MainPanel extends Panel {
         innerPanel.addComponent(topPanel, BorderLayout.Location.TOP);
         innerPanel.addComponent(getBottomPanel(), BorderLayout.Location.BOTTOM);
         innerPanel.addComponent(navigationPanel, BorderLayout.Location.LEFT);
+        innerPanel.addComponent(centerPanel);
         addComponent(innerPanel.withBorder(Borders.singleLine(Messages.APP_NAME.getValue())));
         setLayoutManager(layoutManager);
         setLayoutData(BorderLayout.Location.CENTER);
