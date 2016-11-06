@@ -91,9 +91,10 @@ class InsertMenu implements PopupMenu, MenuItemReceiver {
                          .forEach(menuItem -> dialogBuilder.addAction(menuItem.getLabel(), menuItem.getAction()));
         if (!dialogBuilder.getActions()
                           .isEmpty()) {
-                         .build()
-                         .showDialog(gui);
-            dialogBuilder.setTitle(title)
+            val dialog = dialogBuilder.setTitle(title)
+                                      .build();
+            dialog.setCloseWindowWithEscape(true);
+            dialog.showDialog(gui);
         }
     }
 
