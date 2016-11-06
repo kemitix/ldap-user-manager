@@ -80,7 +80,7 @@ class InsertMenu implements PopupMenu, MenuItemReceiver {
      */
     @EventListener(DisplayInsertMenuEvent.class)
     public final void onDisplayInsertMenu(final DisplayInsertMenuEvent event) {
-        display(event.getDn(), "Insert");
+        display(event.getDn(), "");
     }
 
     @Override
@@ -91,9 +91,9 @@ class InsertMenu implements PopupMenu, MenuItemReceiver {
                          .forEach(menuItem -> dialogBuilder.addAction(menuItem.getLabel(), menuItem.getAction()));
         if (!dialogBuilder.getActions()
                           .isEmpty()) {
-            dialogBuilder.setTitle(String.format("Create in %s", title))
                          .build()
                          .showDialog(gui);
+            dialogBuilder.setTitle(title)
         }
     }
 
