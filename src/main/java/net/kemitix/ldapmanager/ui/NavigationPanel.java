@@ -44,7 +44,7 @@ import java.util.logging.Level;
  */
 @Log
 @Component
-class NavigationPanel extends Panel {
+class NavigationPanel extends AbstractFocusablePanel {
 
     private final NavigationItemActionListBox actionListBox;
 
@@ -70,5 +70,10 @@ class NavigationPanel extends Panel {
                            .withBorder(Borders.singleLine(Messages.NAVIGATION.getValue())),
                 BorderLayout.Location.CENTER
                     );
+    }
+
+    @Override
+    public void setFocused() {
+        getBasePane().setFocusedInteractable(actionListBox);
     }
 }

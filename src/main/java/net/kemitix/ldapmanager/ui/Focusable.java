@@ -24,40 +24,20 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import com.googlecode.lanterna.gui2.BorderLayout;
-import com.googlecode.lanterna.gui2.Panel;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
+import com.googlecode.lanterna.gui2.Container;
 
 /**
- * The center of the main panel.
+ * A Panel which can be assigned with the keyboard focus.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Component
-class CenterPanel extends AbstractFocusablePanel implements FormContainer {
+public interface Focusable extends Container {
 
     /**
-     * Initializer.
+     * Sets the input focus on the container.
+     *
+     * <p>The implementation is responsible for specifying to it's {@link com.googlecode.lanterna.gui2.BasePane} which
+     * {@link com.googlecode.lanterna.gui2.Interactable} should be the recipient of the input focus.</p>
      */
-    @PostConstruct
-    public final void init() {
-        setLayoutManager(new BorderLayout());
-        setLayoutData(BorderLayout.Location.CENTER);
-    }
-
-    @Override
-    public final Panel replaceComponents(final com.googlecode.lanterna.gui2.Component component) {
-        return removeAllComponents().addComponent(component);
-    }
-
-    @Override
-    public final void setFocused() {
-        getChildren().stream()
-                     .filter(component -> component instanceof Focusable)
-                     .map(panel -> (Focusable) panel)
-                     .findFirst()
-                     .ifPresent(Focusable::setFocused);
-    }
+    void setFocused();
 }

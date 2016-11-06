@@ -2,11 +2,14 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.BorderLayout;
 import com.googlecode.lanterna.gui2.Panel;
+import lombok.NoArgsConstructor;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.spy;
 
 /**
  * Tests for {@link MainPanel}.
@@ -17,20 +20,24 @@ public class MainPanelTest {
 
     private MainPanel mainPanel;
 
+    private Panel topPanel;
 
-    private Panel topPanel = new Panel();
+    private Panel bottomPanel;
 
-    private Panel bottomPanel = new Panel();
+    private MainPanelTest.FocusablePanel navigationPanel;
 
-    private Panel navigationPanel = new Panel();
+    private Panel logPanel;
 
-    private Panel logPanel = new Panel();
-
-    private Panel centerPanel = new Panel();
+    private AbstractFocusablePanel centerPanel;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        topPanel = new Panel();
+        bottomPanel = new Panel();
+        navigationPanel = spy(new MainPanelTest.FocusablePanel());
+        logPanel = new Panel();
+        centerPanel = spy(new MainPanelTest.FocusablePanel());
         mainPanel = new MainPanel(topPanel, bottomPanel, navigationPanel, logPanel, centerPanel);
     }
 
@@ -42,9 +49,30 @@ public class MainPanelTest {
         assertThat(topPanel.isInside(mainPanel)).isTrue();
         assertThat(bottomPanel.isInside(mainPanel)).isTrue();
         assertThat(navigationPanel.isInside(mainPanel)).isTrue();
+        assertThat(centerPanel.isInside(mainPanel)).isTrue();
         assertThat(logPanel.isInside(mainPanel)).isTrue();
         assertThat(mainPanel.getLayoutManager()).isInstanceOf(BorderLayout.class);
         assertThat(mainPanel.getLayoutData()).isEqualTo(BorderLayout.Location.CENTER);
     }
 
+    @Test
+    public void shouldOnCloseCentreFor() throws Exception {
+        //given
+        //when
+        mainPanel.onCloseCenterForm();
+        //then
+        then(navigationPanel).should()
+                             .setFocused();
+        then(centerPanel).should()
+                         .removeAllComponents();
+    }
+
+    @NoArgsConstructor
+    private static class FocusablePanel extends AbstractFocusablePanel {
+
+        @Override
+        public void setFocused() {
+
+        }
+    }
 }
