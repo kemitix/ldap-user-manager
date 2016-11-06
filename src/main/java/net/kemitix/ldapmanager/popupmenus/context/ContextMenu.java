@@ -81,9 +81,10 @@ class ContextMenu implements PopupMenu, MenuItemReceiver {
                          .forEach(menuItem -> dialogBuilder.addAction(menuItem.getLabel(), menuItem.getAction()));
         if (!dialogBuilder.getActions()
                           .isEmpty()) {
-            dialogBuilder.setTitle(title)
-                         .build()
-                         .showDialog(gui);
+            val dialog = dialogBuilder.setTitle(title)
+                                      .build();
+            dialog.setCloseWindowWithEscape(true);
+            dialog.showDialog(gui);
         }
     }
 
