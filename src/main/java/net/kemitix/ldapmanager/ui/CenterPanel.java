@@ -25,55 +25,39 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.BorderLayout;
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
-import lombok.extern.java.Log;
-import net.kemitix.ldapmanager.Messages;
-import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.logging.Level;
 
 /**
- * The Left-hand Navigation Panel.
+ * The center of the main panel.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Log
 @Component
-class NavigationPanel extends AbstractFocusablePanel {
-
-    private final NavigationItemActionListBox actionListBox;
-
-    /**
-     * Constructor.
-     *
-     * @param actionListBox The Navigation Item Action List Box.
-     */
-    @Autowired
-    NavigationPanel(final NavigationItemActionListBox actionListBox) {
-        super(new BorderLayout());
-        this.actionListBox = actionListBox;
-    }
+class CenterPanel extends AbstractFocusablePanel implements FormContainer {
 
     /**
      * Initializer.
      */
     @PostConstruct
     public final void init() {
-        log.log(Level.FINEST, "init()");
-        addComponent(
-                new Panel().addComponent(actionListBox, LinearLayout.createLayoutData(LinearLayout.Alignment.Fill))
-                           .withBorder(Borders.singleLine(Messages.NAVIGATION.getValue())),
-                BorderLayout.Location.CENTER
-                    );
+        setLayoutManager(new BorderLayout());
+        setLayoutData(BorderLayout.Location.CENTER);
     }
 
     @Override
-    public void setFocused() {
-        getBasePane().setFocusedInteractable(actionListBox);
+    public final Panel replaceComponents(final com.googlecode.lanterna.gui2.Component component) {
+        return removeAllComponents().addComponent(component);
+    }
+
+    @Override
+    public final void setFocused() {
+        getChildren().stream()
+                     .filter(component -> component instanceof Focusable)
+                     .map(panel -> (Focusable) panel)
+                     .findFirst()
+                     .ifPresent(Focusable::setFocused);
     }
 }

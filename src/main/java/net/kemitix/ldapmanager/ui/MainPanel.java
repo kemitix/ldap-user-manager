@@ -33,6 +33,7 @@ import com.googlecode.lanterna.gui2.Panel;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -51,11 +52,13 @@ class MainPanel extends Panel {
 
     private final Panel bottomPanel;
 
-    private final Panel navigationPanel;
+    private final AbstractFocusablePanel navigationPanel;
 
     private final Panel logPanel;
 
     private final LayoutManager layoutManager = new BorderLayout();
+
+    private final Panel centerPanel;
 
     /**
      * Constructor.
@@ -64,26 +67,32 @@ class MainPanel extends Panel {
      * @param bottomPanel     The bottom panel
      * @param navigationPanel The navigation panel
      * @param logPanel        The log panel
+     * @param centerPanel     The center panel
      */
     @Autowired
-    MainPanel(final Panel topPanel, final Panel bottomPanel, final Panel navigationPanel, final Panel logPanel) {
+    MainPanel(
+            final Panel topPanel, final Panel bottomPanel, final AbstractFocusablePanel navigationPanel,
+            final Panel logPanel, final AbstractFocusablePanel centerPanel
+             ) {
         this.topPanel = topPanel;
         this.bottomPanel = bottomPanel;
         this.navigationPanel = navigationPanel;
         this.logPanel = logPanel;
+        this.centerPanel = centerPanel;
     }
 
     /**
      * Initializer.
      */
     @PostConstruct
-    public void init() {
+    public final void init() {
         val innerPanel = new Panel();
         innerPanel.setLayoutManager(layoutManager);
         innerPanel.setLayoutData(BorderLayout.Location.CENTER);
         innerPanel.addComponent(topPanel, BorderLayout.Location.TOP);
         innerPanel.addComponent(getBottomPanel(), BorderLayout.Location.BOTTOM);
         innerPanel.addComponent(navigationPanel, BorderLayout.Location.LEFT);
+        innerPanel.addComponent(centerPanel);
         addComponent(innerPanel.withBorder(Borders.singleLine(Messages.APP_NAME.getValue())));
         setLayoutManager(layoutManager);
         setLayoutData(BorderLayout.Location.CENTER);
@@ -92,5 +101,15 @@ class MainPanel extends Panel {
     private Panel getBottomPanel() {
         return new Panel(new LinearLayout()).addComponent(logPanel, FILL)
                                             .addComponent(bottomPanel, FILL);
+    }
+
+    /**
+     * Event listener for {@link CloseCenterFormEvent} for clear the center panel and set the input focus on the
+     * navigation panel.
+     */
+    @EventListener(CloseCenterFormEvent.class)
+    public final void onCloseCenterForm() {
+        navigationPanel.setFocused();
+        centerPanel.removeAllComponents();
     }
 }

@@ -22,58 +22,47 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ui;
+package net.kemitix.ldapmanager.actions.user.create;
 
-import com.googlecode.lanterna.gui2.BorderLayout;
-import com.googlecode.lanterna.gui2.Borders;
-import com.googlecode.lanterna.gui2.LinearLayout;
-import com.googlecode.lanterna.gui2.Panel;
-import lombok.extern.java.Log;
-import net.kemitix.ldapmanager.Messages;
-import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
+import lombok.val;
+import net.kemitix.ldapmanager.popupmenus.MenuItem;
+import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
+import net.kemitix.ldapmanager.popupmenus.MenuItemReceiver;
+import net.kemitix.ldapmanager.popupmenus.MenuItemType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.logging.Level;
+import javax.naming.Name;
+import java.util.ArrayList;
+import java.util.stream.Stream;
 
 /**
- * The Left-hand Navigation Panel.
+ * Factory for creating {@link CreateUserMenuItem} objects.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Log
 @Component
-class NavigationPanel extends AbstractFocusablePanel {
+class CreateUserMenuItemFactory implements MenuItemFactory {
 
-    private final NavigationItemActionListBox actionListBox;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Constructor.
      *
-     * @param actionListBox The Navigation Item Action List Box.
+     * @param applicationEventPublisher The Application Event Publisher.
      */
     @Autowired
-    NavigationPanel(final NavigationItemActionListBox actionListBox) {
-        super(new BorderLayout());
-        this.actionListBox = actionListBox;
-    }
-
-    /**
-     * Initializer.
-     */
-    @PostConstruct
-    public final void init() {
-        log.log(Level.FINEST, "init()");
-        addComponent(
-                new Panel().addComponent(actionListBox, LinearLayout.createLayoutData(LinearLayout.Alignment.Fill))
-                           .withBorder(Borders.singleLine(Messages.NAVIGATION.getValue())),
-                BorderLayout.Location.CENTER
-                    );
+    CreateUserMenuItemFactory(final ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
-    public void setFocused() {
-        getBasePane().setFocusedInteractable(actionListBox);
+    public Stream<MenuItem> create(final Name dn, final MenuItemReceiver menu) {
+        val items = new ArrayList<MenuItem>();
+        if (menu.canReceive(MenuItemType.CREATE)) {
+            items.add(CreateUserMenuItem.create(dn, applicationEventPublisher));
+        }
+        return items.stream();
     }
 }
