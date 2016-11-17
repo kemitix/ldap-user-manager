@@ -6,6 +6,8 @@ import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import net.kemitix.ldapmanager.events.ApplicationExitRequestEvent;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.ui.FormContainer;
 import org.junit.Before;
@@ -82,6 +84,7 @@ public class CreateUserFormPanelTest {
 
         @Override
         public Panel replaceComponents(Component component) {
+            component.onAdded(this);
             return null;
         }
     }
@@ -135,5 +138,28 @@ public class CreateUserFormPanelTest {
         val event = eventArgumentCaptor.getValue();
         assertThat(event.getCn()).isEqualTo("cn value");
         assertThat(event.getSn()).isEqualTo("sn value");
+    }
+
+    @Test
+    public void shouldNotDenyExitRequestWhenFormNotOpen() {
+        //given
+        /// don't call onCreateUserEvent() to open the form
+        val event = ApplicationExitRequestEvent.create();
+        //when
+        panel.onApplicationExitRequest(event);
+        //then
+        assertThat(event.isApproved()).isTrue();
+    }
+
+    @Test
+    public void shouldDenyExitRequestWhenFormIsOpen() {
+        //given
+        /// call onCreateUserEvent() to open the form
+        panel.onCreateUserEvent(CreateUserEvent.create(LdapNameUtil.empty()));
+        val event = ApplicationExitRequestEvent.create();
+        //when
+        panel.onApplicationExitRequest(event);
+        //then
+        assertThat(event.isApproved()).isFalse();
     }
 }

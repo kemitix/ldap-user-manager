@@ -36,6 +36,7 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.TextBox;
 import lombok.Getter;
 import lombok.val;
+import net.kemitix.ldapmanager.events.ApplicationExitRequestEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.ui.Focusable;
 import net.kemitix.ldapmanager.ui.FormContainer;
@@ -160,5 +161,19 @@ class CreateUserFormPanel extends Panel implements Focusable {
     public final void setFocused() {
         formContainer.getBasePane()
                      .setFocusedInteractable(cnTextBox);
+    }
+
+    /**
+     * Listener for {@link ApplicationExitRequestEvent} to prevent the application from exiting if the form is open.
+     *
+     * <p>The form is considered 'open' is if is in the formContainer.</p>
+     *
+     * @param event The event
+     */
+    @EventListener(ApplicationExitRequestEvent.class)
+    public void onApplicationExitRequest(final ApplicationExitRequestEvent event) {
+        if (form.isInside(formContainer)) {
+            event.deny();
+        }
     }
 }
