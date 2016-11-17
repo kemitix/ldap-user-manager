@@ -35,6 +35,8 @@ public interface DeniableRequestEvent {
 
     /**
      * Whether the request is approved or not.
+     *
+     * @return true if the request has not been denied, otherwise false.
      */
     boolean isApproved();
 
