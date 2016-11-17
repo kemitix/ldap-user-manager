@@ -25,23 +25,24 @@ SOFTWARE.
 package net.kemitix.ldapmanager.events;
 
 /**
- * Application Exit Event Configuration.
+ * Raised when the application is exiting.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 public final class ApplicationExitEvent {
 
     /**
-     * Create a new ApplicationEvent.
+     * Constructor.
      */
     private ApplicationExitEvent() {
     }
 
     /**
-     * Create an ApplicationExitEvent.
+     * Create an new {@link ApplicationExitEvent}.
      *
      * @return the event
      */
+    @SuppressWarnings("InstantiationOfUtilityClass")
     public static ApplicationExitEvent create() {
         return new ApplicationExitEvent();
     }
