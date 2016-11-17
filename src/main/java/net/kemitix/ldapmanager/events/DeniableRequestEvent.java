@@ -31,8 +31,12 @@ package net.kemitix.ldapmanager.events;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@FunctionalInterface
 public interface DeniableRequestEvent {
+
+    /**
+     * Whether the request is approved or not.
+     */
+    boolean isApproved();
 
     /**
      * Deny the request.

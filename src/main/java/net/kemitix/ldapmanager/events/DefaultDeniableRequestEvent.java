@@ -36,9 +36,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DefaultDeniableRequestEvent implements DeniableRequestEvent {
 
-    /**
-     * Whether the request is approved or not.
-     */
     @Getter
     private boolean approved = true;
 
