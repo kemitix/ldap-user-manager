@@ -25,25 +25,23 @@ SOFTWARE.
 package net.kemitix.ldapmanager.events;
 
 /**
- * Raised when the application is exiting.
+ * Represent an event that is requesting permission to perform an action.
+ *
+ * <p>Listeners may deny the request by calling the {@link #deny()} method.</p>
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class ApplicationExitEvent {
+public interface DeniableRequestEvent {
 
     /**
-     * Constructor.
-     */
-    private ApplicationExitEvent() {
-    }
-
-    /**
-     * Create an new {@link ApplicationExitEvent}.
+     * Whether the request is approved or not.
      *
-     * @return the event
+     * @return true if the request has not been denied, otherwise false.
      */
-    @SuppressWarnings("InstantiationOfUtilityClass")
-    public static ApplicationExitEvent create() {
-        return new ApplicationExitEvent();
-    }
+    boolean isApproved();
+
+    /**
+     * Deny the request.
+     */
+    void deny();
 }

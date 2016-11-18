@@ -24,26 +24,23 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 /**
- * Raised when the application is exiting.
+ * Basic implementation of the {@link DeniableRequestEvent} interface.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class ApplicationExitEvent {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class DefaultDeniableRequestEvent implements DeniableRequestEvent {
 
-    /**
-     * Constructor.
-     */
-    private ApplicationExitEvent() {
-    }
+    @Getter
+    private boolean approved = true;
 
-    /**
-     * Create an new {@link ApplicationExitEvent}.
-     *
-     * @return the event
-     */
-    @SuppressWarnings("InstantiationOfUtilityClass")
-    public static ApplicationExitEvent create() {
-        return new ApplicationExitEvent();
+    @Override
+    public final void deny() {
+        approved = false;
     }
 }

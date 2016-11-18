@@ -24,26 +24,27 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
- * Raised when the application is exiting.
+ * Raised when the application wants to exit.
+ *
+ * <p>Listeners can prevent the application from exiting by calling the {@link #deny()} method.</p>
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public final class ApplicationExitEvent {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ApplicationExitRequestEvent extends DefaultDeniableRequestEvent {
 
     /**
-     * Constructor.
-     */
-    private ApplicationExitEvent() {
-    }
-
-    /**
-     * Create an new {@link ApplicationExitEvent}.
+     * Create a new {@link ApplicationExitRequestEvent}.
      *
-     * @return the event
+     * <p>The request is approved unless {@link #deny()} is called.</p>
+     *
+     * @return The event
      */
-    @SuppressWarnings("InstantiationOfUtilityClass")
-    public static ApplicationExitEvent create() {
-        return new ApplicationExitEvent();
+    public static ApplicationExitRequestEvent create() {
+        return new ApplicationExitRequestEvent();
     }
 }
