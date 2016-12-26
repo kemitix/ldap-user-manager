@@ -1,0 +1,6 @@
+ldap:
+  urls:
+   - ${LDAP_URL:ldap://localhost:389/}
+  base: ${LDAP_BASE:dc=kemitix,dc=net}
+  password: ${LDAP_PASSPWORD:password}
+  user-dn: ${LDAP_USER:cn=admin},${LDAP_BASE:dc=kemitix,dc=net}
