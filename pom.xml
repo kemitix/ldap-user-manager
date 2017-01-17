@@ -12,20 +12,20 @@
 
     <parent>
         <groupId>net.kemitix</groupId>
-        <artifactId>kemitix-spring-parent</artifactId>
-        <version>2.1.0</version>
+        <artifactId>kemitix-parent</artifactId>
+        <version>2.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.version>${project.version}</project.version>
-        <spring-boot.version>1.4.2.BUILD-SNAPSHOT</spring-boot.version>
+        <spring-boot.version>1.4.3.RELEASE</spring-boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <lanterna.version>3.0.0-beta3</lanterna.version>
-        <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
-        <assertj.version>3.5.2</assertj.version>
+        <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
+        <assertj.version>3.6.1</assertj.version>
         <unboundid.version>3.2.0</unboundid.version>
         <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
         <maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
@@ -56,10 +56,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
