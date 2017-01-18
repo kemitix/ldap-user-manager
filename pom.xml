@@ -29,6 +29,7 @@
         <unboundid.version>3.2.0</unboundid.version>
         <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
         <maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
+        <digraph-dependency.basePackage>net.kemitix.ldapmanager</digraph-dependency.basePackage>
     </properties>
 
     <dependencyManagement>
