@@ -28,6 +28,7 @@
         <unboundid.version>3.2.0</unboundid.version>
         <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
         <maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
+        <immutable-value.version>2.4.0</immutable-value.version>
         <digraph-dependency.basePackage>net.kemitix.ldapmanager</digraph-dependency.basePackage>
     </properties>
 
@@ -65,6 +66,12 @@
             <groupId>com.googlecode.lanterna</groupId>
             <artifactId>lanterna</artifactId>
             <version>${lanterna.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.immutables</groupId>
+            <artifactId>value</artifactId>
+            <version>${immutable-value.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
