@@ -24,15 +24,17 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Raised when any form in the {@link CenterPanel} should be closed.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@SuppressWarnings("hideutilityclassconstructor")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CloseCenterFormEvent {
-
-    private CloseCenterFormEvent() {
-    }
 
     /**
      * Create a new CloseCenterFromEvent.
