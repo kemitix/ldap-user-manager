@@ -24,7 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.create;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import javax.naming.Name;
 
@@ -33,6 +35,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 final class CreateUserCommitEvent {
 
     @Getter
@@ -43,12 +46,6 @@ final class CreateUserCommitEvent {
 
     @Getter
     private final String sn;
-
-    private CreateUserCommitEvent(final Name dn, final String cn, final String sn) {
-        this.dn = dn;
-        this.cn = cn;
-        this.sn = sn;
-    }
 
     /**
      * Create a new CreateUserCommitEvent.
