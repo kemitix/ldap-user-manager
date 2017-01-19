@@ -25,7 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.state;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 
 import java.util.Collection;
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LdapEntityContainer {
 
     private final Collection<LdapEntity> contents;
