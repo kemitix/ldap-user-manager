@@ -24,18 +24,17 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Raised when the application is exiting.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@SuppressWarnings("hideutilityclassconstructor")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ApplicationExitEvent {
-
-    /**
-     * Constructor.
-     */
-    private ApplicationExitEvent() {
-    }
 
     /**
      * Create an new {@link ApplicationExitEvent}.
