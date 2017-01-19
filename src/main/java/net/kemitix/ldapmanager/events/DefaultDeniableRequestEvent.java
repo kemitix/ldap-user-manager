@@ -26,14 +26,14 @@ package net.kemitix.ldapmanager.events;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Basic implementation of the {@link DeniableRequestEvent} interface.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class DefaultDeniableRequestEvent implements DeniableRequestEvent {
 
     @Getter
