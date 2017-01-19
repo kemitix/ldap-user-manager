@@ -30,11 +30,11 @@ import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.ui.UiProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -46,12 +46,15 @@ import javax.annotation.PostConstruct;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class LogPanel extends Panel {
 
     private final LogMessages logMessages;
 
     @Getter
     private final Label messageLabel = new Label("");
+
+    private final UiProperties uiProperties;
 
     private int linesToShow;
 
@@ -62,22 +65,11 @@ class LogPanel extends Panel {
     private Border label;
 
     /**
-     * Constructor.
-     *
-     * @param logMessages  The message log
-     * @param uiProperties The UI Properties
-     */
-    @Autowired
-    LogPanel(final LogMessages logMessages, final UiProperties uiProperties) {
-        this.logMessages = logMessages;
-        this.linesToShow = uiProperties.getLogLinesToShow();
-    }
-
-    /**
      * Initializer.
      */
     @PostConstruct
     public void init() {
+        linesToShow = uiProperties.getLogLinesToShow();
         label = new Panel().addComponent(messageLabel)
                            .withBorder(Borders.singleLine(Messages.LOG.getValue()));
         label.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Fill));
