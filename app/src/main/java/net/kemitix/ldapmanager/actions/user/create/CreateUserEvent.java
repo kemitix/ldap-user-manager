@@ -24,9 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.create;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.immutables.value.Value;
 
 import javax.naming.Name;
 
@@ -35,11 +33,15 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-final class CreateUserEvent {
+@Value.Immutable
+interface CreateUserEvent {
 
-    @Getter
-    private final Name dn;
+    /**
+     * The DN of the container where the new user should be created.
+     *
+     * @return The DN attribute.
+     */
+    Name getDn();
 
     /**
      * Create a CreateUserEvent.
@@ -48,7 +50,9 @@ final class CreateUserEvent {
      *
      * @return the event.
      */
-    public static CreateUserEvent create(final Name dn) {
-        return new CreateUserEvent(dn);
+    static CreateUserEvent create(final Name dn) {
+        return ImmutableCreateUserEvent.builder()
+                                       .dn(dn)
+                                       .build();
     }
 }
