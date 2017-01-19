@@ -54,6 +54,8 @@ public class DefaultLdapServiceTest {
 
     private OUEntity ouEntity;
 
+    private UserEntity userEntity;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -63,6 +65,10 @@ public class DefaultLdapServiceTest {
         ouEntity = new OUEntity();
         ouEntity.setDn(ouDn);
         ouEntity.setOu("ou");
+        userEntity = new UserEntity();
+        userEntity.setDn(userDn);
+        userEntity.setCn("cn");
+        userEntity.setSn("sn");
     }
 
     @Test
@@ -70,9 +76,11 @@ public class DefaultLdapServiceTest {
         //given
         user = User.builder()
                    .dn(userDn)
+                   .cn("bob")
+                   .sn("smith")
                    .build();
         given(ldapTemplate.find(anyObject(), eq(OUEntity.class))).willReturn(Collections.singletonList(ouEntity));
-        given(ldapTemplate.find(anyObject(), eq(User.class))).willReturn(Collections.singletonList(user));
+        given(ldapTemplate.find(anyObject(), eq(UserEntity.class))).willReturn(Collections.singletonList(userEntity));
         //when
         final LdapEntityContainer result = ldapService.getLdapEntityContainer(ouDn);
         //then

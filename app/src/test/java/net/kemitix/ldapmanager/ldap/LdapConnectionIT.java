@@ -49,11 +49,12 @@ public class LdapConnectionIT extends AbstractLdapConnectionIntegrationTest {
     @Test
     public void ldapTemplateCanFindAUser() throws InvalidNameException {
         //given
-        ldapTemplate.create(User.builder()
-                                .dn(LdapNameUtil.parse("cn=bob"))
-                                .cn("bob")
-                                .sn("smith")
-                                .build());
+        final User user = User.builder()
+                              .dn(LdapNameUtil.parse("cn=bob"))
+                              .cn("bob")
+                              .sn("smith")
+                              .build();
+        ldapTemplate.create(UserEntity.from(user));
         //when
         val users = ldapTemplate.search(LdapQueryBuilder.query()
                                                         .filter("(cn=bob)"), userContextMapper);

@@ -3,6 +3,7 @@ package net.kemitix.ldapmanager.navigation.events;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
@@ -72,6 +73,9 @@ public class SelectionChangeListenerTest {
     public void shouldOnUserSelected() throws Exception {
         //given
         val user = User.builder()
+                       .dn(LdapNameUtil.parse("cn=bob"))
+                       .cn("bob")
+                       .sn("smith")
                        .build();
         val userItem = UserNavigationItem.create(user, applicationEventPublisher);
         val event = NavigationItemUserSelectedEvent.of(userItem);

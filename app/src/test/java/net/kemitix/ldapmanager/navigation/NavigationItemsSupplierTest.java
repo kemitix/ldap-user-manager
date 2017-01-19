@@ -64,6 +64,7 @@ public class NavigationItemsSupplierTest {
         bobUsersUser = User.builder()
                            .dn(LdapNameUtil.parse("cn=bob,ou=users"))
                            .cn("bob")
+                           .sn("smith")
                            .build();
     }
 
@@ -147,12 +148,14 @@ public class NavigationItemsSupplierTest {
         val ou1 = OU.create(LdapNameUtil.parse("ou=alpha"), "alpha");
         val ou2 = OU.create(LdapNameUtil.parse("ou=beta"), "beta");
         val user1 = User.builder()
-                        .cn("alice")
                         .dn(LdapNameUtil.parse("cn=alice"))
+                        .cn("alice")
+                        .sn("little")
                         .build();
         val user2 = User.builder()
-                        .cn("bob")
                         .dn(LdapNameUtil.parse("cn=bob"))
+                        .cn("bob")
+                        .sn("smith")
                         .build();
         val entities = new ArrayList<LdapEntity>(Arrays.asList(ou2, user2, user1, ou1));
         given(currentLdapContainerSupplier.get()).willReturn(LdapEntityContainer.of(entities.stream()));

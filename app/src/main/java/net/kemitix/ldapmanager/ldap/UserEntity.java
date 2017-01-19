@@ -22,38 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager.ldap;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.java.Log;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
+import lombok.Setter;
+import net.kemitix.ldapmanager.domain.User;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
-import org.springframework.ldap.odm.annotations.Transient;
 
 import javax.naming.Name;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.logging.Level;
 
 /**
- * A user.
+ * LDAP Entity mapper for {@link User}.
  *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * @author Paul Campbell (paul.campbell@hubio.com)
  */
-@Log
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
+@Setter
 @Entry(objectClasses = {
         ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
 })
-public final class User implements LdapEntity {
+public class UserEntity {
 
     @Id
     private Name dn;
@@ -62,17 +49,27 @@ public final class User implements LdapEntity {
 
     private String sn;
 
-    @Transient
-    private final Set<Features> featureSet = EnumSet.of(Features.PASSWORD, Features.RENAME);
-
-    @Override
-    public String name() {
-        log.log(Level.FINEST, "name(): %1", cn);
-        return cn;
+    /**
+     * Convert the UserEntity into an immutable User.
+     *
+     * @return The immutable User.
+     */
+    final User fromLdap() {
+        return User.create(dn, cn, sn);
     }
 
-    @Override
-    public boolean hasFeature(final Features feature) {
-        return featureSet.contains(feature);
+    /**
+     * Convert a User into a UserEntity.
+     *
+     * @param user The user.
+     *
+     * @return The Entity.
+     */
+    static UserEntity from(final User user) {
+        final UserEntity userEntity = new UserEntity();
+        userEntity.setDn(user.getDn());
+        userEntity.setCn(user.getCn());
+        userEntity.setSn(user.getSn());
+        return userEntity;
     }
 }

@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
@@ -45,6 +47,8 @@ public class UserNavigationItemTest {
         user = User.builder()
                    .dn(LdapNameUtil.parse("cn=name"))
                    .cn(name)
+                   .sn("sn")
+                   .featureSet(Arrays.asList(Features.RENAME, Features.PASSWORD))
                    .build();
         userNavigationItem = UserNavigationItem.create(user, applicationEventPublisher);
     }

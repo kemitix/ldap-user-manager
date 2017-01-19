@@ -22,38 +22,66 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.domain;
 
-import net.kemitix.ldapmanager.domain.User;
 import org.immutables.value.Value;
 
 import javax.naming.Name;
 
 /**
- * Raised when the user want the change the {@link User} password.
+ * A User.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Value.Immutable
-public interface ChangePasswordRequestEvent {
+public interface User extends LdapEntity {
 
     /**
-     * Get the DN to change the password of.
+     * Get the CN name for the user.
      *
-     * @return The DN to change the password of.
+     * @return The CN attribute.
      */
-    Name getDn();
+    String getCn();
 
     /**
-     * Constructor.
+     * Get the SN name for the user.
      *
-     * @param dn The DN to change the password of.
-     *
-     * @return the event
+     * @return The SN attribute.
      */
-    static ChangePasswordRequestEvent create(final Name dn) {
-        return ImmutableChangePasswordRequestEvent.builder()
-                                                  .dn(dn)
-                                                  .build();
+    String getSn();
+
+    /**
+     * Return the name (CN attribute) of the User.
+     *
+     * @return The name.
+     */
+    default String name() {
+        return getCn();
+    }
+
+    /**
+     * Create a Builder.
+     *
+     * @return The Builder.
+     */
+    static ImmutableUser.Builder builder() {
+        return ImmutableUser.builder();
+    }
+
+    /**
+     * Create a new User that may be renamed.
+     *
+     * @param dn The DN of the user.
+     * @param cn The CN of the user.
+     * @param sn The SN of the user.
+     *
+     * @return The new User.
+     */
+    static User create(final Name dn, final String cn, final String sn) {
+        return User.builder()
+                   .dn(dn)
+                   .cn(cn)
+                   .sn(sn)
+                   .build();
     }
 }

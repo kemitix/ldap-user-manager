@@ -310,7 +310,9 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         val ou = NavigationItemFactory.create(OU.create(LdapNameUtil.empty(), "users"), applicationEventPublisher);
         val user = NavigationItemFactory.create(User.builder()
+                                                    .dn(LdapNameUtil.parse("cn=bob"))
                                                     .cn("bob")
+                                                    .sn("smith")
                                                     .build(), applicationEventPublisher);
         //then
         assertThat(ou.toString()).isEqualTo("[users]");

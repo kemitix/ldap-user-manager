@@ -43,11 +43,18 @@ public class DefaultRenameDnDialogTest {
     @Captor
     private ArgumentCaptor<String> stringArgumentCaptor;
 
+    private User user;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         dialog = new DefaultRenameDnDialog(textInputDialogFactory, validateNameNotEmpty);
         given(textInputDialogFactory.create(anyString(), any())).willReturn(textInputDialog);
+        user = User.builder()
+                   .dn(LdapNameUtil.parse("cn=bob,ou=users"))
+                   .cn("bob")
+                   .sn("smith")
+                   .build();
     }
 
     @Test
@@ -58,17 +65,14 @@ public class DefaultRenameDnDialogTest {
         //when
         dialog.getRenamedDn(dn);
         //then
-        then(textInputDialogFactory).should().create(stringArgumentCaptor.capture(), eq(validateNameNotEmpty));
+        then(textInputDialogFactory).should()
+                                    .create(stringArgumentCaptor.capture(), eq(validateNameNotEmpty));
         assertThat(stringArgumentCaptor.getValue()).isEqualTo("bob");
     }
 
     @Test
     public void shouldGetRenamedUserDnWhenCnChanges() throws Exception {
         //given
-        val user = User.builder()
-                       .dn(LdapNameUtil.parse("cn=bob,ou=users"))
-                       .cn("bob")
-                       .build();
         given(textInputDialogFactory.getInput(any(TextInputDialog.class))).willReturn("bobby");
         //when
         final Optional<Name> renamedUserDn = dialog.getRenamedDn(user.getDn());
@@ -79,10 +83,6 @@ public class DefaultRenameDnDialogTest {
     @Test
     public void shouldGetEmptyWhenNotChanged() throws Exception {
         //when
-        val user = User.builder()
-                       .dn(LdapNameUtil.parse("cn=bob,ou=users"))
-                       .cn("bob")
-                       .build();
         given(textInputDialogFactory.getInput(any(TextInputDialog.class))).willReturn("bob");
         //when
         final Optional<Name> renamedUserDn = dialog.getRenamedDn(user.getDn());
@@ -93,15 +93,10 @@ public class DefaultRenameDnDialogTest {
     @Test
     public void shouldDoNothingWhenCancelled() throws Exception {
         //when
-        val user = User.builder()
-                       .dn(LdapNameUtil.parse("cn=bob,ou=users"))
-                       .cn("bob")
-                       .build();
         given(textInputDialogFactory.getInput(any(TextInputDialog.class))).willReturn(null);
         //when
         final Optional<Name> renamedUserDn = dialog.getRenamedDn(user.getDn());
         //then
         assertThat(renamedUserDn).isEmpty();
-
     }
 }

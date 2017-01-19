@@ -31,6 +31,7 @@ import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.ldap.OUEntity;
+import net.kemitix.ldapmanager.ldap.UserEntity;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
 import org.junit.After;
@@ -63,6 +64,10 @@ import static org.mockito.Matchers.eq;
 @ActiveProfiles({"test"})
 public class CurrentContainerChangedEventIT {
 
+    public static final String CN = "bob";
+
+    public static final String SN = "smith";
+
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
@@ -89,15 +94,21 @@ public class CurrentContainerChangedEventIT {
 
     private Name userDn;
 
+    private UserEntity userEntity;
+
     @Before
     public void setUp() {
         ldapName = LdapNameUtil.parse("ou=new");
         ouDn = LdapNameUtil.parse("ou=users");
-        userDn = LdapNameUtil.parse("cn=bob");
+        userDn = LdapNameUtil.parse("cn=" + CN);
         currentContainer.setDn(ldapName);
         ouEntity = new OUEntity();
         ouEntity.setDn(ouDn);
         ouEntity.setOu("users");
+        userEntity = new UserEntity();
+        userEntity.setDn(userDn);
+        userEntity.setCn(CN);
+        userEntity.setSn(SN);
     }
 
     @After
@@ -120,10 +131,11 @@ public class CurrentContainerChangedEventIT {
         val ou = OU.create(ouDn, "users");
         val user = User.builder()
                        .dn(userDn)
-                       .cn("bob")
+                       .cn(CN)
+                       .sn(SN)
                        .build();
         given(ldapTemplate.find(anyObject(), eq(OUEntity.class))).willReturn(Collections.singletonList(ouEntity));
-        given(ldapTemplate.find(anyObject(), eq(User.class))).willReturn(Collections.singletonList(user));
+        given(ldapTemplate.find(anyObject(), eq(UserEntity.class))).willReturn(Collections.singletonList(userEntity));
         //when
         eventPublisher.publishEvent(CurrentContainerChangedEvent.of(ldapName));
         //then

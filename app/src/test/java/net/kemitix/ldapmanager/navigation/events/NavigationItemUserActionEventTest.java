@@ -2,6 +2,7 @@ package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,6 +23,9 @@ public class NavigationItemUserActionEventTest {
     public void shouldCreateEventAndGetUserBackOut() throws Exception {
         //given
         val user = User.builder()
+                       .dn(LdapNameUtil.parse("cn=bob"))
+                       .cn("bob")
+                       .sn("smith")
                        .build();
         //when
         val event = NavigationItemUserActionEvent.of(user);
