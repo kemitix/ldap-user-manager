@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
@@ -32,7 +33,6 @@ import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
  */
 @Log
 @Component
+@RequiredArgsConstructor
 class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
 
     private static final String PARENT = "..";
@@ -59,23 +60,6 @@ class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
     private final CurrentContainer currentContainer;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param currentLdapContainerSupplier The supplier of the node for the current LdapEntityContainer.
-     * @param currentContainer             The Current Container.
-     * @param applicationEventPublisher    The Application Event Publisher
-     */
-    @Autowired
-    NavigationItemsSupplier(
-            final Supplier<LdapEntityContainer> currentLdapContainerSupplier, final CurrentContainer currentContainer,
-            final ApplicationEventPublisher applicationEventPublisher
-                           ) {
-        this.currentLdapContainerSupplier = currentLdapContainerSupplier;
-        this.currentContainer = currentContainer;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     /**
      * An list of navigation items for the current container.

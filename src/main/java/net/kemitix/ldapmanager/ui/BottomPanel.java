@@ -29,13 +29,13 @@ import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.KeyStrokeHandlerUpdateEvent;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -51,23 +51,13 @@ import java.util.stream.Collectors;
  */
 @Log
 @Component
+@RequiredArgsConstructor
 class BottomPanel extends Panel {
 
     @Getter
-    private final Label statusBarLabel;
+    private final Label statusBarLabel = new Label("");
 
     private final KeyStrokeHandlers keyStrokeHandlers;
-
-    /**
-     * Constructor.
-     *
-     * @param keyStrokeHandlers The Keystroke handlers
-     */
-    @Autowired
-    BottomPanel(final KeyStrokeHandlers keyStrokeHandlers) {
-        this.keyStrokeHandlers = keyStrokeHandlers;
-        statusBarLabel = new Label("");
-    }
 
     /**
      * Initializer.

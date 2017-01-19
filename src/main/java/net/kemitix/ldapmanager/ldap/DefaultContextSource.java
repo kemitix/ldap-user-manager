@@ -24,7 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.support.DirContextSource;
@@ -39,23 +39,12 @@ import javax.annotation.PostConstruct;
  */
 @Profile("!test")
 @Component
+@RequiredArgsConstructor
 class DefaultContextSource extends DirContextSource implements ContextSource {
 
     private final LdapOptions ldapOptions;
 
     private final LdapCredentials ldapCredentials;
-
-    /**
-     * Constructor.
-     *
-     * @param ldapOptions     The LDAP Options.
-     * @param ldapCredentials The LDAP Credentials.
-     */
-    @Autowired
-    DefaultContextSource(final LdapOptions ldapOptions, final LdapCredentials ldapCredentials) {
-        this.ldapOptions = ldapOptions;
-        this.ldapCredentials = ldapCredentials;
-    }
 
     /**
      * Initializer.

@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.events.LogMessageAddedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -39,20 +40,12 @@ import java.util.stream.Stream;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class DefaultLogMessages implements LogMessages {
 
     private final Collection<String> messages = new ArrayList<>();
 
     private final ApplicationEventPublisher eventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param eventPublisher The event publisher
-     */
-    DefaultLogMessages(final ApplicationEventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
-    }
 
     /**
      * Initializer.

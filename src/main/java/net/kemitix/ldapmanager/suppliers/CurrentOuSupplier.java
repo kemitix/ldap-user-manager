@@ -24,8 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.suppliers;
 
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.state.CurrentContainer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Supplier;
@@ -36,19 +36,10 @@ import java.util.function.Supplier;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class CurrentOuSupplier implements Supplier<String> {
 
     private final CurrentContainer currentContainer;
-
-    /**
-     * Constructor.
-     *
-     * @param currentContainer The current container
-     */
-    @Autowired
-    CurrentOuSupplier(final CurrentContainer currentContainer) {
-        this.currentContainer = currentContainer;
-    }
 
     @Override
     public String get() {

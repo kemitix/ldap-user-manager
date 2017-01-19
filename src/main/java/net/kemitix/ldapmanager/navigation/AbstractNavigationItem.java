@@ -24,7 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 /**
@@ -33,17 +35,9 @@ import lombok.extern.java.Log;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Log
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 abstract class AbstractNavigationItem implements NavigationItem {
 
     @Getter
     private final String name;
-
-    /**
-     * Constructor.
-     *
-     * @param name           The name.
-     */
-    protected AbstractNavigationItem(final String name) {
-        this.name = name;
-    }
 }

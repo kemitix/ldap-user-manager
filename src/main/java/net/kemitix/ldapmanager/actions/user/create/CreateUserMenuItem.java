@@ -24,6 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.create;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -34,6 +36,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 final class CreateUserMenuItem implements MenuItem {
 
     private static final String LABEL = "Create User";
@@ -41,11 +44,6 @@ final class CreateUserMenuItem implements MenuItem {
     private final Name dn;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    private CreateUserMenuItem(final Name dn, final ApplicationEventPublisher applicationEventPublisher) {
-        this.dn = dn;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     @Override
     public String getLabel() {

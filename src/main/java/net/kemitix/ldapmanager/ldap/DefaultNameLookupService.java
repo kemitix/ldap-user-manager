@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,7 +33,6 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
 import javax.naming.NamingException;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,24 +42,12 @@ import java.util.Set;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Service
+@RequiredArgsConstructor
 class DefaultNameLookupService implements NameLookupService {
 
     private final LdapTemplate ldapTemplate;
 
     private final Set<PreCheckContextMapper<? extends LdapEntity>> contextMappers;
-
-    /**
-     * Constructor.
-     *
-     * @param ldapTemplate   The LDAP Template.
-     * @param contextMappers The Context Mappers for LdapEntity objects.
-     */
-    DefaultNameLookupService(
-            final LdapTemplate ldapTemplate, final Set<PreCheckContextMapper<? extends LdapEntity>> contextMappers
-                            ) {
-        this.ldapTemplate = ldapTemplate;
-        this.contextMappers = new HashSet<>(contextMappers);
-    }
 
     @Cacheable
     @Override

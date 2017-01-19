@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.popupmenus.insert;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import org.springframework.context.ApplicationEventPublisher;
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Component;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class InsertKeyStrokeHandler implements KeyStrokeHandler {
 
     private static final String DESCRIPTION = "Insert";
@@ -48,19 +50,6 @@ class InsertKeyStrokeHandler implements KeyStrokeHandler {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     private final CurrentContainer currentContainer;
-
-    /**
-     * Constructor.
-     *
-     * @param applicationEventPublisher The Application Event Publisher.
-     * @param currentContainer          The Current Container.
-     */
-    InsertKeyStrokeHandler(
-            final ApplicationEventPublisher applicationEventPublisher, final CurrentContainer currentContainer
-                          ) {
-        this.applicationEventPublisher = applicationEventPublisher;
-        this.currentContainer = currentContainer;
-    }
 
     @Override
     public final boolean isActive() {

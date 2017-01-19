@@ -26,7 +26,7 @@ package net.kemitix.ldapmanager.actions.user.password;
 
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -37,6 +37,7 @@ import java.util.Optional;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class DefaultPasswordDialog implements PasswordDialog {
 
     private static final String TITLE = "Change Password";
@@ -44,16 +45,6 @@ class DefaultPasswordDialog implements PasswordDialog {
     private static final String INITIAL_CONTENT = "";
 
     private final WindowBasedTextGUI gui;
-
-    /**
-     * Constructor.
-     *
-     * @param gui The GUI to display the dialog.
-     */
-    @Autowired
-    DefaultPasswordDialog(final WindowBasedTextGUI gui) {
-        this.gui = gui;
-    }
 
     @Override
     public final Optional<String> getPassword(final String description) {

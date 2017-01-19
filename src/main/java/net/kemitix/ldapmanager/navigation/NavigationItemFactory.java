@@ -24,6 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
@@ -37,10 +39,9 @@ import java.util.logging.Level;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Log
+@SuppressWarnings("hideutilityclassconstructor")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NavigationItemFactory {
-
-    private NavigationItemFactory() {
-    }
 
     /**
      * Create an OuNavigationItem.

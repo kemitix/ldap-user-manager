@@ -24,8 +24,10 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation.events;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 
@@ -38,6 +40,7 @@ import java.util.logging.Level;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Log
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NavigationItemUserSelectedEvent {
 
     @Getter
@@ -45,17 +48,6 @@ public final class NavigationItemUserSelectedEvent {
 
     @Getter
     private final Name dn;
-
-    /**
-     * Create a new ApplicationEvent.
-     *
-     * @param userNavigationItem the object on which the event initially occurred (never {@code null})
-     */
-    private NavigationItemUserSelectedEvent(final UserNavigationItem userNavigationItem) {
-        this.userNavigationItem = userNavigationItem;
-        dn = userNavigationItem.getUser()
-                     .getDn();
-    }
 
     /**
      * Creates a new NavigationItemOuSelectedEvent.
@@ -66,6 +58,7 @@ public final class NavigationItemUserSelectedEvent {
      */
     public static NavigationItemUserSelectedEvent of(@NonNull final UserNavigationItem userNavigationItem) {
         log.log(Level.FINEST, "of(%s)", userNavigationItem);
-        return new NavigationItemUserSelectedEvent(userNavigationItem);
+        return new NavigationItemUserSelectedEvent(userNavigationItem, userNavigationItem.getUser()
+                                                                                         .getDn());
     }
 }

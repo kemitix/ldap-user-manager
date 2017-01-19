@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.password;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
@@ -44,24 +45,12 @@ import java.util.stream.Stream;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class ChangePasswordMenuItemFactory implements MenuItemFactory {
 
     private final NameLookupService nameLookupService;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param nameLookupService         The Name Lookup Service.
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    ChangePasswordMenuItemFactory(
-            final NameLookupService nameLookupService, final ApplicationEventPublisher applicationEventPublisher
-                                 ) {
-        this.nameLookupService = nameLookupService;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     @Override
     public final Stream<MenuItem> create(final Name dn, final MenuItemReceiver menu) {

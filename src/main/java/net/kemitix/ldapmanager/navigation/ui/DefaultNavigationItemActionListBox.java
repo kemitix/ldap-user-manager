@@ -30,6 +30,7 @@ import com.googlecode.lanterna.gui2.Interactable;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
@@ -38,7 +39,6 @@ import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.AbstractListenableListBox;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.ldap.AuthenticationException;
@@ -57,6 +57,7 @@ import java.util.logging.Level;
  */
 @Log
 @Component
+@RequiredArgsConstructor
 class DefaultNavigationItemActionListBox
         extends AbstractListenableListBox<NavigationItem, DefaultNavigationItemActionListBox>
         implements NavigationItemActionListBox {
@@ -70,24 +71,6 @@ class DefaultNavigationItemActionListBox
     private final ApplicationEventPublisher applicationEventPublisher;
 
     private boolean publishOnSelectionChange;
-
-    /**
-     * Constructor.
-     *
-     * @param navigationItemSupplier     The Supplier for Navigation Items.
-     * @param startupExceptionsCollector The LDAP Server Status.
-     * @param applicationEventPublisher  The Application Event Publisher.
-     */
-    @Autowired
-    DefaultNavigationItemActionListBox(
-            final Supplier<List<NavigationItem>> navigationItemSupplier,
-            final StartupExceptionsCollector startupExceptionsCollector,
-            final ApplicationEventPublisher applicationEventPublisher
-                                      ) {
-        this.navigationItemSupplier = navigationItemSupplier;
-        this.startupExceptionsCollector = startupExceptionsCollector;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     /**
      * Initializer to load the initial container.

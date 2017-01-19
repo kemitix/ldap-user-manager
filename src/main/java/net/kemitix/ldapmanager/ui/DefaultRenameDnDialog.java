@@ -26,10 +26,10 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.naming.Name;
@@ -41,26 +41,12 @@ import java.util.Optional;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class DefaultRenameDnDialog implements RenameDnDialog {
 
     private final TextInputDialogFactory textInputDialogFactory;
 
     private final TextInputDialogResultValidator validateNameNotEmpty;
-
-    /**
-     * Constructor.
-     *
-     * @param textInputDialogFactory The Factory for creating and managing text input dialogs.
-     * @param validateNameNotEmpty   The Validator to ensure name is not empty.
-     */
-    @Autowired
-    DefaultRenameDnDialog(
-            final TextInputDialogFactory textInputDialogFactory,
-            final TextInputDialogResultValidator validateNameNotEmpty
-                         ) {
-        this.textInputDialogFactory = textInputDialogFactory;
-        this.validateNameNotEmpty = validateNameNotEmpty;
-    }
 
     /**
      * Prompt the used with a dialog to provide the new DN.

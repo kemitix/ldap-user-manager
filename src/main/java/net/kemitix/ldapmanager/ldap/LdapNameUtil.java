@@ -24,6 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ldap.support.LdapNameBuilder;
 
 import javax.naming.InvalidNameException;
@@ -35,13 +37,12 @@ import java.util.Optional;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@SuppressWarnings("hideutilityclassconstructor")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LdapNameUtil {
 
     private static final Name EMPTY = LdapNameBuilder.newInstance()
                                                      .build();
-
-    private LdapNameUtil() {
-    }
 
     /**
      * Returns the parent of the supplied name.

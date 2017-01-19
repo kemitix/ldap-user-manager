@@ -24,11 +24,11 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.suppliers;
 
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -41,25 +41,12 @@ import java.util.function.Supplier;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class CurrentLdapEntityContainerSupplier implements Supplier<LdapEntityContainer> {
 
     private final CurrentContainer currentContainer;
 
     private final LdapEntityContainerMap containerMap;
-
-    /**
-     * Constructor.
-     *
-     * @param currentContainer The current container.
-     * @param containerMap     The lookup map of LdapEntity containers.
-     */
-    @Autowired
-    CurrentLdapEntityContainerSupplier(
-            final CurrentContainer currentContainer, final LdapEntityContainerMap containerMap
-                                      ) {
-        this.currentContainer = currentContainer;
-        this.containerMap = containerMap;
-    }
 
     @Override
     public LdapEntityContainer get() {

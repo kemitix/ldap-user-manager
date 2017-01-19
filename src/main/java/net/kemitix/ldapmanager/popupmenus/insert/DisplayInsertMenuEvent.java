@@ -24,8 +24,10 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.popupmenus.insert;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.naming.Name;
 
@@ -34,14 +36,11 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DisplayInsertMenuEvent {
 
     @Getter
     private final Name dn;
-
-    private DisplayInsertMenuEvent(final Name dn) {
-        this.dn = dn;
-    }
 
     /**
      * Create a new DisplayInsertMenuEvent.

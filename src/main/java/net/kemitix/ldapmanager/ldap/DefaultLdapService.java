@@ -24,12 +24,12 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LogMessages;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.ldap.query.SearchScope;
@@ -45,23 +45,12 @@ import java.util.stream.Stream;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Service
+@RequiredArgsConstructor
 class DefaultLdapService implements LdapService {
 
     private final LdapTemplate ldapTemplate;
 
     private final LogMessages logMessages;
-
-    /**
-     * Constructor.
-     *
-     * @param ldapTemplate The LDAP Template.
-     * @param logMessages  The Log Messages
-     */
-    @Autowired
-    DefaultLdapService(final LdapTemplate ldapTemplate, final LogMessages logMessages) {
-        this.ldapTemplate = ldapTemplate;
-        this.logMessages = logMessages;
-    }
 
     @Override
     public final LdapEntityContainer getLdapEntityContainer(final Name dn) {

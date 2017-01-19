@@ -25,7 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.events;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Raised when the application wants to exit.
@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ApplicationExitRequestEvent extends DefaultDeniableRequestEvent {
 
     /**

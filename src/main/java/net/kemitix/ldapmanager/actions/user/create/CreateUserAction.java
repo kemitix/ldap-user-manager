@@ -24,10 +24,10 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.create;
 
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ui.CloseCenterFormEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.ldap.core.LdapTemplate;
@@ -42,24 +42,13 @@ import javax.naming.ldap.LdapName;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor
 @Component
 class CreateUserAction {
 
     private final LdapTemplate ldapTemplate;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param ldapTemplate              The LDAP Template.
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    @Autowired
-    CreateUserAction(final LdapTemplate ldapTemplate, final ApplicationEventPublisher applicationEventPublisher) {
-        this.ldapTemplate = ldapTemplate;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     /**
      * Listener for {@link CreateUserCommitEvent} to create the user in LDAP.

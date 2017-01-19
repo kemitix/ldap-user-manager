@@ -24,8 +24,10 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation.events;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 
@@ -34,14 +36,11 @@ import net.kemitix.ldapmanager.navigation.UserNavigationItem;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NavigationItemUserActionEvent {
 
     @Getter
     private final User user;
-
-    private NavigationItemUserActionEvent(final User user) {
-        this.user = user;
-    }
 
     /**
      * Create a new ApplicationEvent for when the User is opened.

@@ -24,7 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 
 /**
@@ -32,19 +34,11 @@ import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class KeyStrokeHandlerUpdateEvent {
 
     @Getter
     private final KeyStrokeHandler keyStrokeHandler;
-
-    /**
-     * Create a new ApplicationEvent.
-     *
-     * @param keyStrokeHandler the keystroke handler on which the event initially occurred (never {@code null})
-     */
-    private KeyStrokeHandlerUpdateEvent(final KeyStrokeHandler keyStrokeHandler) {
-        this.keyStrokeHandler = keyStrokeHandler;
-    }
 
     /**
      * Create a new KeyStrokeHandlerUpdateEvent.
