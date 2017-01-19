@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.log;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import org.springframework.stereotype.Component;
@@ -38,18 +39,10 @@ import java.util.Optional;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class LogPanelToggleKeyStrokeHandler implements KeyStrokeHandler {
 
     private final LogPanel logPanel;
-
-    /**
-     * Constructor.
-     *
-     * @param logPanel The Log Panel.
-     */
-    LogPanelToggleKeyStrokeHandler(final LogPanel logPanel) {
-        this.logPanel = logPanel;
-    }
 
     @Override
     public Optional<String> getPrompt() {
