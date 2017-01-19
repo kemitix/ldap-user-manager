@@ -118,9 +118,4 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     public boolean hasFeature(final Features feature) {
         return user.hasFeature(feature);
     }
-
-    @Override
-    public void removeFeature(final Features feature) {
-        user.removeFeature(feature);
-    }
 }

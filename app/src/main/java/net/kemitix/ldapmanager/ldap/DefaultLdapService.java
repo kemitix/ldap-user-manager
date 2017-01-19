@@ -26,7 +26,6 @@ package net.kemitix.ldapmanager.ldap;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LogMessages;
@@ -60,9 +59,10 @@ class DefaultLdapService implements LdapService {
                                     .searchScope(SearchScope.ONELEVEL)
                                     .where("objectclass")
                                     .isPresent();
-        val ouList = ldapTemplate.find(query, OU.class);
+        val ouList = ldapTemplate.find(query, OUEntity.class);
         val userList = ldapTemplate.find(query, User.class);
-        val ldapEntityContainer = LdapEntityContainer.of(Stream.of(ouList.stream(), userList.stream())
+        val ldapEntityContainer = LdapEntityContainer.of(Stream.of(ouList.stream()
+                                                                         .map(OUEntity::fromLdap), userList.stream())
                                                                .flatMap(Function.identity()));
         logMessages.add(String.format("Loaded container: %d OU(s) and %d user(s)", ouList.size(), userList.size()));
         return ldapEntityContainer;

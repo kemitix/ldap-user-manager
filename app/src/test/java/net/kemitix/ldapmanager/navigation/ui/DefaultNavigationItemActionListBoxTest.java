@@ -8,6 +8,7 @@ import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
@@ -306,9 +307,7 @@ public class DefaultNavigationItemActionListBoxTest {
     @Test
     public void shouldShowOusWithBraces() {
         //given
-        val ou = OU.builder()
-                   .ou("users")
-                   .build()
+        val ou = OU.create(LdapNameUtil.empty(), "users")
                    .asNavigationItem(applicationEventPublisher);
         val user = User.builder()
                        .cn("bob")
@@ -397,11 +396,6 @@ public class DefaultNavigationItemActionListBoxTest {
         @Override
         public boolean hasFeature(final Features feature) {
             return false;
-        }
-
-        @Override
-        public void removeFeature(final Features feature) {
-
         }
     }
 }

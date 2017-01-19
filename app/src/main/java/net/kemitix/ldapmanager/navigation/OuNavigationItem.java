@@ -116,9 +116,4 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     public boolean hasFeature(final Features feature) {
         return ou.hasFeature(feature);
     }
-
-    @Override
-    public void removeFeature(final Features feature) {
-        ou.removeFeature(feature);
-    }
 }

@@ -47,10 +47,7 @@ public class OuNavigationItemTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         name = "name";
-        ou = OU.builder()
-               .ou(name)
-               .dn(dn)
-               .build();
+        ou = OU.create(dn, name);
         ouNavigationItem = OuNavigationItem.create(ou, applicationEventPublisher);
     }
 
@@ -132,13 +129,5 @@ public class OuNavigationItemTest {
     @Test
     public void shouldNotHaveFeaturePassword() {
         assertThat(ouNavigationItem.hasFeature(Features.PASSWORD)).isFalse();
-    }
-
-    @Test
-    public void shouldRemoveFeature() {
-        //given
-        ouNavigationItem.removeFeature(Features.RENAME);
-        //then
-        assertThat(ouNavigationItem.hasFeature(Features.RENAME)).isFalse();
     }
 }

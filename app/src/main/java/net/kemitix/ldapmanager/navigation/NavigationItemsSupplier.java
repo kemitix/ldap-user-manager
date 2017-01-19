@@ -27,7 +27,6 @@ package net.kemitix.ldapmanager.navigation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.val;
-import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
@@ -88,11 +87,7 @@ class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
     }
 
     private NavigationItem createParentNavigationItem(final Name parentDn) {
-        val ou = OU.builder()
-                   .dn(parentDn)
-                   .ou(PARENT)
-                   .build();
-        ou.removeFeature(Features.RENAME);
-        return ou.asNavigationItem(applicationEventPublisher);
+        return OU.createNonRenamable(parentDn, PARENT)
+                 .asNavigationItem(applicationEventPublisher);
     }
 }

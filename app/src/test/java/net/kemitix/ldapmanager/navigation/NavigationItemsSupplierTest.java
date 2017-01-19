@@ -59,14 +59,8 @@ public class NavigationItemsSupplierTest {
         MockitoAnnotations.initMocks(this);
         navigationItemsSupplier =
                 new NavigationItemsSupplier(currentLdapContainerSupplier, currentContainer, eventPublisher);
-        usersOu = OU.builder()
-                    .dn(LdapNameUtil.parse("ou=users"))
-                    .ou("users")
-                    .build();
-        itUsersOu = OU.builder()
-                      .dn(LdapNameUtil.parse("ou=it,ou=users"))
-                      .ou("it")
-                      .build();
+        usersOu = OU.create(LdapNameUtil.parse("ou=users"), "users");
+        itUsersOu = OU.create(LdapNameUtil.parse("ou=it,ou=users"), "it");
         bobUsersUser = User.builder()
                            .dn(LdapNameUtil.parse("cn=bob,ou=users"))
                            .cn("bob")
@@ -150,14 +144,8 @@ public class NavigationItemsSupplierTest {
     @Test
     public void shouldSortByOusThenByUsers() {
         //given
-        val ou1 = OU.builder()
-                    .ou("alpha")
-                    .dn(LdapNameUtil.parse("ou=alpha"))
-                    .build();
-        val ou2 = OU.builder()
-                    .ou("beta")
-                    .dn(LdapNameUtil.parse("ou=beta"))
-                    .build();
+        val ou1 = OU.create(LdapNameUtil.parse("ou=alpha"), "alpha");
+        val ou2 = OU.create(LdapNameUtil.parse("ou=beta"), "beta");
         val user1 = User.builder()
                         .cn("alice")
                         .dn(LdapNameUtil.parse("cn=alice"))

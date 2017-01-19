@@ -28,6 +28,7 @@ import net.kemitix.ldapmanager.navigation.NavigationItem;
 import org.springframework.context.ApplicationEventPublisher;
 
 import javax.naming.Name;
+import java.util.Set;
 
 /**
  * Common interface for LDAP Entities.
@@ -60,4 +61,22 @@ public interface LdapEntity extends FeatureSet {
      * @return the DN
      */
     Name getDn();
+
+    /**
+     * Returns the set of features supported by the object.
+     *
+     * @return The Set of Features.
+     */
+    Set<Features> getFeatureSet();
+
+    /**
+     * Checks if the entity supports the feature.
+     *
+     * @param feature The Feature to check for.
+     *
+     * @return True if the feature is supported.
+     */
+    default boolean hasFeature(final Features feature) {
+        return getFeatureSet().contains(feature);
+    }
 }

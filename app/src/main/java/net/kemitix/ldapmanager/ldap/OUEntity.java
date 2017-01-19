@@ -22,21 +22,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.domain;
+package net.kemitix.ldapmanager.ldap;
+
+import lombok.Setter;
+import net.kemitix.ldapmanager.domain.OU;
+import org.springframework.ldap.odm.annotations.Entry;
+import org.springframework.ldap.odm.annotations.Id;
+
+import javax.naming.Name;
 
 /**
- * Represents a set of features.
+ * LDAP Entity mapper for {@link OU}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public interface FeatureSet {
+@Setter
+@Entry(objectClasses = {ObjectClass.ORGANIZATIONAL_UNIT, ObjectClass.TOP})
+public class OUEntity {
+
+    @Id
+    private Name dn;
+
+    private String ou;
 
     /**
-     * Checks if a feature is present.
+     * Convert the OUEntity into an immutable OU.
      *
-     * @param feature The Feature to check for.
-     *
-     * @return true if the feature is present, otherwise false.
+     * @return The immutable OU.
      */
-    boolean hasFeature(Features feature);
+    final OU fromLdap() {
+        return OU.create(dn, ou);
+    }
 }

@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for {@link SelectionChangeListener}.
@@ -57,8 +58,7 @@ public class SelectionChangeListenerTest {
     @Test
     public void shouldOnOuSelected() throws Exception {
         //given
-        val ou = OU.builder()
-                   .build();
+        val ou = mock(OU.class);
         val ouItem = OuNavigationItem.create(ou, applicationEventPublisher);
         val event = NavigationItemOuSelectedEvent.of(ouItem);
         //when

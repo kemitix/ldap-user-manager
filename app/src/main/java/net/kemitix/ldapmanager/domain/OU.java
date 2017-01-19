@@ -24,64 +24,80 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.java.Log;
-import net.kemitix.ldapmanager.ldap.ObjectClass;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.NavigationItemFactory;
+import org.immutables.value.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
-import org.springframework.ldap.odm.annotations.Transient;
 
 import javax.naming.Name;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.logging.Level;
+import java.util.Collections;
 
 /**
  * An Organizational Unit.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Log
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Entry(objectClasses = {ObjectClass.ORGANIZATIONAL_UNIT, ObjectClass.TOP})
-public final class OU implements LdapEntity {
+@Value.Immutable
+public interface OU extends LdapEntity {
 
-    @Id
-    private Name dn;
+    /**
+     * Get the OU name for the container.
+     *
+     * @return The OU attribute.
+     */
+    String getOu();
 
-    private String ou;
-
-    @Transient
-    private final Set<Features> featureSet = EnumSet.of(Features.RENAME);
-
-    @Override
-    public String name() {
-        log.log(Level.FINEST, "name(): %1", ou);
-        return ou;
+    /**
+     * Create a new OU container that may be renamed.
+     *
+     * @param dn The DN of the container.
+     * @param ou The OU of the container.
+     *
+     * @return The new OU container.
+     */
+    static OU create(final Name dn, final String ou) {
+        return ImmutableOU.builder()
+                          .dn(dn)
+                          .ou(ou)
+                          .featureSet(Collections.singletonList(Features.RENAME))
+                          .build();
     }
 
-    @Override
-    public NavigationItem asNavigationItem(final ApplicationEventPublisher eventPublisher) {
+    /**
+     * Create a new OU container that may not be renamed.
+     *
+     * @param dn The DN of the container.
+     * @param ou The OU of the container.
+     *
+     * @return The new OU container.
+     */
+    static OU createNonRenamable(final Name dn, final String ou) {
+        return ImmutableOU.builder()
+                          .dn(dn)
+                          .ou(ou)
+                          .build();
+    }
+
+    /**
+     * Return the name (OU attribute) of the OU.
+     *
+     * @return The name.
+     */
+    default String name() {
+        return getOu();
+    }
+
+    /**
+     * Convert the OU into the a Navigation Item.
+     *
+     * @param eventPublisher The Application Event Publisher
+     *
+     * @return The Navigation Item.
+     *
+     * @deprecated Should be replaced by a Converter implementation.
+     */
+    @Deprecated
+    default NavigationItem asNavigationItem(final ApplicationEventPublisher eventPublisher) {
         return NavigationItemFactory.create(this, eventPublisher);
-    }
-
-    @Override
-    public boolean hasFeature(final Features feature) {
-        return featureSet.contains(feature);
-    }
-
-    @Override
-    public void removeFeature(final Features feature) {
-        featureSet.remove(feature);
     }
 }

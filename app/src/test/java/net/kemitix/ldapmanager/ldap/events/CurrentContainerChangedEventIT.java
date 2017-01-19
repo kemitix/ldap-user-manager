@@ -30,6 +30,7 @@ import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
+import net.kemitix.ldapmanager.ldap.OUEntity;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;
 import org.junit.After;
@@ -45,6 +46,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.naming.Name;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -81,10 +83,21 @@ public class CurrentContainerChangedEventIT {
 
     private Name ldapName;
 
+    private Name ouDn;
+
+    private OUEntity ouEntity;
+
+    private Name userDn;
+
     @Before
     public void setUp() {
         ldapName = LdapNameUtil.parse("ou=new");
+        ouDn = LdapNameUtil.parse("ou=users");
+        userDn = LdapNameUtil.parse("cn=bob");
         currentContainer.setDn(ldapName);
+        ouEntity = new OUEntity();
+        ouEntity.setDn(ouDn);
+        ouEntity.setOu("users");
     }
 
     @After
@@ -104,18 +117,21 @@ public class CurrentContainerChangedEventIT {
     @Test
     public void shouldLoadContainerObjects() throws InterruptedException {
         //given
-        val ou = OU.builder()
-                   .ou("users")
-                   .build();
+        val ou = OU.create(ouDn, "users");
         val user = User.builder()
+                       .dn(userDn)
                        .cn("bob")
                        .build();
-        given(ldapTemplate.find(anyObject(), eq(OU.class))).willReturn(Collections.singletonList(ou));
+        given(ldapTemplate.find(anyObject(), eq(OUEntity.class))).willReturn(Collections.singletonList(ouEntity));
         given(ldapTemplate.find(anyObject(), eq(User.class))).willReturn(Collections.singletonList(user));
         //when
         eventPublisher.publishEvent(CurrentContainerChangedEvent.of(ldapName));
         //then
-        val ldapEntityContainer = ldapEntityContainerMap.get(ldapName);
-        assertThat(ldapEntityContainer.getContents()).containsExactlyInAnyOrder(ou, user);
+        val result = ldapEntityContainerMap.get(ldapName)
+                                           .getContents()
+                                           .collect(Collectors.toList());
+        assertThat(result).hasSize(2);
+        assertThat(result.get(0)).isEqualTo(ou);
+        assertThat(result.get(1)).isEqualTo(user);
     }
 }

@@ -127,12 +127,4 @@ public class UserNavigationItemTest {
     public void shouldHaveFeaturePassword() {
         assertThat(userNavigationItem.hasFeature(Features.PASSWORD)).isTrue();
     }
-
-    @Test
-    public void shouldRemoveFeature() {
-        //given
-        userNavigationItem.removeFeature(Features.RENAME);
-        //then
-        assertThat(userNavigationItem.hasFeature(Features.RENAME)).isFalse();
-    }
 }

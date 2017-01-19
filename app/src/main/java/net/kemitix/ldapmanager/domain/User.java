@@ -83,9 +83,4 @@ public final class User implements LdapEntity {
     public boolean hasFeature(final Features feature) {
         return featureSet.contains(feature);
     }
-
-    @Override
-    public void removeFeature(final Features feature) {
-        featureSet.remove(feature);
-    }
 }

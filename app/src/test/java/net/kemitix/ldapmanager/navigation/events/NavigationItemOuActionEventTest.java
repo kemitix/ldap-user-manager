@@ -2,9 +2,12 @@ package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,11 +21,16 @@ public class NavigationItemOuActionEventTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    @Mock
+    private OU ou;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
     public void shouldCreateEventAndGetOuBackOut() {
-        //given
-        val ou = OU.builder()
-                   .build();
         //when
         val event = NavigationItemOuActionEvent.of(ou);
         //then

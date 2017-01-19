@@ -2,8 +2,8 @@ package net.kemitix.ldapmanager.state;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
-import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
+import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,9 +68,7 @@ public class DefaultCurrentContainerTest {
         val newDn = LdapNameUtil.parse("ou=new");
         container.setDn(oldDn);
         reset(eventPublisher);
-        val newOu = OU.builder()
-                      .dn(newDn)
-                      .build();
+        val newOu = OU.create(newDn, "users");
         //when
         container.onNavigationItemOuAction(NavigationItemOuActionEvent.of(newOu));
         //then
@@ -89,9 +87,7 @@ public class DefaultCurrentContainerTest {
         val dn = LdapNameUtil.parse("ou=users");
         container.setDn(dn);
         reset(eventPublisher);
-        val newOu = OU.builder()
-                      .dn(dn)
-                      .build();
+        val newOu = OU.create(dn, "users");
         //when
         container.onNavigationItemOuAction(NavigationItemOuActionEvent.of(newOu));
         //then

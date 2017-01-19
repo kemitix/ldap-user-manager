@@ -37,7 +37,9 @@ public class DefaultLdapServiceTest {
     @Mock
     private LogMessages logMessages;
 
-    private Name dn;
+    private Name ouDn;
+
+    private Name userDn;
 
     private OU ou;
 
@@ -50,27 +52,31 @@ public class DefaultLdapServiceTest {
     @Captor
     private ArgumentCaptor<ContainerExpiredEvent> eventArgumentCaptor;
 
+    private OUEntity ouEntity;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ldapService = new DefaultLdapService(ldapTemplate, logMessages);
+        ouDn = LdapNameUtil.empty();
+        userDn = LdapNameUtil.empty();
+        ouEntity = new OUEntity();
+        ouEntity.setDn(ouDn);
+        ouEntity.setOu("ou");
     }
 
     @Test
     public void shouldGetLdapEntityContainer() throws Exception {
         //given
-        dn = LdapNameUtil.empty();
-        ou = OU.builder()
-               .build();
         user = User.builder()
+                   .dn(userDn)
                    .build();
-        given(ldapTemplate.find(anyObject(), eq(OU.class))).willReturn(Collections.singletonList(ou));
+        given(ldapTemplate.find(anyObject(), eq(OUEntity.class))).willReturn(Collections.singletonList(ouEntity));
         given(ldapTemplate.find(anyObject(), eq(User.class))).willReturn(Collections.singletonList(user));
         //when
-        final LdapEntityContainer result = ldapService.getLdapEntityContainer(dn);
+        final LdapEntityContainer result = ldapService.getLdapEntityContainer(ouDn);
         //then
-        assertThat(result.getContents()).containsExactlyInAnyOrder(ou, user);
+        assertThat(result.getContents()).extracting("dn")
+                                        .containsExactlyInAnyOrder(ouDn, userDn);
     }
-
-
 }
