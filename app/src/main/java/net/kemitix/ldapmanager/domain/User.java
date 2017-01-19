@@ -31,9 +31,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.ldap.ObjectClass;
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import net.kemitix.ldapmanager.navigation.NavigationItemFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 import org.springframework.ldap.odm.annotations.Transient;
@@ -72,11 +69,6 @@ public final class User implements LdapEntity {
     public String name() {
         log.log(Level.FINEST, "name(): %1", cn);
         return cn;
-    }
-
-    @Override
-    public NavigationItem asNavigationItem(final ApplicationEventPublisher eventPublisher) {
-        return NavigationItemFactory.create(this, eventPublisher);
     }
 
     @Override

@@ -19,6 +19,7 @@
 
     <modules>
         <module>app</module>
+        <module>datatypes</module>
     </modules>
 
 </project>

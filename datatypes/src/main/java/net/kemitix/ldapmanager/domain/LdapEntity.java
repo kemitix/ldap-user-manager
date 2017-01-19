@@ -24,9 +24,6 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.domain;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import org.springframework.context.ApplicationEventPublisher;
-
 import javax.naming.Name;
 import java.util.Set;
 
@@ -45,15 +42,6 @@ public interface LdapEntity extends FeatureSet {
      * @return the name of the entity
      */
     String name();
-
-    /**
-     * Create a NavigationItem for this.
-     *
-     * @param eventPublisher The Application Event Publisher
-     *
-     * @return the navigation item
-     */
-    NavigationItem asNavigationItem(ApplicationEventPublisher eventPublisher);
 
     /**
      * Returns the DN attribute.

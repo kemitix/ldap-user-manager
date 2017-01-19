@@ -27,6 +27,7 @@ package net.kemitix.ldapmanager.navigation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import org.springframework.context.ApplicationEventPublisher;
@@ -67,5 +68,26 @@ public final class NavigationItemFactory {
     public static NavigationItem create(final User user, final ApplicationEventPublisher eventPublisher) {
         log.log(Level.FINEST, "create<User>(%s,...)", user.name());
         return UserNavigationItem.create(user, eventPublisher);
+    }
+
+    /**
+     * Create a NavigationItem.
+     *
+     * @param entity         The LDAP Entity.
+     * @param eventPublisher The Application Event Publisher.
+     *
+     * @return The user navigation item.
+     */
+    public static NavigationItem create(final LdapEntity entity, final ApplicationEventPublisher eventPublisher) {
+        // UGLY
+        if (entity instanceof OU) {
+            return create((OU) entity, eventPublisher);
+        }
+        if (entity instanceof User) {
+            return create((User) entity, eventPublisher);
+        }
+        throw new UnsupportedOperationException(String.format(
+                "Unknown LDAP Entity type: %s", entity.getClass()
+                                                      .getName()));
     }
 }

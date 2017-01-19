@@ -34,6 +34,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>net.kemitix</groupId>
+            <artifactId>ldap-user-manager-datatypes</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>

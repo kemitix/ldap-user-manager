@@ -10,6 +10,7 @@ import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
+import net.kemitix.ldapmanager.navigation.NavigationItemFactory;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
 import org.assertj.core.api.Assertions;
@@ -307,12 +308,10 @@ public class DefaultNavigationItemActionListBoxTest {
     @Test
     public void shouldShowOusWithBraces() {
         //given
-        val ou = OU.create(LdapNameUtil.empty(), "users")
-                   .asNavigationItem(applicationEventPublisher);
-        val user = User.builder()
-                       .cn("bob")
-                       .build()
-                       .asNavigationItem(applicationEventPublisher);
+        val ou = NavigationItemFactory.create(OU.create(LdapNameUtil.empty(), "users"), applicationEventPublisher);
+        val user = NavigationItemFactory.create(User.builder()
+                                                    .cn("bob")
+                                                    .build(), applicationEventPublisher);
         //then
         assertThat(ou.toString()).isEqualTo("[users]");
         assertThat(user.toString()).isEqualTo(" bob ");

@@ -24,10 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.domain;
 
-import net.kemitix.ldapmanager.navigation.NavigationItem;
-import net.kemitix.ldapmanager.navigation.NavigationItemFactory;
 import org.immutables.value.Value;
-import org.springframework.context.ApplicationEventPublisher;
 
 import javax.naming.Name;
 import java.util.Collections;
@@ -85,19 +82,5 @@ public interface OU extends LdapEntity {
      */
     default String name() {
         return getOu();
-    }
-
-    /**
-     * Convert the OU into the a Navigation Item.
-     *
-     * @param eventPublisher The Application Event Publisher
-     *
-     * @return The Navigation Item.
-     *
-     * @deprecated Should be replaced by a Converter implementation.
-     */
-    @Deprecated
-    default NavigationItem asNavigationItem(final ApplicationEventPublisher eventPublisher) {
-        return NavigationItemFactory.create(this, eventPublisher);
     }
 }

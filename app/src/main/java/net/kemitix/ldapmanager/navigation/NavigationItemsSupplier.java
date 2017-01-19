@@ -83,11 +83,10 @@ class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
     }
 
     private NavigationItem asNavigationItem(final LdapEntity ldapEntity) {
-        return ldapEntity.asNavigationItem(applicationEventPublisher);
+        return NavigationItemFactory.create(ldapEntity, applicationEventPublisher);
     }
 
     private NavigationItem createParentNavigationItem(final Name parentDn) {
-        return OU.createNonRenamable(parentDn, PARENT)
-                 .asNavigationItem(applicationEventPublisher);
+        return NavigationItemFactory.create(OU.createNonRenamable(parentDn, PARENT), applicationEventPublisher);
     }
 }
