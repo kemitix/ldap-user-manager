@@ -30,6 +30,7 @@ import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LayoutData;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,7 @@ import javax.annotation.PostConstruct;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class TopPanel extends Panel {
 
     private static final LayoutData FILL = LinearLayout.createLayoutData(LinearLayout.Alignment.Fill);
@@ -53,17 +55,6 @@ class TopPanel extends Panel {
     private final Label currentOuLabel;
 
     private final Label clockLabel;
-
-    /**
-     * Constructor.
-     *
-     * @param currentOuLabel The current OU label
-     * @param clockLabel     The clock label
-     */
-    TopPanel(final Label currentOuLabel, final Label clockLabel) {
-        this.currentOuLabel = currentOuLabel;
-        this.clockLabel = clockLabel;
-    }
 
     /**
      * Initializer.
