@@ -24,6 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation.events;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 
@@ -36,17 +38,12 @@ import java.util.logging.Level;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Log
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NavigationItemSelectionChangedEvent {
 
     private final NavigationItem oldItem;
 
     private final NavigationItem newItem;
-
-
-    private NavigationItemSelectionChangedEvent(final NavigationItem oldItem, final NavigationItem newItem) {
-        this.oldItem = oldItem;
-        this.newItem = newItem;
-    }
 
     /**
      * Create a new ApplicationEvent for when the highlighted item in the Navigation Panel changes.
