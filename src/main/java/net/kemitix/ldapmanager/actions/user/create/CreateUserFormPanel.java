@@ -35,12 +35,12 @@ import com.googlecode.lanterna.gui2.LayoutData;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.TextBox;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.events.ApplicationExitRequestEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.ui.Focusable;
 import net.kemitix.ldapmanager.ui.FormContainer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -54,6 +54,7 @@ import javax.naming.Name;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class CreateUserFormPanel extends Panel implements Focusable {
 
     private static final LayoutData LAYOUT_TEXT_FIELD =
@@ -80,23 +81,6 @@ class CreateUserFormPanel extends Panel implements Focusable {
 
     @Getter
     private TextBox snTextBox;
-
-    /**
-     * Constructor.
-     *
-     * @param formContainer             The Central Panel.
-     * @param logMessages               The Log Messages.
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    @Autowired
-    CreateUserFormPanel(
-            final FormContainer formContainer, final LogMessages logMessages,
-            final ApplicationEventPublisher applicationEventPublisher
-                       ) {
-        this.formContainer = formContainer;
-        this.logMessages = logMessages;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     /**
      * Initializer.
