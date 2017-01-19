@@ -38,8 +38,10 @@ public class RenameActionTest {
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Mock
     private Name oldDn;
 
+    @Mock
     private Name newDn;
 
     @Captor

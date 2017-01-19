@@ -24,9 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.rename;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.immutables.value.Value;
 
 import javax.naming.Name;
 
@@ -35,11 +33,15 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RenameRequestEvent {
+@Value.Immutable
+public interface RenameRequestEvent {
 
-    @Getter
-    private final Name dn;
+    /**
+     * The DN to be renamed.
+     *
+     * @return the DN.
+     */
+    Name getDn();
 
     /**
      * Create new RenameRequestEvent.
@@ -48,7 +50,9 @@ public final class RenameRequestEvent {
      *
      * @return the event.
      */
-    public static RenameRequestEvent create(final Name dn) {
-        return new RenameRequestEvent(dn);
+    static RenameRequestEvent create(final Name dn) {
+        return ImmutableRenameRequestEvent.builder()
+                                          .dn(dn)
+                                          .build();
     }
 }

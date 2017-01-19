@@ -1,9 +1,9 @@
 package net.kemitix.ldapmanager.navigation;
 
+import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
-import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.junit.Before;
@@ -13,6 +13,8 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
+
+import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
@@ -35,6 +37,9 @@ public class OuNavigationItemTest {
 
     private String name;
 
+    @Mock
+    private Name dn;
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -44,6 +49,7 @@ public class OuNavigationItemTest {
         name = "name";
         ou = OU.builder()
                .ou(name)
+               .dn(dn)
                .build();
         ouNavigationItem = OuNavigationItem.create(ou, applicationEventPublisher);
     }
