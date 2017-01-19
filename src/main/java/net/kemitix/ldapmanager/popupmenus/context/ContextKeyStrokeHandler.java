@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.popupmenus.context;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
@@ -38,6 +39,7 @@ import org.springframework.stereotype.Component;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class ContextKeyStrokeHandler implements KeyStrokeHandler {
 
     private static final String DESCRIPTION = "Menu";
@@ -49,20 +51,6 @@ class ContextKeyStrokeHandler implements KeyStrokeHandler {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     private final NavigationItemActionListBox navigationItemActionListBox;
-
-    /**
-     * Constructor.
-     *
-     * @param applicationEventPublisher   The Application Event Publisher.
-     * @param navigationItemActionListBox The Navigation Item Action List Box.
-     */
-    ContextKeyStrokeHandler(
-            final ApplicationEventPublisher applicationEventPublisher,
-            final NavigationItemActionListBox navigationItemActionListBox
-                           ) {
-        this.applicationEventPublisher = applicationEventPublisher;
-        this.navigationItemActionListBox = navigationItemActionListBox;
-    }
 
     @Override
     public final boolean isActive() {
