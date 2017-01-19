@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.rename;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ui.RenameDnDialog;
@@ -35,10 +36,11 @@ import org.springframework.stereotype.Component;
 import javax.naming.Name;
 
 /**
- * .
+ * Action for renaming an LdapEntity.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor
 @Component
 class RenameAction {
 
@@ -47,22 +49,6 @@ class RenameAction {
     private final LdapTemplate ldapTemplate;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param renameDnDialog            The Dialog to get the new name.
-     * @param ldapTemplate              The LDAP Template.
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    RenameAction(
-            final RenameDnDialog renameDnDialog, final LdapTemplate ldapTemplate,
-            final ApplicationEventPublisher applicationEventPublisher
-                ) {
-        this.renameDnDialog = renameDnDialog;
-        this.ldapTemplate = ldapTemplate;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     /**
      * Listener for {@link RenameRequestEvent} to display the rename dialog and update the LDAP server.
