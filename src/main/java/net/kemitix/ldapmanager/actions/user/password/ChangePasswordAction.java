@@ -24,10 +24,10 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.password;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.val;
 import net.kemitix.ldapmanager.state.LogMessages;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -44,6 +44,7 @@ import java.util.logging.Level;
  */
 @Log
 @Component
+@RequiredArgsConstructor
 class ChangePasswordAction {
 
     private static final String PROMPT1 = "Enter the new password";
@@ -58,25 +59,6 @@ class ChangePasswordAction {
     private final LdapTemplate ldapTemplate;
 
     private final LogMessages logMessages;
-
-    /**
-     * Constructor.
-     *
-     * @param passwordDialog  The Dialog to display to get the new password.
-     * @param passwordEncoder The password encoder.
-     * @param ldapTemplate    The LDAP Template
-     * @param logMessages     The Log Messages.
-     */
-    @Autowired
-    ChangePasswordAction(
-            final PasswordDialog passwordDialog, final PasswordEncoder passwordEncoder, final LdapTemplate ldapTemplate,
-            final LogMessages logMessages
-                        ) {
-        this.passwordDialog = passwordDialog;
-        this.passwordEncoder = passwordEncoder;
-        this.ldapTemplate = ldapTemplate;
-        this.logMessages = logMessages;
-    }
 
     /**
      * Listener for {@link ChangePasswordRequestEvent} to prompt the user for the new password and to then update the
