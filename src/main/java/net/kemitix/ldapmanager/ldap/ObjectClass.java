@@ -24,11 +24,16 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 /**
  * LDAP ObjectClasses.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@SuppressWarnings("hideutilityclassconstructor")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ObjectClass {
 
     public static final String TOP = "top";
@@ -40,7 +45,4 @@ public final class ObjectClass {
     public static final String ORGANIZATIONAL_PERSON = "organizationalPerson";
 
     public static final String INET_ORG_PERSON = "inetOrgPerson";
-
-    private ObjectClass() {
-    }
 }
