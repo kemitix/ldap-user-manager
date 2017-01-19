@@ -28,13 +28,13 @@ import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.LdapUserManagerException;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.apache.commons.lang.WordUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
@@ -52,6 +52,7 @@ import java.util.logging.Level;
 @Log
 @Profile("default")
 @Component
+@RequiredArgsConstructor
 class LanternaUi implements CommandLineRunner {
 
     private static final String NEWLINE = System.getProperty("line.separator");
@@ -67,30 +68,6 @@ class LanternaUi implements CommandLineRunner {
     private final MessageDialogBuilder messageDialogBuilder;
 
     private final StartupExceptionsCollector startupExceptionsCollector;
-
-    /**
-     * Constructor.
-     *
-     * @param logMessages                The Log Messages
-     * @param mainWindow                 The main UI windows
-     * @param gui                        The Lanterna UI
-     * @param eventPublisher             The Application Event Publisher
-     * @param messageDialogBuilder       The Message Dialog Builder
-     * @param startupExceptionsCollector The LDAP Server Status.
-     */
-    @Autowired
-    LanternaUi(
-            final LogMessages logMessages, final BasicWindow mainWindow, final WindowBasedTextGUI gui,
-            final ApplicationEventPublisher eventPublisher, final MessageDialogBuilder messageDialogBuilder,
-            final StartupExceptionsCollector startupExceptionsCollector
-              ) {
-        this.logMessages = logMessages;
-        this.mainWindow = mainWindow;
-        this.gui = gui;
-        this.eventPublisher = eventPublisher;
-        this.messageDialogBuilder = messageDialogBuilder;
-        this.startupExceptionsCollector = startupExceptionsCollector;
-    }
 
     /**
      * Display the Lanterna UI.
