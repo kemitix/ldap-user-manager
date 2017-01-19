@@ -30,9 +30,9 @@ import com.googlecode.lanterna.gui2.LayoutData;
 import com.googlecode.lanterna.gui2.LayoutManager;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +44,7 @@ import javax.annotation.PostConstruct;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class MainPanel extends Panel {
 
     private static final LayoutData FILL = LinearLayout.createLayoutData(LinearLayout.Alignment.Fill);
@@ -59,27 +60,6 @@ class MainPanel extends Panel {
     private final LayoutManager layoutManager = new BorderLayout();
 
     private final Panel centerPanel;
-
-    /**
-     * Constructor.
-     *
-     * @param topPanel        The top panel
-     * @param bottomPanel     The bottom panel
-     * @param navigationPanel The navigation panel
-     * @param logPanel        The log panel
-     * @param centerPanel     The center panel
-     */
-    @Autowired
-    MainPanel(
-            final Panel topPanel, final Panel bottomPanel, final AbstractFocusablePanel navigationPanel,
-            final Panel logPanel, final AbstractFocusablePanel centerPanel
-             ) {
-        this.topPanel = topPanel;
-        this.bottomPanel = bottomPanel;
-        this.navigationPanel = navigationPanel;
-        this.logPanel = logPanel;
-        this.centerPanel = centerPanel;
-    }
 
     /**
      * Initializer.
