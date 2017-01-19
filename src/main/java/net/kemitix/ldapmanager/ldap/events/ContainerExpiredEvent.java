@@ -24,7 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap.events;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 
 import javax.naming.Name;
@@ -39,14 +41,11 @@ import java.util.stream.Collectors;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ContainerExpiredEvent {
 
     @Getter
     private final Set<Name> containers;
-
-    private ContainerExpiredEvent(final Set<Name> containers) {
-        this.containers = containers;
-    }
 
     /**
      * Create new {@link ContainerExpiredEvent} to indicate that the application needs to reload the
