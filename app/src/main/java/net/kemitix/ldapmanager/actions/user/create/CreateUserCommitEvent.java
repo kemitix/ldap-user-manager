@@ -24,9 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.create;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.immutables.value.Value;
 
 import javax.naming.Name;
 
@@ -35,28 +33,44 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-final class CreateUserCommitEvent {
+@Value.Immutable
+interface CreateUserCommitEvent {
 
-    @Getter
-    private final Name dn;
+    /**
+     * The DN of the container where the new user should be created.
+     *
+     * @return The DN of the container.
+     */
+    Name getDn();
 
-    @Getter
-    private final String cn;
+    /**
+     * The CN (common name) attribute of the new user.
+     *
+     * @return The CN attribute.
+     */
+    String getCn();
 
-    @Getter
-    private final String sn;
+    /**
+     * The SN (surname) attribute of the new user.
+     *
+     * @return The SN attribute.
+     */
+    String getSn();
 
     /**
      * Create a new CreateUserCommitEvent.
      *
      * @param dn The DN of the container where the new user should be created.
      * @param cn The CN (common name) attribute of the new user.
-     * @param sn The SN (suname) attribute of the new user.
+     * @param sn The SN (surname) attribute of the new user.
      *
      * @return the event.
      */
-    public static CreateUserCommitEvent create(final Name dn, final String cn, final String sn) {
-        return new CreateUserCommitEvent(dn, cn, sn);
+    static CreateUserCommitEvent create(final Name dn, final String cn, final String sn) {
+        return ImmutableCreateUserCommitEvent.builder()
+                                             .dn(dn)
+                                             .cn(cn)
+                                             .sn(sn)
+                                             .build();
     }
 }
