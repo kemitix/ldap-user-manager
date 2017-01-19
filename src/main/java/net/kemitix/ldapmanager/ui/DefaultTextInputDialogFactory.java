@@ -29,7 +29,7 @@ import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialogResultValidator;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,19 +38,10 @@ import org.springframework.stereotype.Component;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class DefaultTextInputDialogFactory implements TextInputDialogFactory {
 
     private final WindowBasedTextGUI gui;
-
-    /**
-     * Constructor.
-     *
-     * @param gui The Gui to display the dialog
-     */
-    @Autowired
-    DefaultTextInputDialogFactory(final WindowBasedTextGUI gui) {
-        this.gui = gui;
-    }
 
     @Override
     public final String getInput(final TextInputDialog dialog) {
