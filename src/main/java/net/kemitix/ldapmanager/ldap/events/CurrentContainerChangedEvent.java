@@ -24,7 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ldap.events;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import javax.naming.Name;
 
@@ -33,19 +35,11 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CurrentContainerChangedEvent {
 
     @Getter
     private final Name newContainer;
-
-    /**
-     * Constructor.
-     *
-     * @param newContainer The name of the new container.
-     */
-    private CurrentContainerChangedEvent(final Name newContainer) {
-        this.newContainer = newContainer;
-    }
 
     /**
      * Creates a new {@link CurrentContainerChangedEvent}.
