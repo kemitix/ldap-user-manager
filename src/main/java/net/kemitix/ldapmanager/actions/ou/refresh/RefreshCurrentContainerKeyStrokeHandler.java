@@ -26,10 +26,10 @@ package net.kemitix.ldapmanager.actions.ou.refresh;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
 import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -39,25 +39,12 @@ import org.springframework.stereotype.Component;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class RefreshCurrentContainerKeyStrokeHandler implements KeyStrokeHandler {
 
     private final CurrentContainer currentContainer;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param currentContainer          The current container.
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    @Autowired
-    RefreshCurrentContainerKeyStrokeHandler(
-            final CurrentContainer currentContainer, final ApplicationEventPublisher applicationEventPublisher
-                                           ) {
-        this.currentContainer = currentContainer;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     @Override
     public boolean isActive() {
