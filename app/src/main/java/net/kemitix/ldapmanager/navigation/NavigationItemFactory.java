@@ -24,8 +24,6 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
@@ -41,7 +39,6 @@ import java.util.logging.Level;
  */
 @Log
 @SuppressWarnings("hideutilityclassconstructor")
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NavigationItemFactory {
 
     /**
@@ -83,11 +80,6 @@ public final class NavigationItemFactory {
         if (entity instanceof OU) {
             return create((OU) entity, eventPublisher);
         }
-        if (entity instanceof User) {
-            return create((User) entity, eventPublisher);
-        }
-        throw new UnsupportedOperationException(String.format(
-                "Unknown LDAP Entity type: %s", entity.getClass()
-                                                      .getName()));
+        return create((User) entity, eventPublisher);
     }
 }
