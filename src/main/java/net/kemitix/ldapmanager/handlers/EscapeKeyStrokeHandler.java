@@ -26,10 +26,10 @@ package net.kemitix.ldapmanager.handlers;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.events.ApplicationExitRequestEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -39,19 +39,10 @@ import org.springframework.stereotype.Component;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class EscapeKeyStrokeHandler implements KeyStrokeHandler {
 
     private final ApplicationEventPublisher eventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param eventPublisher The Application Event Publisher.
-     */
-    @Autowired
-    EscapeKeyStrokeHandler(final ApplicationEventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
-    }
 
     @Override
     public boolean isActive() {
