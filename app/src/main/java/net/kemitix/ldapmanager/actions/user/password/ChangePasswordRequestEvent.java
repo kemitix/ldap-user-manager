@@ -24,10 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.password;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.immutables.value.Value;
 
 import javax.naming.Name;
 
@@ -36,11 +33,15 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ChangePasswordRequestEvent {
+@Value.Immutable
+public interface ChangePasswordRequestEvent {
 
-    @Getter
-    private final Name dn;
+    /**
+     * Get the DN to change the password of.
+     *
+     * @return The DN to change the password of.
+     */
+    Name getDn();
 
     /**
      * Constructor.
@@ -49,7 +50,9 @@ public final class ChangePasswordRequestEvent {
      *
      * @return the event
      */
-    public static ChangePasswordRequestEvent create(@NonNull final Name dn) {
-        return new ChangePasswordRequestEvent(dn);
+    static ChangePasswordRequestEvent create(final Name dn) {
+        return ImmutableChangePasswordRequestEvent.builder()
+                                                  .dn(dn)
+                                                  .build();
     }
 }
