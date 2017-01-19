@@ -24,11 +24,11 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.state;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -43,6 +43,7 @@ import java.util.Map;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
 
     private final LdapService ldapService;
@@ -52,23 +53,6 @@ class DefaultLdapEntityContainerMap implements LdapEntityContainerMap {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     private final CurrentContainer currentContainer;
-
-    /**
-     * Constructor.
-     *
-     * @param ldapService               The LDAP Service.
-     * @param applicationEventPublisher The Application Event Publisher.
-     * @param currentContainer          The Current Container.
-     */
-    @Autowired
-    DefaultLdapEntityContainerMap(
-            final LdapService ldapService, final ApplicationEventPublisher applicationEventPublisher,
-            final CurrentContainer currentContainer
-                                 ) {
-        this.ldapService = ldapService;
-        this.applicationEventPublisher = applicationEventPublisher;
-        this.currentContainer = currentContainer;
-    }
 
     @Override
     public LdapEntityContainer get(final Name dn) {
