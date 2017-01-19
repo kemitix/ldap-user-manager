@@ -28,9 +28,9 @@ import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.input.KeyStroke;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.events.ApplicationExitEvent;
 import net.kemitix.ldapmanager.state.KeyStrokeHandlers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -45,25 +45,12 @@ import java.util.Arrays;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class MainWindow extends BasicWindow {
 
     private final Panel mainPanel;
 
     private final KeyStrokeHandlers keyStrokeHandlers;
-
-    /**
-     * Constructor.
-     *
-     * @param mainPanel         The main panel
-     * @param keyStrokeHandlers The KeyStroke Handlers
-     */
-    @Autowired
-    MainWindow(
-            final Panel mainPanel, final KeyStrokeHandlers keyStrokeHandlers
-              ) {
-        this.mainPanel = mainPanel;
-        this.keyStrokeHandlers = keyStrokeHandlers;
-    }
 
     /**
      * Initializer.
