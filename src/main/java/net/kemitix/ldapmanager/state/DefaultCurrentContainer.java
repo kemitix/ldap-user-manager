@@ -25,12 +25,12 @@ SOFTWARE.
 package net.kemitix.ldapmanager.state;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
+import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -44,6 +44,7 @@ import javax.naming.Name;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class DefaultCurrentContainer implements CurrentContainer {
 
     private final ApplicationEventPublisher eventPublisher;
@@ -51,16 +52,6 @@ class DefaultCurrentContainer implements CurrentContainer {
     @Setter
     @Getter
     private Name dn;
-
-    /**
-     * Constructor.
-     *
-     * @param eventPublisher The Application Event Publisher
-     */
-    @Autowired
-    DefaultCurrentContainer(final ApplicationEventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
-    }
 
     /**
      * Initializer.
