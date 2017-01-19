@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.rename;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
@@ -31,7 +32,6 @@ import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
 import net.kemitix.ldapmanager.popupmenus.MenuItemReceiver;
 import net.kemitix.ldapmanager.popupmenus.MenuItemType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -45,25 +45,12 @@ import java.util.stream.Stream;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class RenameMenuItemFactory implements MenuItemFactory {
 
     private final NameLookupService nameLookupService;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param nameLookupService         The Name Lookup Service.
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    @Autowired
-    RenameMenuItemFactory(
-            final NameLookupService nameLookupService, final ApplicationEventPublisher applicationEventPublisher
-                         ) {
-        this.nameLookupService = nameLookupService;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     @Override
     public final Stream<MenuItem> create(final Name dn, final MenuItemReceiver menu) {
