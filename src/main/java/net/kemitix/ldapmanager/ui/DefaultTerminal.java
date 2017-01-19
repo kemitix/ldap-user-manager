@@ -26,8 +26,8 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -41,22 +41,13 @@ import java.io.IOException;
  */
 @Profile("default")
 @Component
+@RequiredArgsConstructor
 class DefaultTerminal implements Terminal {
 
     private final TerminalFactory terminalFactory;
 
     @Delegate
     private Terminal delegate;
-
-    /**
-     * Constructor.
-     *
-     * @param terminalFactory The Terminal Factory
-     */
-    @Autowired
-    DefaultTerminal(final TerminalFactory terminalFactory) {
-        this.terminalFactory = terminalFactory;
-    }
 
     /**
      * Initialize.
