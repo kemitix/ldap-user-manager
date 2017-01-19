@@ -45,6 +45,15 @@ public interface OU extends LdapEntity {
     String getOu();
 
     /**
+     * Create a Builder.
+     *
+     * @return The Builder.
+     */
+    static ImmutableOU.Builder builder() {
+        return ImmutableOU.builder();
+    }
+
+    /**
      * Create a new OU container that may be renamed.
      *
      * @param dn The DN of the container.
@@ -53,11 +62,11 @@ public interface OU extends LdapEntity {
      * @return The new OU container.
      */
     static OU create(final Name dn, final String ou) {
-        return ImmutableOU.builder()
-                          .dn(dn)
-                          .ou(ou)
-                          .featureSet(Collections.singletonList(Features.RENAME))
-                          .build();
+        return OU.builder()
+                 .dn(dn)
+                 .ou(ou)
+                 .featureSet(Collections.singletonList(Features.RENAME))
+                 .build();
     }
 
     /**
@@ -69,10 +78,10 @@ public interface OU extends LdapEntity {
      * @return The new OU container.
      */
     static OU createNonRenamable(final Name dn, final String ou) {
-        return ImmutableOU.builder()
-                          .dn(dn)
-                          .ou(ou)
-                          .build();
+        return OU.builder()
+                 .dn(dn)
+                 .ou(ou)
+                 .build();
     }
 
     /**
