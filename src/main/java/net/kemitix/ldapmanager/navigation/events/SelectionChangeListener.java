@@ -24,11 +24,9 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation.events;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -42,18 +40,10 @@ import java.util.logging.Level;
  */
 @Log
 @Component
+@RequiredArgsConstructor
 class SelectionChangeListener {
 
     private final LogMessages logMessages;
-
-    /**
-     * Constructor.
-     *
-     * @param logMessages The log messages.
-     */
-    SelectionChangeListener(final LogMessages logMessages) {
-        this.logMessages = logMessages;
-    }
 
     /**
      * Listener for {@link NavigationItemSelectionChangedEvent} to have the newly selected item republish itself with an
