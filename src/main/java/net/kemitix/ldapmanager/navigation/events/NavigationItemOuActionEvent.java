@@ -24,8 +24,10 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation.events;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.domain.OU;
 
 /**
@@ -33,14 +35,11 @@ import net.kemitix.ldapmanager.domain.OU;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NavigationItemOuActionEvent {
 
     @Getter
     private final OU ou;
-
-    private NavigationItemOuActionEvent(final OU ou) {
-        this.ou = ou;
-    }
 
     /**
      * Create a new ApplicationEvent for when the current OU is switched to a another.
