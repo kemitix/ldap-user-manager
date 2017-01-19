@@ -24,12 +24,12 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.actions.user.create;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import net.kemitix.ldapmanager.popupmenus.MenuItemFactory;
 import net.kemitix.ldapmanager.popupmenus.MenuItemReceiver;
 import net.kemitix.ldapmanager.popupmenus.MenuItemType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -43,19 +43,10 @@ import java.util.stream.Stream;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Component
+@RequiredArgsConstructor
 class CreateUserMenuItemFactory implements MenuItemFactory {
 
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    /**
-     * Constructor.
-     *
-     * @param applicationEventPublisher The Application Event Publisher.
-     */
-    @Autowired
-    CreateUserMenuItemFactory(final ApplicationEventPublisher applicationEventPublisher) {
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     @Override
     public Stream<MenuItem> create(final Name dn, final MenuItemReceiver menu) {
