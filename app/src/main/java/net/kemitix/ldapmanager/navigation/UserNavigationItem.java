@@ -28,10 +28,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
+import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
-import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemUserSelectedEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -105,7 +105,7 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     @Override
     public void publishRenameRequest() {
         log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
-        applicationEventPublisher.publishEvent(RenameRequestEvent.create(getDn()));
+        applicationEventPublisher.publishEvent(RenameRequestEvent.of(getDn()));
     }
 
     @Override

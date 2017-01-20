@@ -68,6 +68,6 @@ final class RenameMenuItem implements MenuItem {
     }
 
     private void publishRenameRequest() {
-        applicationEventPublisher.publishEvent(RenameRequestEvent.create(dn));
+        applicationEventPublisher.publishEvent(RenameRequestEvent.of(dn));
     }
 }

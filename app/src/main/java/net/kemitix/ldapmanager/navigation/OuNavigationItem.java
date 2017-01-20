@@ -104,7 +104,7 @@ public final class OuNavigationItem extends AbstractNavigationItem {
     @Override
     public void publishRenameRequest() {
         log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
-        applicationEventPublisher.publishEvent(RenameRequestEvent.create(getDn()));
+        applicationEventPublisher.publishEvent(RenameRequestEvent.of(getDn()));
     }
 
     @Override

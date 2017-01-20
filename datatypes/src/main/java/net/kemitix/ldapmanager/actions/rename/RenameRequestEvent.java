@@ -50,7 +50,7 @@ public interface RenameRequestEvent {
      *
      * @return the event.
      */
-    static RenameRequestEvent create(final Name dn) {
+    static RenameRequestEvent of(final Name dn) {
         return ImmutableRenameRequestEvent.builder()
                                           .dn(dn)
                                           .build();

@@ -60,7 +60,7 @@ public class RenameActionTest {
         newDn=LdapNameUtil.parse("cn=bobby,ou=users");
         given(renameDnDialog.getRenamedDn(oldDn)).willReturn(Optional.of(newDn));
         //when
-        renameAction.onRenameRequest(RenameRequestEvent.create(oldDn));
+        renameAction.onRenameRequest(RenameRequestEvent.of(oldDn));
         //then
         then(ldapTemplate).should()
                           .rename(oldDn, newDn);
@@ -71,7 +71,7 @@ public class RenameActionTest {
         //given
         given(renameDnDialog.getRenamedDn(oldDn)).willReturn(Optional.empty());
         //when
-        renameAction.onRenameRequest(RenameRequestEvent.create(oldDn));
+        renameAction.onRenameRequest(RenameRequestEvent.of(oldDn));
         //then
         verifyNoMoreInteractions(ldapTemplate);
     }
@@ -83,7 +83,7 @@ public class RenameActionTest {
         newDn = LdapNameUtil.parse("cn=bobby,ou=users");
         given(renameDnDialog.getRenamedDn(oldDn)).willReturn(Optional.of(newDn));
         //when
-        renameAction.onRenameRequest(RenameRequestEvent.create(oldDn));
+        renameAction.onRenameRequest(RenameRequestEvent.of(oldDn));
         //then
         then(ldapTemplate).should()
                           .rename(oldDn, newDn);
@@ -100,7 +100,7 @@ public class RenameActionTest {
         newDn = LdapNameUtil.parse("cn=bobby,ou=managers");
         given(renameDnDialog.getRenamedDn(oldDn)).willReturn(Optional.of(newDn));
         //when
-        renameAction.onRenameRequest(RenameRequestEvent.create(oldDn));
+        renameAction.onRenameRequest(RenameRequestEvent.of(oldDn));
         //then
         then(ldapTemplate).should()
                           .rename(oldDn, newDn);
