@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.actions.user.create;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import net.kemitix.ldapmanager.events.CreateUserEvent;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import org.springframework.context.ApplicationEventPublisher;
 

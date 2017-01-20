@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.create;
+package net.kemitix.ldapmanager.events;
 
 import org.immutables.value.Value;
 
@@ -34,7 +34,7 @@ import javax.naming.Name;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Value.Immutable
-interface CreateUserCommitEvent {
+public interface CreateUserCommitEvent {
 
     /**
      * The DN of the container where the new user should be created.

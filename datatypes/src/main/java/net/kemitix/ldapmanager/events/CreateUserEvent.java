@@ -22,38 +22,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.events;
 
-import net.kemitix.ldapmanager.domain.User;
 import org.immutables.value.Value;
 
 import javax.naming.Name;
 
 /**
- * Raised when the user want the change the {@link User} password.
+ * Raised when the user selects a 'Create User' option.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Value.Immutable
-public interface ChangePasswordRequestEvent {
+public interface CreateUserEvent {
 
     /**
-     * Get the DN to change the password of.
+     * The DN of the container where the new user should be created.
      *
-     * @return The DN to change the password of.
+     * @return The DN attribute.
      */
     Name getDn();
 
     /**
-     * Constructor.
+     * Create a Builder.
      *
-     * @param dn The DN to change the password of.
-     *
-     * @return the event
+     * @return The Builder.
      */
-    static ChangePasswordRequestEvent of(final Name dn) {
-        return ImmutableChangePasswordRequestEvent.builder()
-                                                  .dn(dn)
-                                                  .build();
+    static ImmutableCreateUserEvent.Builder builder() {
+        return ImmutableCreateUserEvent.builder();
+    }
+
+    /**
+     * Create a CreateUserEvent.
+     *
+     * @param dn The DN of the container where the new user should be created.
+     *
+     * @return the event.
+     */
+    static CreateUserEvent of(final Name dn) {
+        return ImmutableCreateUserEvent.builder()
+                                       .dn(dn)
+                                       .build();
     }
 }

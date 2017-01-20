@@ -27,6 +27,7 @@ package net.kemitix.ldapmanager.actions.user.password;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.val;
+import net.kemitix.ldapmanager.events.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.springframework.context.event.EventListener;
 import org.springframework.ldap.core.LdapTemplate;

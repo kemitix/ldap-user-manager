@@ -23,7 +23,9 @@ SOFTWARE.
 */
 
 /**
- * Change the user password.
+ * .
+ *
+ * @author Paul Campbell (pcampbell@kemitix.net)
  */
 
-package net.kemitix.ldapmanager.actions.user.password;
+package net.kemitix.ldapmanager.events;

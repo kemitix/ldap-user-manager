@@ -1,6 +1,6 @@
 package net.kemitix.ldapmanager.actions.user.password;
 
-import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
+import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

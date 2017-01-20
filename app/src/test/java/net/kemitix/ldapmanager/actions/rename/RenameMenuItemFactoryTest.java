@@ -3,6 +3,7 @@ package net.kemitix.ldapmanager.actions.rename;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.LdapEntity;
+import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.NameLookupService;
 import net.kemitix.ldapmanager.navigation.NavigationItem;

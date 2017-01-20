@@ -22,37 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.actions.user.create;
+package net.kemitix.ldapmanager.events;
 
 import org.immutables.value.Value;
 
 import javax.naming.Name;
 
 /**
- * Raised when the user selects a 'Create User' option.
+ * Raised when a Name is to be renamed.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Value.Immutable
-interface CreateUserEvent {
+public interface RenameRequestEvent {
 
     /**
-     * The DN of the container where the new user should be created.
+     * The DN to be renamed.
      *
-     * @return The DN attribute.
+     * @return the DN.
      */
     Name getDn();
 
     /**
-     * Create a CreateUserEvent.
+     * Create new RenameRequestEvent.
      *
-     * @param dn The DN of the container where the new user should be created.
+     * @param dn The DN to be renamed.
      *
      * @return the event.
      */
-    static CreateUserEvent of(final Name dn) {
-        return ImmutableCreateUserEvent.builder()
-                                       .dn(dn)
-                                       .build();
+    static RenameRequestEvent of(final Name dn) {
+        return ImmutableRenameRequestEvent.builder()
+                                          .dn(dn)
+                                          .build();
     }
 }

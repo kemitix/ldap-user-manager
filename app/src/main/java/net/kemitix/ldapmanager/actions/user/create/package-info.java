@@ -28,12 +28,12 @@ SOFTWARE.
  * <ul> <li>{@link net.kemitix.ldapmanager.actions.user.create.CreateUserMenuItemFactory} - creates the {@link
  * net.kemitix.ldapmanager.actions.user.create.CreateUserMenuItem}</li> <li>{@link
  * net.kemitix.ldapmanager.actions.user.create.CreateUserMenuItem} - sends the {@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserEvent}</li>
- * <li>{@link net.kemitix.ldapmanager.actions.user.create.CreateUserEvent}
+ * net.kemitix.ldapmanager.events.CreateUserEvent}</li>
+ * <li>{@link net.kemitix.ldapmanager.events.CreateUserEvent}
  * - displays the {@link net.kemitix.ldapmanager.actions.user.create.CreateUserFormPanel}</li> <li>{@link
  * net.kemitix.ldapmanager.actions.user.create.CreateUserFormPanel} - sends the {@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserCommitEvent}</li> <li>{@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserCommitEvent} - starts the {@link
+ * net.kemitix.ldapmanager.events.CreateUserCommitEvent}</li> <li>{@link
+ * net.kemitix.ldapmanager.events.CreateUserCommitEvent} - starts the {@link
  * net.kemitix.ldapmanager.actions.user.create.CreateUserAction}</li>
  * <li>{@link net.kemitix.ldapmanager.actions.user.create.CreateUserAction}
  * - creates the user</li> </ul>

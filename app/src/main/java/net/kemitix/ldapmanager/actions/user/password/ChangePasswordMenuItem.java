@@ -27,6 +27,7 @@ package net.kemitix.ldapmanager.actions.user.password;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import net.kemitix.ldapmanager.events.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.popupmenus.MenuItem;
 import org.springframework.context.ApplicationEventPublisher;
 

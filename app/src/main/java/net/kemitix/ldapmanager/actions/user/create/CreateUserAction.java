@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.actions.user.create;
 
 import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.events.CreateUserCommitEvent;
 import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ui.CloseCenterFormEvent;
 import org.springframework.context.ApplicationEventPublisher;

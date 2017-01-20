@@ -26,6 +26,7 @@ package net.kemitix.ldapmanager.actions.rename;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ui.RenameDnDialog;
 import org.springframework.context.ApplicationEventPublisher;

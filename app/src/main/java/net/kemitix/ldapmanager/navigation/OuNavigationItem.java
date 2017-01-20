@@ -30,7 +30,7 @@ import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.Messages;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
-import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
+import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemOuSelectedEvent;
 import org.springframework.context.ApplicationEventPublisher;

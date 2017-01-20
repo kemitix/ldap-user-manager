@@ -22,21 +22,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/**
- * Create/Insert a user.
- *
- * <ul> <li>{@link net.kemitix.ldapmanager.actions.user.create.CreateUserMenuItemFactory} - creates the {@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserMenuItem}</li> <li>{@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserMenuItem} - sends the {@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserEvent}</li>
- * <li>{@link net.kemitix.ldapmanager.actions.user.create.CreateUserEvent}
- * - displays the {@link net.kemitix.ldapmanager.actions.user.create.CreateUserFormPanel}</li> <li>{@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserFormPanel} - sends the {@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserCommitEvent}</li> <li>{@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserCommitEvent} - starts the {@link
- * net.kemitix.ldapmanager.actions.user.create.CreateUserAction}</li>
- * <li>{@link net.kemitix.ldapmanager.actions.user.create.CreateUserAction}
- * - creates the user</li> </ul>
- */
+package net.kemitix.ldapmanager.events;
 
-package net.kemitix.ldapmanager.actions.user.create;
+import net.kemitix.ldapmanager.domain.User;
+import org.immutables.value.Value;
+
+import javax.naming.Name;
+
+/**
+ * Raised when the user want the change the {@link User} password.
+ *
+ * @author Paul Campbell (pcampbell@kemitix.net)
+ */
+@Value.Immutable
+public interface ChangePasswordRequestEvent {
+
+    /**
+     * Get the DN to change the password of.
+     *
+     * @return The DN to change the password of.
+     */
+    Name getDn();
+
+    /**
+     * Constructor.
+     *
+     * @param dn The DN to change the password of.
+     *
+     * @return the event
+     */
+    static ChangePasswordRequestEvent of(final Name dn) {
+        return ImmutableChangePasswordRequestEvent.builder()
+                                                  .dn(dn)
+                                                  .build();
+    }
+}

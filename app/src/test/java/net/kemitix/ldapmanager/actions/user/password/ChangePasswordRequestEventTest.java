@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.actions.user.password;
 
 import lombok.val;
+import net.kemitix.ldapmanager.events.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.junit.Rule;
 import org.junit.Test;

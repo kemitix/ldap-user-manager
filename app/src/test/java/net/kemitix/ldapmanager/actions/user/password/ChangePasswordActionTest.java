@@ -1,5 +1,6 @@
 package net.kemitix.ldapmanager.actions.user.password;
 
+import net.kemitix.ldapmanager.events.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.junit.Before;

@@ -1,7 +1,7 @@
 package net.kemitix.ldapmanager.navigation;
 
-import net.kemitix.ldapmanager.actions.rename.RenameRequestEvent;
-import net.kemitix.ldapmanager.actions.user.password.ChangePasswordRequestEvent;
+import net.kemitix.ldapmanager.events.RenameRequestEvent;
+import net.kemitix.ldapmanager.events.ChangePasswordRequestEvent;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;

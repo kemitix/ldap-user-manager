@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.actions.user.create;
 
 import lombok.val;
+import net.kemitix.ldapmanager.events.CreateUserEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

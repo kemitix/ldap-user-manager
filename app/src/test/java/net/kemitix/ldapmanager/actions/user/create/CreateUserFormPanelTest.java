@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.events.ApplicationExitRequestEvent;
+import net.kemitix.ldapmanager.events.CreateUserCommitEvent;
+import net.kemitix.ldapmanager.events.CreateUserEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.LogMessages;
 import net.kemitix.ldapmanager.ui.FormContainer;
@@ -124,9 +126,9 @@ public class CreateUserFormPanelTest {
     @Test
     public void shouldOnCreateButtonPressedPublishIfValuesSet() {
         //given
-        val createUserEvent = ImmutableCreateUserEvent.builder()
-                                                      .dn(dn)
-                                                      .build();
+        val createUserEvent = CreateUserEvent.builder()
+                                             .dn(dn)
+                                             .build();
         panel.onCreateUserEvent(createUserEvent);
         panel.getCnTextBox()
              .setText("cn value");
