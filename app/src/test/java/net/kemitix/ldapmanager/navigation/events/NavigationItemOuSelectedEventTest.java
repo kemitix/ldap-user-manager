@@ -37,7 +37,7 @@ public class NavigationItemOuSelectedEventTest {
         //given
         val dn = LdapNameBuilder.newInstance()
                                 .build();
-        val ou = OU.create(dn, "users");
+        val ou = OU.of(dn, "users");
         val ouNavigationItem = OuNavigationItem.create(ou, applicationEventPublisher);
         //when
         val event = NavigationItemOuSelectedEvent.of(ouNavigationItem);

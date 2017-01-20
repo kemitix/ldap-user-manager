@@ -128,7 +128,7 @@ public class CurrentContainerChangedEventIT {
     @Test
     public void shouldLoadContainerObjects() throws InterruptedException {
         //given
-        val ou = OU.create(ouDn, "users");
+        val ou = OU.of(ouDn, "users");
         val user = User.builder()
                        .dn(userDn)
                        .cn(CN)

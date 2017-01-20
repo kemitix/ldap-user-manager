@@ -47,7 +47,7 @@ public class OuNavigationItemTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         name = "name";
-        ou = OU.create(dn, name);
+        ou = OU.of(dn, name);
         ouNavigationItem = OuNavigationItem.create(ou, applicationEventPublisher);
     }
 

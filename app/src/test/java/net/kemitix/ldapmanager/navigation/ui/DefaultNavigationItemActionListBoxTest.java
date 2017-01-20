@@ -308,7 +308,7 @@ public class DefaultNavigationItemActionListBoxTest {
     @Test
     public void shouldShowOusWithBraces() {
         //given
-        val ou = NavigationItemFactory.create(OU.create(LdapNameUtil.empty(), "users"), applicationEventPublisher);
+        val ou = NavigationItemFactory.create(OU.of(LdapNameUtil.empty(), "users"), applicationEventPublisher);
         val user = NavigationItemFactory.create(User.builder()
                                                     .dn(LdapNameUtil.parse("cn=bob"))
                                                     .cn("bob")

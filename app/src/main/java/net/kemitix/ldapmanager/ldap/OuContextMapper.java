@@ -42,7 +42,7 @@ class OuContextMapper extends AbstractContextMapper<OU> implements PreCheckConte
 
     @Override
     protected OU doMapFromContext(final DirContextOperations ctx) {
-        return OU.create(ctx.getDn(), ctx.getStringAttribute(LdapAttribute.OU));
+        return OU.of(ctx.getDn(), ctx.getStringAttribute(LdapAttribute.OU));
     }
 
     @Override

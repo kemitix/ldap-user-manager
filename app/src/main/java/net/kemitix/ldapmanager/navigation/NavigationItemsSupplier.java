@@ -87,6 +87,6 @@ class NavigationItemsSupplier implements Supplier<List<NavigationItem>> {
     }
 
     private NavigationItem createParentNavigationItem(final Name parentDn) {
-        return NavigationItemFactory.create(OU.createNonRenamable(parentDn, PARENT), applicationEventPublisher);
+        return NavigationItemFactory.create(OU.nonRenameable(parentDn, PARENT), applicationEventPublisher);
     }
 }

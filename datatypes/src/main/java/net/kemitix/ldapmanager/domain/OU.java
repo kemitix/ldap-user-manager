@@ -61,7 +61,8 @@ public interface OU extends LdapEntity {
      *
      * @return The new OU container.
      */
-    static OU create(final Name dn, final String ou) {
+    // can't use auto-generated 'of' constructor due to default featureSet.
+    static OU of(final Name dn, final String ou) {
         return OU.builder()
                  .dn(dn)
                  .ou(ou)
@@ -77,7 +78,7 @@ public interface OU extends LdapEntity {
      *
      * @return The new OU container.
      */
-    static OU createNonRenamable(final Name dn, final String ou) {
+    static OU nonRenameable(final Name dn, final String ou) {
         return OU.builder()
                  .dn(dn)
                  .ou(ou)

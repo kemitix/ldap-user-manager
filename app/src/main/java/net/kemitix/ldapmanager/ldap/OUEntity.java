@@ -51,6 +51,6 @@ public class OUEntity {
      * @return The immutable OU.
      */
     final OU fromLdap() {
-        return OU.create(dn, ou);
+        return OU.of(dn, ou);
     }
 }
