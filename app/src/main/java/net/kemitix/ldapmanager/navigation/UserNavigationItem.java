@@ -111,7 +111,7 @@ public final class UserNavigationItem extends AbstractNavigationItem {
     @Override
     public void publishChangePasswordRequest() {
         log.log(Level.FINEST, "publishChangePasswordRequest(): %1", getName());
-        applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.create(getDn()));
+        applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.of(getDn()));
     }
 
     @Override

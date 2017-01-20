@@ -22,7 +22,7 @@ public class ChangePasswordRequestEventTest {
     public void shouldCreateAndGetNavigationItemBackOut() throws Exception {
         //when
         val dn = LdapNameUtil.parse("cn=user");
-        val event = ChangePasswordRequestEvent.create(dn);
+        val event = ChangePasswordRequestEvent.of(dn);
         //then
         assertThat(event.getDn()).isSameAs(dn);
     }
@@ -33,6 +33,6 @@ public class ChangePasswordRequestEventTest {
         exception.expect(NullPointerException.class);
         exception.expectMessage("dn");
         //when
-        ChangePasswordRequestEvent.create(null);
+        ChangePasswordRequestEvent.of(null);
     }
 }

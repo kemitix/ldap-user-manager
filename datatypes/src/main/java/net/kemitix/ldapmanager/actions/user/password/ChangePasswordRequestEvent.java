@@ -51,7 +51,7 @@ public interface ChangePasswordRequestEvent {
      *
      * @return the event
      */
-    static ChangePasswordRequestEvent create(final Name dn) {
+    static ChangePasswordRequestEvent of(final Name dn) {
         return ImmutableChangePasswordRequestEvent.builder()
                                                   .dn(dn)
                                                   .build();

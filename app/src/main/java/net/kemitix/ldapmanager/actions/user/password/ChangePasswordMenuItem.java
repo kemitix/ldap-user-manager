@@ -67,6 +67,6 @@ final class ChangePasswordMenuItem implements MenuItem {
 
     @Override
     public Runnable getAction() {
-        return () -> applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.create(dn));
+        return () -> applicationEventPublisher.publishEvent(ChangePasswordRequestEvent.of(dn));
     }
 }
