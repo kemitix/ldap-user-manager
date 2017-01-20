@@ -90,7 +90,7 @@ class LanternaUi implements CommandLineRunner {
         } catch (final LdapUserManagerException e) {
             exceptionMessageDialog(e).showDialog(gui);
         } finally {
-            eventPublisher.publishEvent(ApplicationExitEvent.create());
+            eventPublisher.publishEvent(ApplicationExitEvent.APPROVED);
         }
 
     }

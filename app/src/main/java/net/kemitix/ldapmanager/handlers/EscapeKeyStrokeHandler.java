@@ -69,7 +69,7 @@ class EscapeKeyStrokeHandler implements KeyStrokeHandler {
         val exitRequestEvent = ApplicationExitRequestEvent.create();
         eventPublisher.publishEvent(exitRequestEvent);
         if (exitRequestEvent.isApproved()) {
-            eventPublisher.publishEvent(ApplicationExitEvent.create());
+            eventPublisher.publishEvent(ApplicationExitEvent.APPROVED);
         }
     }
 }
