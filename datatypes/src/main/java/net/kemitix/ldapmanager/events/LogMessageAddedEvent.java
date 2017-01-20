@@ -24,24 +24,15 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Log message added.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@SuppressWarnings("hideutilityclassconstructor")
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LogMessageAddedEvent {
 
-    /**
-     * Create a new ApplicationEvent.
-     *
-     * @return the event
-     */
-    public static LogMessageAddedEvent create() {
-        return new LogMessageAddedEvent();
+    public static final LogMessageAddedEvent EVENT = new LogMessageAddedEvent();
+
+    private LogMessageAddedEvent() {
     }
 }
