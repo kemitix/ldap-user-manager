@@ -50,7 +50,7 @@ interface CreateUserEvent {
      *
      * @return the event.
      */
-    static CreateUserEvent create(final Name dn) {
+    static CreateUserEvent of(final Name dn) {
         return ImmutableCreateUserEvent.builder()
                                        .dn(dn)
                                        .build();

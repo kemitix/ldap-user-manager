@@ -68,7 +68,7 @@ public class CreateUserFormPanelTest {
         panel.getSnTextBox()
              .setText("sn value");
         //when
-        panel.onCreateUserEvent(CreateUserEvent.create(dn));
+        panel.onCreateUserEvent(CreateUserEvent.of(dn));
         //then
         assertThat(panel.getCnTextBox()
                         .getText()).isEmpty();
@@ -159,7 +159,7 @@ public class CreateUserFormPanelTest {
     public void shouldDenyExitRequestWhenFormIsOpen() {
         //given
         /// call onCreateUserEvent() to open the form
-        panel.onCreateUserEvent(CreateUserEvent.create(LdapNameUtil.empty()));
+        panel.onCreateUserEvent(CreateUserEvent.of(LdapNameUtil.empty()));
         val event = ApplicationExitRequestEvent.create();
         //when
         panel.onApplicationExitRequest(event);

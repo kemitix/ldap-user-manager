@@ -52,7 +52,7 @@ final class CreateUserMenuItem implements MenuItem {
 
     @Override
     public Runnable getAction() {
-        return () -> applicationEventPublisher.publishEvent(CreateUserEvent.create(dn));
+        return () -> applicationEventPublisher.publishEvent(CreateUserEvent.of(dn));
     }
 
     /**
