@@ -22,7 +22,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <lanterna.version>3.0.0-beta3</lanterna.version>
         <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
         <assertj.version>3.6.1</assertj.version>
         <unboundid.version>3.2.0</unboundid.version>
@@ -69,11 +68,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-ldap</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.lanterna</groupId>
-            <artifactId>lanterna</artifactId>
-            <version>${lanterna.version}</version>
         </dependency>
 
         <dependency>

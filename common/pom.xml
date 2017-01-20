@@ -11,10 +11,19 @@
 
     <artifactId>ldap-user-manager-common</artifactId>
 
+    <properties>
+        <lanterna.version>3.0.0-beta3</lanterna.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.lanterna</groupId>
+            <artifactId>lanterna</artifactId>
+            <version>${lanterna.version}</version>
         </dependency>
     </dependencies>
 

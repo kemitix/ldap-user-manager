@@ -22,32 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.events;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
-
 /**
- * Raised when a {@link KeyStrokeHandler} is enabled or disabled.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Event and KeyStroke Handlers.
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class KeyStrokeHandlerUpdateEvent {
 
-    @Getter
-    private final KeyStrokeHandler keyStrokeHandler;
-
-    /**
-     * Create a new KeyStrokeHandlerUpdateEvent.
-     *
-     * @param keyStrokeHandler The KeyStorkeHandler that triggered the update event
-     *
-     * @return the event
-     */
-    public static KeyStrokeHandlerUpdateEvent of(final KeyStrokeHandler keyStrokeHandler) {
-        return new KeyStrokeHandlerUpdateEvent(keyStrokeHandler);
-    }
-}
+package net.kemitix.ldapmanager.handlers;
