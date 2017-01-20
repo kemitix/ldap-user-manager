@@ -51,7 +51,7 @@ public class CreateUserActionTest {
         val dn = LdapNameUtil.parse("ou=users");
         val cn = "bob";
         val sn = "smith";
-        val event = CreateUserCommitEvent.create(dn, cn, sn);
+        val event = CreateUserCommitEvent.of(dn, cn, sn);
         //when
         action.onCreateUserCommit(event);
         //then

@@ -124,7 +124,7 @@ class CreateUserFormPanel extends Panel implements Focusable {
             return;
         }
         logMessages.add(String.format("Create user %s (%s) in %s", cn, sn, dn));
-        applicationEventPublisher.publishEvent(CreateUserCommitEvent.create(dn, cn, sn));
+        applicationEventPublisher.publishEvent(CreateUserCommitEvent.of(dn, cn, sn));
     }
 
     /**

@@ -66,7 +66,7 @@ interface CreateUserCommitEvent {
      *
      * @return the event.
      */
-    static CreateUserCommitEvent create(final Name dn, final String cn, final String sn) {
+    static CreateUserCommitEvent of(final Name dn, final String cn, final String sn) {
         return ImmutableCreateUserCommitEvent.builder()
                                              .dn(dn)
                                              .cn(cn)
