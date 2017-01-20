@@ -23,4 +23,8 @@
         <module>common</module>
     </modules>
 
+    <properties>
+        <digraph-dependency.basePackage>net.kemitix.ldapmanager</digraph-dependency.basePackage>
+    </properties>
+
 </project>
