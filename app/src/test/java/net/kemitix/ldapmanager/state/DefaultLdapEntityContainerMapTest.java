@@ -4,7 +4,7 @@ import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
-import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

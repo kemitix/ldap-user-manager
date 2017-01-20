@@ -22,14 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+package net.kemitix.ldapmanager.events;
+
+import org.immutables.value.Value;
+
+import javax.naming.Name;
+
 /**
- * .
+ * Notification of a change to the current container.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Value.Immutable
+public interface CurrentContainerChangedEvent {
 
-/**
- * LDAP Events.
- */
+    /**
+     * The name of the new container.
+     *
+     * @return The container name.
+     */
+    Name getNewContainer();
 
-package net.kemitix.ldapmanager.ldap.events;
+    /**
+     * Creates a new {@link CurrentContainerChangedEvent}.
+     *
+     * @param newContainer The name of the new container.
+     *
+     * @return the event
+     */
+    static CurrentContainerChangedEvent of(final Name newContainer) {
+        return ImmutableCurrentContainerChangedEvent.builder()
+                                                    .newContainer(newContainer)
+                                                    .build();
+    }
+}

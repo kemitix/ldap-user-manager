@@ -26,7 +26,7 @@ package net.kemitix.ldapmanager.ui;
 
 import com.googlecode.lanterna.gui2.Label;
 import net.kemitix.ldapmanager.Messages;
-import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.state.LogMessages;

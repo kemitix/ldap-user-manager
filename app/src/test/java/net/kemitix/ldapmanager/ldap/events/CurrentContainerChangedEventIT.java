@@ -28,6 +28,7 @@ import com.googlecode.lanterna.gui2.Label;
 import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.ldap.OUEntity;

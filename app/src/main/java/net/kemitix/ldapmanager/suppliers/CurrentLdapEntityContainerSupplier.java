@@ -25,7 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.suppliers;
 
 import lombok.RequiredArgsConstructor;
-import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainerMap;

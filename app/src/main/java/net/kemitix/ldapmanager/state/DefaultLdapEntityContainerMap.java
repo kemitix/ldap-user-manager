@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapService;
 import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
-import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
+import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
