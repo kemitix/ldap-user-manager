@@ -2,7 +2,7 @@ package net.kemitix.ldapmanager.actions.ou.refresh;
 
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 
+import javax.naming.Name;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
 
@@ -29,10 +32,14 @@ public class RefreshCurrentContainerKeyStrokeHandlerTest {
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Mock
+    private Name dn;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         handler = new RefreshCurrentContainerKeyStrokeHandler(currentContainer, applicationEventPublisher);
+        given(currentContainer.getDn()).willReturn(dn);
     }
 
     @Test

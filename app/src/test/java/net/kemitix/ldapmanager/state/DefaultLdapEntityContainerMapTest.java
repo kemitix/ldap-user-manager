@@ -3,7 +3,7 @@ package net.kemitix.ldapmanager.state;
 import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapService;
-import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ldap.events.CurrentContainerChangedEvent;
 import org.junit.Before;
 import org.junit.Test;

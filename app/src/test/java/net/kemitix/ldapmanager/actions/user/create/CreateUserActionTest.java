@@ -4,7 +4,7 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.events.CreateUserCommitEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ui.CloseCenterFormEvent;
 import org.junit.Before;
 import org.junit.Test;

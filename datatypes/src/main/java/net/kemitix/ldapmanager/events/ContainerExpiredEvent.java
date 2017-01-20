@@ -22,12 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.ldap.events;
+package net.kemitix.ldapmanager.events;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
+import org.immutables.value.Value;
 
 import javax.naming.Name;
 import java.util.Arrays;
@@ -41,11 +40,15 @@ import java.util.stream.Collectors;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ContainerExpiredEvent {
+@Value.Immutable
+public interface ContainerExpiredEvent {
 
-    @Getter
-    private final Set<Name> containers;
+    /**
+     * Return the containers that have expired.
+     *
+     * @return The Containers.
+     */
+    Set<Name> getContainers();
 
     /**
      * Create new {@link ContainerExpiredEvent} to indicate that the application needs to reload the
@@ -55,13 +58,15 @@ public final class ContainerExpiredEvent {
      *
      * @return the event
      */
-    @SuppressWarnings("InstantiationOfUtilityClass")
-    public static ContainerExpiredEvent containing(final Name... dn) {
-        return new ContainerExpiredEvent(Arrays.stream(dn)
-                                               .map(LdapNameUtil::getParent)
-                                               .filter(Optional::isPresent)
-                                               .map(Optional::get)
-                                               .collect(Collectors.toSet()));
+    static ContainerExpiredEvent containing(final Name... dn) {
+        val containers = Arrays.stream(dn)
+                               .map(LdapNameUtil::getParent)
+                               .filter(Optional::isPresent)
+                               .map(Optional::get)
+                               .collect(Collectors.toSet());
+        return ImmutableContainerExpiredEvent.builder()
+                                             .addAllContainers(containers)
+                                             .build();
     }
 
     /**
@@ -72,7 +77,9 @@ public final class ContainerExpiredEvent {
      *
      * @return the event
      */
-    public static ContainerExpiredEvent of(final Name dn) {
-        return new ContainerExpiredEvent(Collections.singleton(dn));
+    static ContainerExpiredEvent of(final Name dn) {
+        return ImmutableContainerExpiredEvent.builder()
+                                             .addAllContainers(Collections.singleton(dn))
+                                             .build();
     }
 }

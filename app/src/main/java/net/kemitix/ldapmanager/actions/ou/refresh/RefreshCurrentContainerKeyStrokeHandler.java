@@ -28,7 +28,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
-import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

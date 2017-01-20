@@ -20,6 +20,7 @@
     <modules>
         <module>app</module>
         <module>datatypes</module>
+        <module>common</module>
     </modules>
 
 </project>

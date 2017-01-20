@@ -2,7 +2,7 @@ package net.kemitix.ldapmanager.actions.rename;
 
 import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.ui.RenameDnDialog;
 import org.junit.Before;
 import org.junit.Test;

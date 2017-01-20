@@ -3,7 +3,7 @@ package net.kemitix.ldapmanager.ldap;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
-import net.kemitix.ldapmanager.ldap.events.ContainerExpiredEvent;
+import net.kemitix.ldapmanager.events.ContainerExpiredEvent;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import net.kemitix.ldapmanager.state.LogMessages;
 import org.junit.Before;
