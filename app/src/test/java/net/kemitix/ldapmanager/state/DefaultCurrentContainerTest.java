@@ -4,7 +4,7 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
+import net.kemitix.ldapmanager.events.NavigationItemOuActionEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

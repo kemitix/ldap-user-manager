@@ -5,7 +5,7 @@ import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
+import net.kemitix.ldapmanager.events.NavigationItemOuActionEvent;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import org.junit.Before;

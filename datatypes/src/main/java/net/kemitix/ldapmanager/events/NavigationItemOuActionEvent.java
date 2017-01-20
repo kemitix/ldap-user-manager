@@ -22,24 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation.events;
+package net.kemitix.ldapmanager.events;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.domain.OU;
+import org.immutables.value.Value;
 
 /**
  * Raised when an OU is actioned.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class NavigationItemOuActionEvent {
+@Value.Immutable
+public interface NavigationItemOuActionEvent {
 
-    @Getter
-    private final OU ou;
+    /**
+     * The OU being switched to.
+     *
+     * @return The OU.
+     */
+    OU getOu();
 
     /**
      * Create a new ApplicationEvent for when the current OU is switched to a another.
@@ -48,7 +49,9 @@ public final class NavigationItemOuActionEvent {
      *
      * @return the event
      */
-    public static NavigationItemOuActionEvent of(@NonNull final OU ou) {
-        return new NavigationItemOuActionEvent(ou);
+    static NavigationItemOuActionEvent of(final OU ou) {
+        return ImmutableNavigationItemOuActionEvent.builder()
+                                                   .ou(ou)
+                                                   .build();
     }
 }

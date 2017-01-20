@@ -30,7 +30,7 @@ import lombok.Setter;
 import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.events.CurrentContainerChangedEvent;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemOuActionEvent;
+import net.kemitix.ldapmanager.events.NavigationItemOuActionEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
