@@ -23,10 +23,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-        <assertj.version>3.6.1</assertj.version>
-        <unboundid.version>3.2.0</unboundid.version>
-        <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
-        <maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
     </properties>
 
     <dependencies>
@@ -69,38 +65,16 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-ldap</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.unboundid</groupId>
-            <artifactId>unboundid-ldapsdk</artifactId>
-            <version>${unboundid.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.ldap</groupId>
-            <artifactId>spring-ldap-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.trajano.commons</groupId>
-            <artifactId>commons-testing</artifactId>
-            <version>${trajano-commons-testing.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ldap-user-manager-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
