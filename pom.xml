@@ -21,10 +21,34 @@
         <module>app</module>
         <module>datatypes</module>
         <module>common</module>
+        <module>test</module>
     </modules>
 
     <properties>
         <digraph-dependency.basePackage>net.kemitix.ldapmanager</digraph-dependency.basePackage>
+        <assertj.version>3.6.1</assertj.version>
+        <unboundid.version>3.2.0</unboundid.version>
+        <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.unboundid</groupId>
+                <artifactId>unboundid-ldapsdk</artifactId>
+                <version>${unboundid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.trajano.commons</groupId>
+                <artifactId>commons-testing</artifactId>
+                <version>${trajano-commons-testing.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
