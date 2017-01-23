@@ -22,22 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-
 /**
- * An abstract {@link NavigationItem}.
- *
- * @author Paul Campbell (pcampbell@kemitix.net)
+ * Navigation Panel.
  */
-@Log
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract class AbstractNavigationItem implements NavigationItem {
 
-    @Getter
-    private final String name;
-}
+package net.kemitix.ldapmanager.navigation;
