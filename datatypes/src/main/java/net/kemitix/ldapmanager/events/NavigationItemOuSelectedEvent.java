@@ -22,43 +22,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation.events;
+package net.kemitix.ldapmanager.events;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.navigation.OuNavigationItem;
+import org.immutables.value.Value;
 
 import javax.naming.Name;
-import java.util.logging.Level;
 
 /**
  * Raised when an OU Navigation Item is selected.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Log
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class NavigationItemOuSelectedEvent {
-
-    @Getter
-    private final OuNavigationItem ouNavigationItem;
-
-    @Getter
-    private final Name dn;
+@Value.Immutable
+public interface NavigationItemOuSelectedEvent {
 
     /**
-     * Creates a new NavigationItemOuSelectedEvent.
+     * Get the OU Navigation Item selected.
      *
-     * @param ouNavigationItem the OU Navigation Item selected
-     *
-     * @return the event
+     * @return The OU Navigation Item selected
      */
-    public static NavigationItemOuSelectedEvent of(@NonNull final OuNavigationItem ouNavigationItem) {
-        log.log(Level.FINEST, "of(%s)", ouNavigationItem);
-        return new NavigationItemOuSelectedEvent(ouNavigationItem, ouNavigationItem.getOu()
-                                                                                   .getDn());
+    @Value.Parameter
+    OuNavigationItem getOuNavigationItem();
+
+    /**
+     * The DN of the Navigation Item's OU.
+     *
+     * @return The DN
+     */
+    default Name getDn() {
+        return getOuNavigationItem().getOu()
+                                    .getDn();
+    }
+
+    static NavigationItemOuSelectedEvent of(OuNavigationItem ouNavigationItem) {
+        return ImmutableNavigationItemOuSelectedEvent.of(ouNavigationItem);
     }
 }
