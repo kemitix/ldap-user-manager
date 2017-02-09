@@ -113,4 +113,33 @@ public class LdapNameUtilTest {
         //then
         assertThat(result.toString()).isEqualTo("cn=bobby,ou=users");
     }
+
+    @Test
+    public void emptyShouldBeEmpty() throws Exception {
+        //given
+        //when
+        val empty = LdapNameUtil.empty();
+        //then
+        assertThat(empty.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void emptyShouldBeSingleton() throws Exception {
+        //given
+        val empty1 = LdapNameUtil.empty();
+        val empty2 = LdapNameUtil.empty();
+        //then
+        assertThat(empty1).isSameAs(empty2);
+    }
+
+    @Test
+    public void shouldJoin() throws Exception {
+        //given
+        val localName = "cn=bob";
+        val baseName = "ou=users";
+        //when
+        val joined = LdapNameUtil.join(localName, baseName);
+        //then
+        assertThat(joined.toString()).isEqualTo("cn=bob,ou=users");
+    }
 }
