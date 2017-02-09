@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
+import lombok.NonNull;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.events.ChangePasswordRequestEvent;
@@ -70,7 +71,9 @@ public interface UserNavigationItem extends NamedNavigationItem {
      *
      * @return The navigation item.
      */
-    static UserNavigationItem create(final User user, final ApplicationEventPublisher eventPublisher) {
+    static UserNavigationItem create(
+            @NonNull final User user, @NonNull final ApplicationEventPublisher eventPublisher
+                                    ) {
         return builder().user(user)
                         .name(user.name())
                         .dn(user.getDn())
@@ -102,7 +105,7 @@ public interface UserNavigationItem extends NamedNavigationItem {
 
 
     @Override
-    default boolean hasFeature(final Features feature) {
+    default boolean hasFeature(@NonNull final Features feature) {
         return getUser().hasFeature(feature);
     }
 
