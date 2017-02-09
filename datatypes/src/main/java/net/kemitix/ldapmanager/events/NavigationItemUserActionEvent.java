@@ -22,25 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation.events;
+package net.kemitix.ldapmanager.events;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
+import org.immutables.value.Value;
 
 /**
  * Raised when the user presses Enter or Space on a {@link UserNavigationItem}.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class NavigationItemUserActionEvent {
+@Value.Immutable
+public interface NavigationItemUserActionEvent {
 
-    @Getter
-    private final User user;
+    /**
+     * Get the user.
+     *
+     * @return the user.
+     */
+    User getUser();
 
     /**
      * Create a new ApplicationEvent for when the User is opened.
@@ -49,7 +51,9 @@ public final class NavigationItemUserActionEvent {
      *
      * @return the event
      */
-    public static NavigationItemUserActionEvent of(@NonNull final User user) {
-        return new NavigationItemUserActionEvent(user);
+    static NavigationItemUserActionEvent of(@NonNull final User user) {
+        return ImmutableNavigationItemUserActionEvent.builder()
+                                                     .user(user)
+                                                     .build();
     }
 }

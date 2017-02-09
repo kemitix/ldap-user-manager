@@ -2,6 +2,7 @@ package net.kemitix.ldapmanager.navigation.events;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.events.NavigationItemUserActionEvent;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.junit.Rule;
 import org.junit.Test;
