@@ -11,10 +11,6 @@
 
     <artifactId>ldap-user-manager-common</artifactId>
 
-    <properties>
-        <lanterna.version>3.0.0-beta3</lanterna.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>

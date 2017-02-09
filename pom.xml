@@ -30,6 +30,8 @@
         <assertj.version>3.6.1</assertj.version>
         <unboundid.version>3.2.0</unboundid.version>
         <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
+        <immutable-value.version>2.4.0</immutable-value.version>
+        <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -38,6 +40,16 @@
                 <groupId>com.googlecode.lanterna</groupId>
                 <artifactId>lanterna</artifactId>
                 <version>${lanterna.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kemitix</groupId>
+                <artifactId>ldap-user-manager-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kemitix</groupId>
+                <artifactId>ldap-user-manager-datatypes</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.kemitix</groupId>
@@ -59,7 +71,24 @@
                 <artifactId>commons-testing</artifactId>
                 <version>${trajano-commons-testing.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.immutables</groupId>
+                <artifactId>value</artifactId>
+                <version>${immutable-value.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.eluder.coveralls</groupId>
+                    <artifactId>coveralls-maven-plugin</artifactId>
+                    <version>${coveralls-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
