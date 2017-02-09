@@ -55,6 +55,13 @@ public interface NavigationItemOuSelectedEvent {
                                     .getDn();
     }
 
+    /**
+     * Creates a new NavigationItemOuSelectedEvent.
+     *
+     * @param ouNavigationItem The selected item
+     *
+     * @return The Event.
+     */
     static NavigationItemOuSelectedEvent of(OuNavigationItem ouNavigationItem) {
         return ImmutableNavigationItemOuSelectedEvent.of(ouNavigationItem);
     }
