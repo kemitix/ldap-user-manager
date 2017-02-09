@@ -24,6 +24,7 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.navigation;
 
+import lombok.NonNull;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.events.NavigationItemOuActionEvent;
@@ -71,9 +72,7 @@ public interface OuNavigationItem extends NamedNavigationItem {
      *
      * @return The ou navigation item.
      */
-    static OuNavigationItem create(
-            final OU ou, final ApplicationEventPublisher eventPublisher
-                                  ) {
+    static OuNavigationItem create(@NonNull final OU ou, @NonNull final ApplicationEventPublisher eventPublisher) {
         return builder().ou(ou)
                         .name(ou.getOu())
                         .dn(ou.getDn())
@@ -102,7 +101,7 @@ public interface OuNavigationItem extends NamedNavigationItem {
     }
 
     @Override
-    default boolean hasFeature(final Features feature) {
+    default boolean hasFeature(@NonNull final Features feature) {
         return getOu().hasFeature(feature);
     }
 
