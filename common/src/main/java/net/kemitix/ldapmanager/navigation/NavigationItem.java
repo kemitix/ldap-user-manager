@@ -27,6 +27,7 @@ package net.kemitix.ldapmanager.navigation;
 import net.kemitix.ldapmanager.domain.FeatureSet;
 
 import javax.naming.Name;
+import java.util.Locale;
 
 /**
  * Item that can appear on the Navigation panel.
@@ -62,7 +63,16 @@ public interface NavigationItem extends Runnable, Comparable<NavigationItem>, Fe
      *
      * @return the sortable name
      */
-    String getSortableName();
+    default String getSortableName() {
+        return String.format("%s-%s", getSortableType(), getName().toLowerCase(Locale.ENGLISH));
+    }
+
+    /**
+     * Returns the type of navigation item as a sortable string.
+     *
+     * @return The type of navigation item.
+     */
+    String getSortableType();
 
     /**
      * Compare two NavigationItems using their {@link #getSortableName()}.

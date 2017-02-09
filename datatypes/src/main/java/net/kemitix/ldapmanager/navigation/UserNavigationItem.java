@@ -120,4 +120,9 @@ public interface UserNavigationItem extends NamedNavigationItem {
     default boolean hasFeature(final Features feature) {
         return getUser().hasFeature(feature);
     }
+
+    @Override
+    default String getSortableType() {
+        return "user";
+    }
 }

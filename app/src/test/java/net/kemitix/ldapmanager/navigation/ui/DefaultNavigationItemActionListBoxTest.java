@@ -380,8 +380,8 @@ public class DefaultNavigationItemActionListBoxTest {
         }
 
         @Override
-        public String getSortableName() {
-            return null;
+        public String getSortableType() {
+            return "stub";
         }
 
         @Override

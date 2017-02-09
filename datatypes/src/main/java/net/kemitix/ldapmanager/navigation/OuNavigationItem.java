@@ -124,4 +124,9 @@ public interface OuNavigationItem extends NamedNavigationItem {
     default boolean hasFeature(final Features feature) {
         return getOu().hasFeature(feature);
     }
+
+    @Override
+    default String getSortableType() {
+        return "user";
+    }
 }
