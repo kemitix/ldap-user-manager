@@ -45,11 +45,11 @@ import static org.mockito.Matchers.eq;
  */
 public class DefaultNavigationItemActionListBoxTest {
 
-    private static final String ITEM_NAME_2 = "beta";
-
     private static final String ITEM_NAME_OTHER = "gamma";
 
-    private static final String ITEM_NAME_1 = "name";
+    private static final String ITEM_NAME_1 = "alpha";
+
+    private static final String ITEM_NAME_2 = "beta";
 
     private static final char CHAR_SPACE = ' ';
 
@@ -315,9 +315,9 @@ public class DefaultNavigationItemActionListBoxTest {
                                                     .sn("smith")
                                                     .build(), applicationEventPublisher);
         //then
-        assertThat(ou.toString()).isEqualTo("[users]");
-        assertThat(user.toString()).isEqualTo(" bob ");
+        assertThat(ou.toString()).contains("ou=users", "name=users", "featureSet=[RENAME]");
         assertThat(ou.getName()).isEqualTo("users");
+        assertThat(user.toString()).contains("cn=bob", "dn=cn=bob", "name=bob");
         assertThat(user.getName()).isEqualTo("bob");
     }
 

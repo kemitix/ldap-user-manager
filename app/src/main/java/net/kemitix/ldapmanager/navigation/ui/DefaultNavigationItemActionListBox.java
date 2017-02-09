@@ -45,6 +45,7 @@ import org.springframework.ldap.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -142,6 +143,8 @@ class DefaultNavigationItemActionListBox
         log.log(Level.FINEST, "onCurrentContainerChanged()");
         clearItems();
         navigationItemSupplier.get()
+                              .stream()
+                              .sorted(Comparator.comparing(NavigationItem::getSortableName))
                               .forEach(this::addItem);
     }
 
