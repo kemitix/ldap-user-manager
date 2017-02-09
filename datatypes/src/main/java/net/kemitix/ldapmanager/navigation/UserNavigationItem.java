@@ -54,6 +54,8 @@ public interface UserNavigationItem extends NamedNavigationItem {
 
     static UserNavigationItem create(User user, ApplicationEventPublisher eventPublisher) {
         return builder().user(user)
+                        .name(user.name())
+                        .dn(user.getDn())
                         .applicationEventPublisher(eventPublisher)
                         .build();
     }

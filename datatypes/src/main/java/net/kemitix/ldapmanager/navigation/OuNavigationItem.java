@@ -75,6 +75,8 @@ public interface OuNavigationItem extends NamedNavigationItem {
             final OU ou, final ApplicationEventPublisher eventPublisher
                                   ) {
         return builder().ou(ou)
+                        .name(ou.getOu())
+                        .dn(ou.getDn())
                         .applicationEventPublisher(eventPublisher)
                         .build();
     }
