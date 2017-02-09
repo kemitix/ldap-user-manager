@@ -39,8 +39,18 @@ import org.springframework.context.ApplicationEventPublisher;
 @Value.Immutable
 public interface UserNavigationItem extends NamedNavigationItem {
 
+    /**
+     * Gets the User.
+     *
+     * @return The User.
+     */
     User getUser();
 
+    /**
+     * Gets the Application Event Publisher.
+     *
+     * @return The Application Event Publisher
+     */
     ApplicationEventPublisher getApplicationEventPublisher();
 
     /**
@@ -52,7 +62,15 @@ public interface UserNavigationItem extends NamedNavigationItem {
         return ImmutableUserNavigationItem.builder();
     }
 
-    static UserNavigationItem create(User user, ApplicationEventPublisher eventPublisher) {
+    /**
+     * Creates a new UserNavigationItem.
+     *
+     * @param user           The user.
+     * @param eventPublisher The Event Publisher.
+     *
+     * @return The navigation item.
+     */
+    static UserNavigationItem create(final User user, final ApplicationEventPublisher eventPublisher) {
         return builder().user(user)
                         .name(user.name())
                         .dn(user.getDn())
@@ -60,65 +78,30 @@ public interface UserNavigationItem extends NamedNavigationItem {
                         .build();
     }
 
-    //    /**
-    //     * Create a UserNavigationItem.
-    //     *
-    //     * @param user           The user.
-    //     * @param eventPublisher The Application Event Publisher.
-    //     *
-    //     * @return The user navigation item.
-    //     */
-    //    public static UserNavigationItem create(
-    //            @NonNull final User user, @NonNull final ApplicationEventPublisher eventPublisher
-    //                                           ) {
-    //        log.log(Level.FINEST, "create(%s,...)", user.name());
-    //        return new UserNavigationItem(user, eventPublisher);
-    //    }
-    //
     @Override
     default void run() {
-        //        getApplicationEventPublisher().publishEvent(NavigationItemUserActionEvent.of(user));
+        //getApplicationEventPublisher().publishEvent(NavigationItemUserActionEvent.of(user));
     }
 
-    //
-    //    @Override
-    //    public String toString() {
-    //        return String.format(" %s ", user.name());
-    //    }
-    //
-    //    @Override
-    //    public Name getDn() {
-    //        return user.getDn();
-    //    }
-    //
-    //    @Override
+    @Override
     default void publishAsSelected() {
-        //        log.log(Level.FINEST, "publishAsSelected(): %1", getName());
-        //            getApplicationEventPublisher().publishEvent(NavigationItemUserSelectedEvent.of(this));
+        //getApplicationEventPublisher().publishEvent(NavigationItemUserSelectedEvent.of(this));
     }
 
-    //
-    //    @Override
-    //    public String getSortableName() {
-    //        return String.format(
-    //                "%s-%s", Messages.SORTABLE_PREFIX_USER.getValue(), getName().toLowerCase(Locale.getDefault()));
-    //    }
-    //
-    //    @Override
+
+    @Override
     default void publishRenameRequest() {
-        //        log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
         getApplicationEventPublisher().publishEvent(RenameRequestEvent.of(getDn()));
     }
 
-    //
-    //    @Override
+
+    @Override
     default void publishChangePasswordRequest() {
-        //        log.log(Level.FINEST, "publishChangePasswordRequest(): %1", getName());
         getApplicationEventPublisher().publishEvent(ChangePasswordRequestEvent.of(getDn()));
     }
 
-    //
-    //    @Override
+
+    @Override
     default boolean hasFeature(final Features feature) {
         return getUser().hasFeature(feature);
     }
