@@ -86,43 +86,22 @@ public interface OuNavigationItem extends NamedNavigationItem {
         getApplicationEventPublisher().publishEvent(NavigationItemOuActionEvent.of(getOu()));
     }
 
-    //    @Override
-    //    public String toString() {
-    //        return String.format("[%s]", ou.name());
-    //    }
-    //
-    //    @Override
-    //    public Name getDn() {
-    //        return ou.getDn();
-    //    }
-    //
-    //    @Override
+    @Override
     default void publishAsSelected() {
-        //        log.log(Level.FINEST, "publishAsSelected(): %1", getName());
         getApplicationEventPublisher().publishEvent(NavigationItemOuSelectedEvent.of(this));
     }
 
-    //
-    //    @Override
-    //    public String getSortableName() {
-    //        return String.format(
-    //                "%s-%s", Messages.SORTABLE_PREFIX_OU.getValue(), getName().toLowerCase(Locale.getDefault()));
-    //    }
-    //
-    //    @Override
+    @Override
     default void publishRenameRequest() {
-        //        log.log(Level.FINEST, "publishRenameRequest(): %1", getName());
         getApplicationEventPublisher().publishEvent(RenameRequestEvent.of(getDn()));
     }
 
-    //
-    //    @Override
+    @Override
     default void publishChangePasswordRequest() {
         // does not support passwords
     }
 
-    //
-    //    @Override
+    @Override
     default boolean hasFeature(final Features feature) {
         return getOu().hasFeature(feature);
     }
