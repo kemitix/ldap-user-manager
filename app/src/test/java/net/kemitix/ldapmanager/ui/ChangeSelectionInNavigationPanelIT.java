@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,17 +70,21 @@ public class ChangeSelectionInNavigationPanelIT extends AbstractLdapConnectionIn
         currentContainer.setDn(LdapNameUtil.empty());
         currentContainer.publishCurrentContainer();
         navigationItemSelectionChangedEvents.clear();
-    }
 
-    @Test
-    public void verifyStartConditions() {
         assertThat(currentOuLabel.getText()).isEqualTo(ldapOptions.getBase());
-        assertThat(ldapEntityContainerSupplier.get()
-                                              .getContents()).extracting(LdapEntity::name)
-                                                             .containsExactly(OU_NAME, USER_NAME);
-        assertThat(navigationItemActionListBox.getSelectedIndex()).isEqualTo(0);
-        assertThat(navigationItemActionListBox.getSelectedItem()
-                                              .getName()).isEqualTo(OU_NAME);
+        final List<LdapEntity> contents = ldapEntityContainerSupplier.get()
+                                                                     .getContents()
+                                                                     .collect(Collectors.toList());
+        assertThat(contents).as("Items are: OU and USER")
+                            .extracting(LdapEntity::name)
+                            .containsExactly(OU_NAME, USER_NAME);
+        final int selectedIndex = navigationItemActionListBox.getSelectedIndex();
+        assertThat(selectedIndex).as("Selected item is the first item")
+                                 .isEqualTo(0);
+        final String selectedItemName = navigationItemActionListBox.getSelectedItem()
+                                                                   .getName();
+        assertThat(selectedItemName).as("OU is first item on list box")
+                                    .isEqualTo(OU_NAME);
     }
 
     @Test
