@@ -22,32 +22,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package net.kemitix.ldapmanager.navigation.events;
+package net.kemitix.ldapmanager.events;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
+import org.immutables.value.Value;
 
 import javax.naming.Name;
-import java.util.logging.Level;
 
 /**
  * Raised when a User Navigation Item is selected.
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Log
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class NavigationItemUserSelectedEvent {
+@Value.Immutable
+public interface NavigationItemUserSelectedEvent {
 
-    @Getter
-    private final UserNavigationItem userNavigationItem;
+    /**
+     * Gets the user navigation item.
+     *
+     * @return the navigation item.
+     */
+    UserNavigationItem getUserNavigationItem();
 
-    @Getter
-    private final Name dn;
+    /**
+     * Gets the Dn.
+     *
+     * @return the DN.
+     */
+    Name getDn();
 
     /**
      * Creates a new NavigationItemOuSelectedEvent.
@@ -56,9 +59,10 @@ public final class NavigationItemUserSelectedEvent {
      *
      * @return the event
      */
-    public static NavigationItemUserSelectedEvent of(@NonNull final UserNavigationItem userNavigationItem) {
-        log.log(Level.FINEST, "of(%s)", userNavigationItem);
-        return new NavigationItemUserSelectedEvent(userNavigationItem, userNavigationItem.getUser()
-                                                                                         .getDn());
+    static NavigationItemUserSelectedEvent of(@NonNull final UserNavigationItem userNavigationItem) {
+        return ImmutableNavigationItemUserSelectedEvent.builder()
+                                                       .userNavigationItem(userNavigationItem)
+                                                       .dn(userNavigationItem.getDn())
+                                                       .build();
     }
 }

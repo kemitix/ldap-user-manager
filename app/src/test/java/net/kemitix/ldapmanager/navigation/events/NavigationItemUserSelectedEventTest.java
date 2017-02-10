@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.navigation.events;
 
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.events.NavigationItemUserSelectedEvent;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import org.junit.Before;
 import org.junit.Rule;
