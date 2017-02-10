@@ -28,6 +28,8 @@ import lombok.NonNull;
 import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.events.ChangePasswordRequestEvent;
+import net.kemitix.ldapmanager.events.NavigationItemUserActionEvent;
+import net.kemitix.ldapmanager.events.NavigationItemUserSelectedEvent;
 import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import org.immutables.value.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -83,12 +85,12 @@ public interface UserNavigationItem extends NamedNavigationItem {
 
     @Override
     default void run() {
-        //getApplicationEventPublisher().publishEvent(NavigationItemUserActionEvent.of(user));
+        getApplicationEventPublisher().publishEvent(NavigationItemUserActionEvent.of(getUser()));
     }
 
     @Override
     default void publishAsSelected() {
-        //getApplicationEventPublisher().publishEvent(NavigationItemUserSelectedEvent.of(this));
+        getApplicationEventPublisher().publishEvent(NavigationItemUserSelectedEvent.of(this));
     }
 
 
