@@ -25,6 +25,7 @@
     </modules>
 
     <properties>
+        <spring-boot.version>1.4.4.RELEASE</spring-boot.version>
         <digraph-dependency.basePackage>net.kemitix.ldapmanager</digraph-dependency.basePackage>
         <lanterna.version>3.0.0-beta3</lanterna.version>
         <assertj.version>3.6.1</assertj.version>
@@ -82,6 +83,11 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>net.kemitix</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
                 <plugin>
                     <groupId>org.eluder.coveralls</groupId>
                     <artifactId>coveralls-maven-plugin</artifactId>
