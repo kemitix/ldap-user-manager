@@ -5,12 +5,13 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import lombok.val;
 import net.kemitix.ldapmanager.Messages;
-import net.kemitix.ldapmanager.domain.Features;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 import net.kemitix.ldapmanager.navigation.NavigationItemFactory;
+import net.kemitix.ldapmanager.navigation.OuNavigationItem;
+import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
 import org.assertj.core.api.Assertions;
@@ -28,7 +29,6 @@ import org.springframework.ldap.AuthenticationException;
 import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,8 +68,6 @@ public class DefaultNavigationItemActionListBoxTest {
     @Mock
     private StartupExceptionsCollector startupExceptionsCollector;
 
-    private final AtomicReference<String> selectedItem = new AtomicReference<>("unselected");
-
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -84,9 +82,13 @@ public class DefaultNavigationItemActionListBoxTest {
     @Captor
     private ArgumentCaptor<NavigationItemSelectionChangedEvent> eventCaptor;
 
-    private NavigationItem navigationItem0;
+    private UserNavigationItem navigationItemUser;
 
-    private NavigationItem navigationItem1;
+    private OuNavigationItem navigationItemOU;
+
+    private Name userDn = LdapNameUtil.parse("dn=" + ITEM_NAME_1);
+
+    private Name ouDn = LdapNameUtil.parse("dn=" + ITEM_NAME_2);
 
     @Before
     public void setUp() throws Exception {
@@ -103,8 +105,9 @@ public class DefaultNavigationItemActionListBoxTest {
         spaceKeyStroke = new KeyStroke(CHAR_SPACE, false, false);
         assertThat(spaceKeyStroke.getKeyType()).isEqualTo(KeyType.Character);
         assertThat(spaceKeyStroke.getCharacter()).isEqualTo(CHAR_SPACE);
-        navigationItem0 = createItem(ITEM_NAME_1);
-        navigationItem1 = createItem(ITEM_NAME_2);
+        navigationItemUser =
+                UserNavigationItem.create(User.create(userDn, ITEM_NAME_1, "userSn"), applicationEventPublisher);
+        navigationItemOU = OuNavigationItem.create(OU.of(ouDn, ITEM_NAME_2), applicationEventPublisher);
     }
 
     @Test
@@ -156,10 +159,7 @@ public class DefaultNavigationItemActionListBoxTest {
         //when
         val result = navigationItemListBox.findAndSelectItemByName(ITEM_NAME_2);
         //then
-        Assertions.assertThat(result.map(Runnable::toString))
-                  .contains(ITEM_NAME_2);
-        result.ifPresent(a -> navigationItemListBox.performSelectedItem());
-        assertThat(selectedItem.get()).isEqualTo(ITEM_NAME_2);
+        assertThat(result.map(NavigationItem::getName)).contains(ITEM_NAME_2);
     }
 
     @Test
@@ -171,7 +171,6 @@ public class DefaultNavigationItemActionListBoxTest {
         //then
         Assertions.assertThat(result)
                   .isEmpty();
-        assertThat(selectedItem.get()).isEqualTo("unselected");
     }
 
     @Test
@@ -258,8 +257,8 @@ public class DefaultNavigationItemActionListBoxTest {
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
-        assertThat(event.getOldItem()).contains(navigationItem0);
-        assertThat(event.getNewItem()).contains(navigationItem1);
+        assertThat(event.getOldItem()).contains(navigationItemUser);
+        assertThat(event.getNewItem()).contains(navigationItemOU);
     }
 
     @Test
@@ -272,7 +271,7 @@ public class DefaultNavigationItemActionListBoxTest {
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
-        assertThat(event.getOldItem()).contains(navigationItem0);
+        assertThat(event.getOldItem()).contains(navigationItemUser);
         assertThat(event.getNewItem()).isEmpty();
     }
 
@@ -287,7 +286,7 @@ public class DefaultNavigationItemActionListBoxTest {
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
         assertThat(event.getOldItem()).isEmpty();
-        assertThat(event.getNewItem()).contains(navigationItem1);
+        assertThat(event.getNewItem()).contains(navigationItemOU);
     }
 
     @Test
@@ -323,80 +322,16 @@ public class DefaultNavigationItemActionListBoxTest {
 
     private void givenPopulatedList() {
         given(navigationItemsSupplier.get()).willReturn(navigationItems);
-        navigationItems.add(navigationItem0);
-        navigationItems.add(navigationItem1);
+        navigationItems.add(navigationItemUser);
+        navigationItems.add(navigationItemOU);
         navigationItemListBox.init();
+        navigationItemListBox.getItems()
+                             .stream()
+                             .map(NavigationItem::getSortableName)
+                             .forEach(System.out::println);
     }
 
     private void givenUnpopulatedList() {
         navigationItemListBox.init();
-    }
-
-    private NavigationItem createItem(final String label) {
-        return new DefaultNavigationItemActionListBoxTest.MyItem(label, applicationEventPublisher, selectedItem);
-    }
-
-    private static class MyItem implements NavigationItem {
-
-        private final String name;
-
-        private final ApplicationEventPublisher applicationEventPublisher;
-
-        private final AtomicReference<String> selectedItem;
-
-        MyItem(
-                final String name, final ApplicationEventPublisher applicationEventPublisher,
-                final AtomicReference<String> selectedItem
-              ) {
-            this.name = name;
-            this.applicationEventPublisher = applicationEventPublisher;
-            this.selectedItem = selectedItem;
-        }
-
-        @Override
-        public void run() {
-            selectedItem.getAndSet(name);
-        }
-
-        @Override
-        @Deprecated
-        public String toString() {
-            return name;
-        }
-
-        @Override
-        public Name getDn() {
-            return null;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public void publishAsSelected() {
-            applicationEventPublisher.publishEvent(this);
-        }
-
-        @Override
-        public String getSortableType() {
-            return "stub";
-        }
-
-        @Override
-        public void publishRenameRequest() {
-            applicationEventPublisher.publishEvent(this);
-        }
-
-        @Override
-        public void publishChangePasswordRequest() {
-            applicationEventPublisher.publishEvent(this);
-        }
-
-        @Override
-        public boolean hasFeature(final Features feature) {
-            return false;
-        }
     }
 }
