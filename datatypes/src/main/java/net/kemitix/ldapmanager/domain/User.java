@@ -27,6 +27,7 @@ package net.kemitix.ldapmanager.domain;
 import org.immutables.value.Value;
 
 import javax.naming.Name;
+import java.util.EnumSet;
 
 /**
  * A User.
@@ -82,6 +83,7 @@ public interface User extends LdapEntity {
                    .dn(dn)
                    .cn(cn)
                    .sn(sn)
+                   .featureSet(EnumSet.of(Features.RENAME, Features.PASSWORD))
                    .build();
     }
 }
