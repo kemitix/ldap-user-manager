@@ -14,7 +14,6 @@ import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.ui.StartupExceptionsCollector;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,15 +44,21 @@ import static org.mockito.Matchers.eq;
  */
 public class DefaultNavigationItemActionListBoxTest {
 
-    private static final String ITEM_NAME_OTHER = "gamma";
+    private static final String NOT_FOUND_NAME = "gamma";
 
-    private static final String ITEM_NAME_1 = "alpha";
+    private static final String USER_NAME = "alpha";
 
-    private static final String ITEM_NAME_2 = "beta";
+    private static final String OU_NAME = "beta";
 
     private static final char CHAR_SPACE = ' ';
 
     private static final char CHAR_X = 'x';
+
+    private static final int INDEX_FIRST_ITEM = 0;
+
+    private static final int INDEX_NONE_SELECTED = -1;
+
+    private static final int INDEX_SECOND_ITEM = 1;
 
     private DefaultNavigationItemActionListBox navigationItemListBox;
 
@@ -86,9 +91,9 @@ public class DefaultNavigationItemActionListBoxTest {
 
     private OuNavigationItem navigationItemOU;
 
-    private Name userDn = LdapNameUtil.parse("dn=" + ITEM_NAME_1);
+    private Name userDn = LdapNameUtil.parse("dn=" + USER_NAME);
 
-    private Name ouDn = LdapNameUtil.parse("dn=" + ITEM_NAME_2);
+    private Name ouDn = LdapNameUtil.parse("dn=" + OU_NAME);
 
     @Before
     public void setUp() throws Exception {
@@ -106,8 +111,8 @@ public class DefaultNavigationItemActionListBoxTest {
         assertThat(spaceKeyStroke.getKeyType()).isEqualTo(KeyType.Character);
         assertThat(spaceKeyStroke.getCharacter()).isEqualTo(CHAR_SPACE);
         navigationItemUser =
-                UserNavigationItem.create(User.create(userDn, ITEM_NAME_1, "userSn"), applicationEventPublisher);
-        navigationItemOU = OuNavigationItem.create(OU.of(ouDn, ITEM_NAME_2), applicationEventPublisher);
+                UserNavigationItem.create(User.create(userDn, USER_NAME, "userSn"), applicationEventPublisher);
+        navigationItemOU = OuNavigationItem.create(OU.of(ouDn, OU_NAME), applicationEventPublisher);
     }
 
     @Test
@@ -137,9 +142,9 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         givenPopulatedList();
         //when
-        val result = navigationItemListBox.findItemPositionByName(ITEM_NAME_2);
+        val result = navigationItemListBox.findItemPositionByName(OU_NAME);
         //then
-        assertThat(result).contains(1);
+        assertThat(result).contains(INDEX_FIRST_ITEM);
     }
 
     @Test
@@ -147,7 +152,7 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         givenPopulatedList();
         //when
-        val result = navigationItemListBox.findItemPositionByName(ITEM_NAME_OTHER);
+        val result = navigationItemListBox.findItemPositionByName(NOT_FOUND_NAME);
         //then
         assertThat(result).isEmpty();
     }
@@ -157,9 +162,9 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         givenPopulatedList();
         //when
-        val result = navigationItemListBox.findAndSelectItemByName(ITEM_NAME_2);
+        val result = navigationItemListBox.findAndSelectItemByName(OU_NAME);
         //then
-        assertThat(result.map(NavigationItem::getName)).contains(ITEM_NAME_2);
+        assertThat(result.map(NavigationItem::getName)).contains(OU_NAME);
     }
 
     @Test
@@ -167,10 +172,9 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         givenPopulatedList();
         //when
-        val result = navigationItemListBox.findAndSelectItemByName(ITEM_NAME_OTHER);
+        val result = navigationItemListBox.findAndSelectItemByName(NOT_FOUND_NAME);
         //then
-        Assertions.assertThat(result)
-                  .isEmpty();
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -257,8 +261,8 @@ public class DefaultNavigationItemActionListBoxTest {
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
-        assertThat(event.getOldItem()).contains(navigationItemUser);
-        assertThat(event.getNewItem()).contains(navigationItemOU);
+        assertThat(event.getOldItem()).contains(navigationItemOU);
+        assertThat(event.getNewItem()).contains(navigationItemUser);
     }
 
     @Test
@@ -266,12 +270,12 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         givenPopulatedList();
         //when
-        navigationItemListBox.onSelectionChange(0, -1);
+        navigationItemListBox.onSelectionChange(INDEX_FIRST_ITEM, INDEX_NONE_SELECTED);
         //then
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());
         final NavigationItemSelectionChangedEvent event = eventCaptor.getValue();
-        assertThat(event.getOldItem()).contains(navigationItemUser);
+        assertThat(event.getOldItem()).contains(navigationItemOU);
         assertThat(event.getNewItem()).isEmpty();
     }
 
@@ -280,7 +284,7 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         givenPopulatedList();
         //when
-        navigationItemListBox.onSelectionChange(-1, 1);
+        navigationItemListBox.onSelectionChange(INDEX_NONE_SELECTED, INDEX_FIRST_ITEM);
         //then
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());
@@ -294,7 +298,7 @@ public class DefaultNavigationItemActionListBoxTest {
         //given
         givenUnpopulatedList();
         //when
-        navigationItemListBox.onSelectionChange(0, 1);
+        navigationItemListBox.onSelectionChange(INDEX_FIRST_ITEM, INDEX_SECOND_ITEM);
         //then
         then(applicationEventPublisher).should()
                                        .publishEvent(eventCaptor.capture());

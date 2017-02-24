@@ -164,6 +164,6 @@ public class NavigationItemsSupplierTest {
         final List<NavigationItem> navigationItems = navigationItemsSupplier.get();
         //then
         assertThat(navigationItems.stream()
-                                  .map(NavigationItem::getName)).containsExactly("alice", "alpha", "beta", "bob");
+                                  .map(NavigationItem::getName)).containsExactly("alpha", "beta", "alice", "bob");
     }
 }

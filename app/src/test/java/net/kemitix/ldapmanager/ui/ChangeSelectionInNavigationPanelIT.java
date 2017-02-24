@@ -93,6 +93,7 @@ public class ChangeSelectionInNavigationPanelIT {
         final int selectedIndex = navigationItemActionListBox.getSelectedIndex();
         assertThat(selectedIndex).as("Selected item is the first item")
                                  .isEqualTo(0);
+        System.out.println("navigationItemActionListBox = " + navigationItemActionListBox);
         final String selectedItemName = navigationItemActionListBox.getSelectedItem()
                                                                    .getName();
         assertThat(selectedItemName).as("OU is first item on list box")
