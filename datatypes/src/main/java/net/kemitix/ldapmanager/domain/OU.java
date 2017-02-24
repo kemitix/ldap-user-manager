@@ -27,7 +27,7 @@ package net.kemitix.ldapmanager.domain;
 import org.immutables.value.Value;
 
 import javax.naming.Name;
-import java.util.Collections;
+import java.util.EnumSet;
 
 /**
  * An Organizational Unit.
@@ -66,7 +66,7 @@ public interface OU extends LdapEntity {
         return OU.builder()
                  .dn(dn)
                  .ou(ou)
-                 .featureSet(Collections.singletonList(Features.RENAME))
+                 .featureSet(EnumSet.of(Features.RENAME))
                  .build();
     }
 
