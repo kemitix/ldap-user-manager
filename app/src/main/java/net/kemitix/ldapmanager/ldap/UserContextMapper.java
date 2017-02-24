@@ -42,11 +42,8 @@ class UserContextMapper extends AbstractContextMapper<User> implements PreCheckC
 
     @Override
     protected User doMapFromContext(final DirContextOperations ctx) {
-        return User.builder()
-                   .dn(ctx.getDn())
-                   .cn(ctx.getStringAttribute(LdapAttribute.CN))
-                   .sn(ctx.getStringAttribute(LdapAttribute.SN))
-                   .build();
+        return User.create(
+                ctx.getDn(), ctx.getStringAttribute(LdapAttribute.CN), ctx.getStringAttribute(LdapAttribute.SN));
     }
 
     @Override
