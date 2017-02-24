@@ -40,21 +40,22 @@ import org.springframework.context.ApplicationEventPublisher;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Value.Immutable
-public interface UserNavigationItem extends NamedNavigationItem {
+@SuppressWarnings("abstractclassname")
+public abstract class UserNavigationItem extends NamedNavigationItem {
 
     /**
      * Gets the User.
      *
      * @return The User.
      */
-    User getUser();
+    public abstract User getUser();
 
     /**
      * Gets the Application Event Publisher.
      *
      * @return The Application Event Publisher
      */
-    ApplicationEventPublisher getApplicationEventPublisher();
+    public abstract ApplicationEventPublisher getApplicationEventPublisher();
 
     /**
      * Create the builder.
@@ -73,9 +74,9 @@ public interface UserNavigationItem extends NamedNavigationItem {
      *
      * @return The navigation item.
      */
-    static UserNavigationItem create(
+    public static UserNavigationItem create(
             @NonNull final User user, @NonNull final ApplicationEventPublisher eventPublisher
-                                    ) {
+                                           ) {
         return builder().user(user)
                         .name(user.name())
                         .dn(user.getDn())
@@ -84,35 +85,40 @@ public interface UserNavigationItem extends NamedNavigationItem {
     }
 
     @Override
-    default void run() {
+    public final void run() {
         getApplicationEventPublisher().publishEvent(NavigationItemUserActionEvent.of(getUser()));
     }
 
     @Override
-    default void publishAsSelected() {
+    public final void publishAsSelected() {
         getApplicationEventPublisher().publishEvent(NavigationItemUserSelectedEvent.of(this));
     }
 
 
     @Override
-    default void publishRenameRequest() {
+    public final void publishRenameRequest() {
         getApplicationEventPublisher().publishEvent(RenameRequestEvent.of(getDn()));
     }
 
 
     @Override
-    default void publishChangePasswordRequest() {
+    public final void publishChangePasswordRequest() {
         getApplicationEventPublisher().publishEvent(ChangePasswordRequestEvent.of(getDn()));
     }
 
 
     @Override
-    default boolean hasFeature(@NonNull final Features feature) {
+    public final boolean hasFeature(@NonNull final Features feature) {
         return getUser().hasFeature(feature);
     }
 
     @Override
-    default String getSortableType() {
+    public final String getSortableType() {
         return "2:user";
+    }
+
+    @Override
+    public final String toString() {
+        return super.toString();
     }
 }

@@ -29,12 +29,18 @@ package net.kemitix.ldapmanager.navigation;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-interface NamedNavigationItem extends NavigationItem {
+@SuppressWarnings("abstractclassname")
+abstract class NamedNavigationItem implements NavigationItem {
 
     /**
      * Returns the name of the navigation item.
      *
      * @return The name
      */
-    String getName();
+    public abstract String getName();
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

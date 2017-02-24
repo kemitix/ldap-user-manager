@@ -39,21 +39,22 @@ import org.springframework.context.ApplicationEventPublisher;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Value.Immutable
-public interface OuNavigationItem extends NamedNavigationItem {
+@SuppressWarnings("abstractclassname")
+public abstract class OuNavigationItem extends NamedNavigationItem {
 
     /**
      * Gets the OU.
      *
      * @return The OU.
      */
-    OU getOu();
+    public abstract OU getOu();
 
     /**
      * Gets the Application Event Publisher.
      *
      * @return The Application Event Publisher
      */
-    ApplicationEventPublisher getApplicationEventPublisher();
+    abstract ApplicationEventPublisher getApplicationEventPublisher();
 
     /**
      * Creates a builder.
@@ -72,7 +73,9 @@ public interface OuNavigationItem extends NamedNavigationItem {
      *
      * @return The ou navigation item.
      */
-    static OuNavigationItem create(@NonNull final OU ou, @NonNull final ApplicationEventPublisher eventPublisher) {
+    public static OuNavigationItem create(
+            @NonNull final OU ou, @NonNull final ApplicationEventPublisher eventPublisher
+                                         ) {
         return builder().ou(ou)
                         .name(ou.getOu())
                         .dn(ou.getDn())
@@ -81,32 +84,37 @@ public interface OuNavigationItem extends NamedNavigationItem {
     }
 
     @Override
-    default void run() {
+    public final void run() {
         getApplicationEventPublisher().publishEvent(NavigationItemOuActionEvent.of(getOu()));
     }
 
     @Override
-    default void publishAsSelected() {
+    public final void publishAsSelected() {
         getApplicationEventPublisher().publishEvent(NavigationItemOuSelectedEvent.of(this));
     }
 
     @Override
-    default void publishRenameRequest() {
+    public final void publishRenameRequest() {
         getApplicationEventPublisher().publishEvent(RenameRequestEvent.of(getDn()));
     }
 
     @Override
-    default void publishChangePasswordRequest() {
+    public final void publishChangePasswordRequest() {
         // does not support passwords
     }
 
     @Override
-    default boolean hasFeature(@NonNull final Features feature) {
+    public final boolean hasFeature(@NonNull final Features feature) {
         return getOu().hasFeature(feature);
     }
 
     @Override
-    default String getSortableType() {
+    public final String getSortableType() {
         return "1:ou";
+    }
+
+    @Override
+    public final String toString() {
+        return "[" + super.toString() + "]";
     }
 }
