@@ -113,6 +113,6 @@ public interface UserNavigationItem extends NamedNavigationItem {
 
     @Override
     default String getSortableType() {
-        return "user";
+        return "2:user";
     }
 }

@@ -107,6 +107,6 @@ public interface OuNavigationItem extends NamedNavigationItem {
 
     @Override
     default String getSortableType() {
-        return "user";
+        return "1:ou";
     }
 }
