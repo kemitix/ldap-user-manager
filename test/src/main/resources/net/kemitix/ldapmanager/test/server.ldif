@@ -34,4 +34,3 @@ objectClass: organizationalPerson
 objectClass: inetOrgPerson
 cn: alice
 sn: Jones
-

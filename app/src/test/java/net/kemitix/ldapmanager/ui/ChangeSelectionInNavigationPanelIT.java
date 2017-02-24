@@ -1,17 +1,19 @@
 package net.kemitix.ldapmanager.ui;
 
 import net.kemitix.ldapmanager.domain.LdapEntity;
-import net.kemitix.ldapmanager.ldap.AbstractLdapConnectionIntegrationTest;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
-import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
-import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
 import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
+import net.kemitix.ldapmanager.navigation.events.NavigationItemSelectionChangedEvent;
+import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
+import net.kemitix.ldapmanager.test.TestLdapServer;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -37,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles({"test", "ldap-connection-it"})
-public class ChangeSelectionInNavigationPanelIT extends AbstractLdapConnectionIntegrationTest {
+public class ChangeSelectionInNavigationPanelIT {
 
     private static final String OU_NAME = "test1";
 
@@ -63,6 +65,16 @@ public class ChangeSelectionInNavigationPanelIT extends AbstractLdapConnectionIn
 
     @Captor
     private ArgumentCaptor<NavigationItemSelectionChangedEvent> eventArgumentCaptor;
+
+    @BeforeClass
+    public static void startServer() throws Exception {
+        TestLdapServer.startServer();
+    }
+
+    @AfterClass
+    public static void stopServer() throws Exception {
+        TestLdapServer.stopServer();
+    }
 
     @Before
     public void setUp() {

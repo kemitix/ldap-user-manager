@@ -2,6 +2,9 @@ package net.kemitix.ldapmanager.ldap;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
+import net.kemitix.ldapmanager.test.TestLdapServer;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles({"test", "ldap-connection-it"})
-public class LdapConnectionIT extends AbstractLdapConnectionIntegrationTest {
+public class LdapConnectionIT {
 
     @Autowired
     private BindAuthenticator authenticator;
@@ -37,6 +40,16 @@ public class LdapConnectionIT extends AbstractLdapConnectionIntegrationTest {
 
     @Autowired
     private ContextMapper<User> userContextMapper;
+
+    @BeforeClass
+    public static void startServer() throws Exception {
+        TestLdapServer.startServer();
+    }
+
+    @AfterClass
+    public static void stopServer() throws Exception {
+        TestLdapServer.stopServer();
+    }
 
     @Test
     public void canAuthenticateToLdap() {
@@ -48,7 +61,7 @@ public class LdapConnectionIT extends AbstractLdapConnectionIntegrationTest {
     @Test
     public void ldapTemplateCanFindAUser() throws InvalidNameException {
         //given
-        val dn = LdapNameUtil.parse("cn=bob,dc=kemitix,dc=net");
+        val dn = LdapNameUtil.parse("cn=bob");
         val entity = UserEntity.from(User.builder()
                                          .dn(dn)
                                          .cn("bob")

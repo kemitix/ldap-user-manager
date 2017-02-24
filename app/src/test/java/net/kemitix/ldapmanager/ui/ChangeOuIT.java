@@ -24,12 +24,15 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.ui;
 
-import net.kemitix.ldapmanager.ldap.AbstractLdapConnectionIntegrationTest;
+import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.ldap.LdapOptions;
 import net.kemitix.ldapmanager.navigation.ui.NavigationItemActionListBox;
 import net.kemitix.ldapmanager.state.CurrentContainer;
+import net.kemitix.ldapmanager.test.TestLdapServer;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +50,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles({"test", "ldap-connection-it"})
-public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
+public class ChangeOuIT {
 
     private static final String OU_NAME = "test1";
 
@@ -65,6 +68,15 @@ public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
     @Autowired
     private LdapOptions ldapOptions;
 
+    @BeforeClass
+    public static void startServer() throws Exception {
+        TestLdapServer.startServer();
+    }
+
+    @AfterClass
+    public static void stopServer() throws Exception {
+        TestLdapServer.stopServer();
+    }
 
     @Before
     public void setUp() {
@@ -78,15 +90,16 @@ public class ChangeOuIT extends AbstractLdapConnectionIntegrationTest {
         //given
         assertThat(navigationItemActionListBox.findAndSelectItemByName(OU_NAME)).as("Select the OU")
                                                                                 .isNotEmpty();
+        val expected = new StringBuilder().append("ou=")
+                                          .append(OU_NAME)
+                                          .append(',')
+                                          .append(ldapOptions.getBase())
+                                          .toString();
         //when
         navigationItemActionListBox.performSelectedItem();
         //then
         assertThat(currentOuLabel.getText()).as("Current OU label is updated")
-                                            .isEqualTo(new StringBuilder().append("ou=")
-                                                                          .append(OU_NAME)
-                                                                          .append(',')
-                                                                          .append(ldapOptions.getBase())
-                                                                          .toString());
+                                            .isEqualTo(expected);
     }
 
     @Test

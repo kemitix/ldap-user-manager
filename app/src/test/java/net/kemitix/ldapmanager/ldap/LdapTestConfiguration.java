@@ -1,6 +1,7 @@
 package net.kemitix.ldapmanager.ldap;
 
 import lombok.val;
+import net.kemitix.ldapmanager.test.TestLdapServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -19,7 +20,7 @@ import org.springframework.security.ldap.authentication.BindAuthenticator;
 class LdapTestConfiguration {
 
     private LdapContextSource contextSource() {
-        Integer serverPort = LdapConnectionIT.getServerPort();
+        Integer serverPort = TestLdapServer.getServerPort();
         assert serverPort != null;
         val contextSource =
                 new DefaultSpringSecurityContextSource("ldap://127.0.0.1:" + serverPort + "/dc=kemitix,dc=net");
