@@ -88,6 +88,11 @@ class DefaultNavigationItemActionListBox
     }
 
     @Override
+    protected ListItemRenderer<NavigationItem, DefaultNavigationItemActionListBox> createDefaultListItemRenderer() {
+        return new NavigationItemRenderer();
+    }
+
+    @Override
     public final TerminalPosition getCursorLocation() {
         log.log(Level.FINEST, "getCursorLocation(): null");
         return null;
