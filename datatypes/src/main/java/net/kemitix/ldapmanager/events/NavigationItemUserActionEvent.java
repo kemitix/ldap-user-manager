@@ -24,7 +24,6 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import lombok.NonNull;
 import net.kemitix.ldapmanager.domain.User;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import org.immutables.value.Value;
@@ -42,6 +41,7 @@ public interface NavigationItemUserActionEvent {
      *
      * @return the user.
      */
+    @Value.Parameter
     User getUser();
 
     /**
@@ -51,9 +51,7 @@ public interface NavigationItemUserActionEvent {
      *
      * @return the event
      */
-    static NavigationItemUserActionEvent of(@NonNull final User user) {
-        return ImmutableNavigationItemUserActionEvent.builder()
-                                                     .user(user)
-                                                     .build();
+    static NavigationItemUserActionEvent of(final User user) {
+        return ImmutableNavigationItemUserActionEvent.of(user);
     }
 }
