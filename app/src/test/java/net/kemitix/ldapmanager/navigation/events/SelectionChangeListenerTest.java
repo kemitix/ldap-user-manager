@@ -64,7 +64,7 @@ public class SelectionChangeListenerTest {
                    .ou("users")
                    .dn(LdapNameUtil.parse("ou=users"))
                    .build();
-        val ouItem = OuNavigationItem.create(ou, applicationEventPublisher);
+        val ouItem = OuNavigationItem.of(ou, applicationEventPublisher);
         val event = NavigationItemOuSelectedEvent.of(ouItem);
         //when
         listener.onOuSelected(event);

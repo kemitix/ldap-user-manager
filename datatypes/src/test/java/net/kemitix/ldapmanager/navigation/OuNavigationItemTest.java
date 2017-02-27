@@ -15,7 +15,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import javax.naming.Name;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -32,36 +31,30 @@ public class OuNavigationItemTest {
     @Test
     public void builder() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         //when
         val result = OuNavigationItem.builder()
                                      .ou(ou)
                                      .applicationEventPublisher(applicationEventPublisher)
-                                     .dn(dn)
-                                     .name(name)
                                      .build();
         //then
         assertThat(result).isInstanceOf(OuNavigationItem.class);
         assertThat(result.getOu()).isSameAs(ou);
         assertThat(result.getApplicationEventPublisher()).isSameAs(applicationEventPublisher);
         assertThat(result.getDn()).isSameAs(dn);
-        assertThat(result.getName()).isSameAs(name);
     }
 
     @Test
-    public void create() throws Exception {
+    public void of() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        given(ou.getOu()).willReturn(name);
-        given(ou.getDn()).willReturn(dn);
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val name = ou.name();
         //when
-        val result = OuNavigationItem.create(ou, applicationEventPublisher);
+        val result = OuNavigationItem.of(ou, applicationEventPublisher);
         //then
         assertThat(result).isInstanceOf(OuNavigationItem.class);
         assertThat(result.getOu()).isSameAs(ou);
@@ -77,22 +70,16 @@ public class OuNavigationItemTest {
         exception.expect(NullPointerException.class);
         exception.expectMessage("ou");
         //when
-        OuNavigationItem.create(null, applicationEventPublisher);
+        OuNavigationItem.of(null, applicationEventPublisher);
     }
 
     @Test
     public void run() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        val subject = OuNavigationItem.builder()
-                                      .ou(ou)
-                                      .applicationEventPublisher(applicationEventPublisher)
-                                      .dn(dn)
-                                      .name(name)
-                                      .build();
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val subject = OuNavigationItem.of(ou, applicationEventPublisher);
         //when
         subject.run();
         //then
@@ -103,16 +90,10 @@ public class OuNavigationItemTest {
     @Test
     public void publishAsSelected() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        val subject = OuNavigationItem.builder()
-                                      .ou(ou)
-                                      .applicationEventPublisher(applicationEventPublisher)
-                                      .dn(dn)
-                                      .name(name)
-                                      .build();
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val subject = OuNavigationItem.of(ou, applicationEventPublisher);
         //when
         subject.publishAsSelected();
         //then
@@ -123,16 +104,10 @@ public class OuNavigationItemTest {
     @Test
     public void publishRenameRequest() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        val subject = OuNavigationItem.builder()
-                                      .ou(ou)
-                                      .applicationEventPublisher(applicationEventPublisher)
-                                      .dn(dn)
-                                      .name(name)
-                                      .build();
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val subject = OuNavigationItem.of(ou, applicationEventPublisher);
         //when
         subject.publishRenameRequest();
         //then
@@ -143,16 +118,10 @@ public class OuNavigationItemTest {
     @Test
     public void publishChangePasswordRequest() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        val subject = OuNavigationItem.builder()
-                                      .ou(ou)
-                                      .applicationEventPublisher(applicationEventPublisher)
-                                      .dn(dn)
-                                      .name(name)
-                                      .build();
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val subject = OuNavigationItem.of(ou, applicationEventPublisher);
         //when
         subject.publishChangePasswordRequest();
         //then
@@ -163,21 +132,13 @@ public class OuNavigationItemTest {
     @Test
     public void hasFeature() throws Exception {
         //given
-        val ou = mock(OU.class);
-        given(ou.hasFeature(Features.PASSWORD)).willReturn(true);
-        given(ou.hasFeature(Features.RENAME)).willReturn(false);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        val subject = OuNavigationItem.builder()
-                                      .ou(ou)
-                                      .applicationEventPublisher(applicationEventPublisher)
-                                      .dn(dn)
-                                      .name(name)
-                                      .build();
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val subject = OuNavigationItem.of(ou, applicationEventPublisher);
         //when
-        val resultTrue = subject.hasFeature(Features.PASSWORD);
-        val resultFalse = subject.hasFeature(Features.RENAME);
+        val resultTrue = subject.hasFeature(Features.RENAME);
+        val resultFalse = subject.hasFeature(Features.PASSWORD);
         //then
         assertThat(resultTrue).isTrue();
         assertThat(resultFalse).isFalse();
@@ -186,16 +147,10 @@ public class OuNavigationItemTest {
     @Test
     public void getSortableType() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        val subject = OuNavigationItem.builder()
-                                      .ou(ou)
-                                      .applicationEventPublisher(applicationEventPublisher)
-                                      .dn(dn)
-                                      .name(name)
-                                      .build();
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val subject = OuNavigationItem.of(ou, applicationEventPublisher);
         //when
         val result = subject.getSortableType();
         //then
@@ -205,17 +160,11 @@ public class OuNavigationItemTest {
     @Test
     public void getLabel() throws Exception {
         //given
-        val ou = mock(OU.class);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val dn = mock(Name.class);
-        val name = "name";
-        val expected = "[name]";
-        val subject = OuNavigationItem.builder()
-                                      .ou(ou)
-                                      .applicationEventPublisher(applicationEventPublisher)
-                                      .dn(dn)
-                                      .name(name)
-                                      .build();
+        val ou = OU.of(dn, "ou");
+        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
+        val expected = "[ou]";
+        val subject = OuNavigationItem.of(ou, applicationEventPublisher);
         //when
         val result = subject.getLabel();
         //then

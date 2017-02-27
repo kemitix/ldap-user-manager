@@ -51,7 +51,7 @@ public final class NavigationItemFactory {
      */
     public static NavigationItem create(final OU ou, final ApplicationEventPublisher eventPublisher) {
         log.log(Level.FINEST, "create<OU>(%s,...)", ou.name());
-        return OuNavigationItem.create(ou, eventPublisher);
+        return OuNavigationItem.of(ou, eventPublisher);
     }
 
     /**

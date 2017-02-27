@@ -33,6 +33,8 @@ import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import org.immutables.value.Value;
 import org.springframework.context.ApplicationEventPublisher;
 
+import javax.naming.Name;
+
 /**
  * Navigation Item for an OU.
  *
@@ -42,11 +44,18 @@ import org.springframework.context.ApplicationEventPublisher;
 @SuppressWarnings("abstractclassname")
 public interface OuNavigationItem extends NavigationItem {
 
+    @Override
+    @Value.Derived
+    default Name getDn() {
+        return getOu().getDn();
+    }
+
     /**
      * Gets the OU.
      *
      * @return The OU.
      */
+    @Value.Parameter
     OU getOu();
 
     /**
@@ -54,7 +63,14 @@ public interface OuNavigationItem extends NavigationItem {
      *
      * @return The Application Event Publisher
      */
+    @Value.Parameter
     ApplicationEventPublisher getApplicationEventPublisher();
+
+    @Override
+    @Value.Derived
+    default String getName() {
+        return getOu().name();
+    }
 
     /**
      * Creates a builder.
@@ -73,12 +89,8 @@ public interface OuNavigationItem extends NavigationItem {
      *
      * @return The ou navigation item.
      */
-    static OuNavigationItem create(@NonNull final OU ou, final ApplicationEventPublisher eventPublisher) {
-        return builder().ou(ou)
-                        .name(ou.getOu())
-                        .dn(ou.getDn())
-                        .applicationEventPublisher(eventPublisher)
-                        .build();
+    static OuNavigationItem of(@NonNull final OU ou, final ApplicationEventPublisher eventPublisher) {
+        return ImmutableOuNavigationItem.of(ou, eventPublisher);
     }
 
     @Override
