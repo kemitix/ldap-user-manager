@@ -28,6 +28,7 @@ import org.immutables.value.Value;
 
 import javax.naming.Name;
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * An Organizational Unit.
@@ -37,11 +38,20 @@ import java.util.EnumSet;
 @Value.Immutable
 public interface OU extends LdapEntity {
 
+    @Override
+    @Value.Parameter
+    Name getDn();
+
+    @Override
+    @Value.Parameter
+    Set<Features> getFeatureSet();
+
     /**
      * Get the OU name for the container.
      *
      * @return The OU attribute.
      */
+    @Value.Parameter
     String getOu();
 
     /**
@@ -61,13 +71,8 @@ public interface OU extends LdapEntity {
      *
      * @return The new OU container.
      */
-    // can't use auto-generated 'of' constructor due to default featureSet.
     static OU of(final Name dn, final String ou) {
-        return OU.builder()
-                 .dn(dn)
-                 .ou(ou)
-                 .featureSet(EnumSet.of(Features.RENAME))
-                 .build();
+        return ImmutableOU.of(dn, EnumSet.of(Features.RENAME), ou);
     }
 
     /**
@@ -79,10 +84,7 @@ public interface OU extends LdapEntity {
      * @return The new OU container.
      */
     static OU nonRenameable(final Name dn, final String ou) {
-        return OU.builder()
-                 .dn(dn)
-                 .ou(ou)
-                 .build();
+        return ImmutableOU.of(dn, EnumSet.noneOf(Features.class), ou);
     }
 
     /**
