@@ -25,6 +25,7 @@ SOFTWARE.
 package net.kemitix.ldapmanager.ldap;
 
 import lombok.Setter;
+import lombok.ToString;
 import net.kemitix.ldapmanager.domain.User;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
@@ -36,6 +37,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (paul.campbell@hubio.com)
  */
+@ToString
 @Setter
 @Entry(objectClasses = {
         ObjectClass.INET_ORG_PERSON, ObjectClass.ORGANIZATIONAL_PERSON, ObjectClass.PERSON, ObjectClass.TOP
