@@ -47,7 +47,7 @@ public class NavigationItemUserSelectedEventTest {
                    .cn("bob")
                    .sn("smith")
                    .build();
-        userNavigationItem = UserNavigationItem.create(user, applicationEventPublisher);
+        userNavigationItem = UserNavigationItem.of(user, applicationEventPublisher);
         event = NavigationItemUserSelectedEvent.of(userNavigationItem);
     }
 

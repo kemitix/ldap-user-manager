@@ -81,7 +81,7 @@ public class SelectionChangeListenerTest {
                        .cn("bob")
                        .sn("smith")
                        .build();
-        val userItem = UserNavigationItem.create(user, applicationEventPublisher);
+        val userItem = UserNavigationItem.of(user, applicationEventPublisher);
         val event = NavigationItemUserSelectedEvent.of(userItem);
         //when
         listener.onUserSelected(event);

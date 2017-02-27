@@ -64,7 +64,7 @@ public final class NavigationItemFactory {
      */
     public static NavigationItem create(final User user, final ApplicationEventPublisher eventPublisher) {
         log.log(Level.FINEST, "create<User>(%s,...)", user.name());
-        return UserNavigationItem.create(user, eventPublisher);
+        return UserNavigationItem.of(user, eventPublisher);
     }
 
     /**

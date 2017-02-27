@@ -34,6 +34,8 @@ import net.kemitix.ldapmanager.events.RenameRequestEvent;
 import org.immutables.value.Value;
 import org.springframework.context.ApplicationEventPublisher;
 
+import javax.naming.Name;
+
 /**
  * Navigation Item for a User.
  *
@@ -43,11 +45,18 @@ import org.springframework.context.ApplicationEventPublisher;
 @SuppressWarnings("abstractclassname")
 public interface UserNavigationItem extends NavigationItem {
 
+    @Override
+    @Value.Derived
+    default Name getDn() {
+        return getUser().getDn();
+    }
+
     /**
      * Gets the User.
      *
      * @return The User.
      */
+    @Value.Parameter
     User getUser();
 
     /**
@@ -55,7 +64,13 @@ public interface UserNavigationItem extends NavigationItem {
      *
      * @return The Application Event Publisher
      */
+    @Value.Parameter
     ApplicationEventPublisher getApplicationEventPublisher();
+
+    @Override
+    default String getName() {
+        return getUser().name();
+    }
 
     /**
      * Create the builder.
@@ -74,12 +89,8 @@ public interface UserNavigationItem extends NavigationItem {
      *
      * @return The navigation item.
      */
-    static UserNavigationItem create(@NonNull final User user, final ApplicationEventPublisher eventPublisher) {
-        return builder().user(user)
-                        .name(user.name())
-                        .dn(user.getDn())
-                        .applicationEventPublisher(eventPublisher)
-                        .build();
+    static UserNavigationItem of(@NonNull final User user, final ApplicationEventPublisher eventPublisher) {
+        return ImmutableUserNavigationItem.of(user, eventPublisher);
     }
 
     @Override

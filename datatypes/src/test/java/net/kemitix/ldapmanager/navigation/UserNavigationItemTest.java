@@ -14,10 +14,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import javax.naming.Name;
 
-import java.util.EnumSet;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -33,7 +30,10 @@ public class UserNavigationItemTest {
     @Test
     public void builder() throws Exception {
         //given
-        val user = mock(User.class);
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         //when
         val result = UserNavigationItem.builder()
@@ -49,12 +49,13 @@ public class UserNavigationItemTest {
     @Test
     public void create() throws Exception {
         //given
-        val user = mock(User.class);
-        given(user.name()).willReturn("name");
-        given(user.getDn()).willReturn(mock(Name.class));
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         //when
-        val result = UserNavigationItem.create(user, applicationEventPublisher);
+        val result = UserNavigationItem.of(user, applicationEventPublisher);
         //then
         assertThat(result).isInstanceOf(UserNavigationItem.class);
         assertThat(result.getUser()).isSameAs(user);
@@ -68,13 +69,16 @@ public class UserNavigationItemTest {
         exception.expect(NullPointerException.class);
         exception.expectMessage("user");
         //when
-        UserNavigationItem.create(null, applicationEventPublisher);
+        UserNavigationItem.of(null, applicationEventPublisher);
     }
 
     @Test
     public void run() throws Exception {
         //given
-        val user = mock(User.class);
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val subject = UserNavigationItem.builder()
                                         .user(user)
@@ -90,7 +94,10 @@ public class UserNavigationItemTest {
     @Test
     public void publishAsSelected() throws Exception {
         //given
-        val user = mock(User.class);
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val subject = UserNavigationItem.builder()
                                         .user(user)
@@ -106,7 +113,10 @@ public class UserNavigationItemTest {
     @Test
     public void publishRenameRequest() throws Exception {
         //given
-        val user = mock(User.class);
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val subject = UserNavigationItem.builder()
                                         .user(user)
@@ -122,7 +132,10 @@ public class UserNavigationItemTest {
     @Test
     public void publishChangePasswordRequest() throws Exception {
         //given
-        val user = mock(User.class);
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
         val subject = UserNavigationItem.builder()
                                         .user(user)
@@ -138,28 +151,31 @@ public class UserNavigationItemTest {
     @Test
     public void hasFeature() throws Exception {
         //given
-        val user = mock(User.class);
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        given(user.hasFeature(Features.PASSWORD)).willReturn(true);
-        given(user.hasFeature(Features.RENAME)).willReturn(false);
         val subject = UserNavigationItem.builder()
                                         .user(user)
                                         .applicationEventPublisher(applicationEventPublisher)
                                         .build();
         //when
-        val resultTrue = subject.hasFeature(Features.PASSWORD);
-        val resultFalse = subject.hasFeature(Features.RENAME);
+        val resultPassword = subject.hasFeature(Features.PASSWORD);
+        val resultRename = subject.hasFeature(Features.RENAME);
         //then
-        assertThat(resultTrue).isTrue();
-        assertThat(resultFalse).isFalse();
+        assertThat(resultPassword).isTrue();
+        assertThat(resultRename).isTrue();
     }
 
     @Test
     public void getSortableType() throws Exception {
         //given
-        val user = mock(User.class);
+        val dn = mock(Name.class);
+        val cn = "cn";
+        val sn = "sn";
+        val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        given(user.getFeatureSet()).willReturn(EnumSet.of(Features.PASSWORD));
         val subject = UserNavigationItem.builder()
                                         .user(user)
                                         .applicationEventPublisher(applicationEventPublisher)
