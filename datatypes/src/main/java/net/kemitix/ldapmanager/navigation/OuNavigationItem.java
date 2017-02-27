@@ -40,21 +40,21 @@ import org.springframework.context.ApplicationEventPublisher;
  */
 @Value.Immutable
 @SuppressWarnings("abstractclassname")
-public abstract class OuNavigationItem extends NamedNavigationItem {
+public interface OuNavigationItem extends NavigationItem {
 
     /**
      * Gets the OU.
      *
      * @return The OU.
      */
-    public abstract OU getOu();
+    OU getOu();
 
     /**
      * Gets the Application Event Publisher.
      *
      * @return The Application Event Publisher
      */
-    abstract ApplicationEventPublisher getApplicationEventPublisher();
+    ApplicationEventPublisher getApplicationEventPublisher();
 
     /**
      * Creates a builder.
@@ -73,9 +73,7 @@ public abstract class OuNavigationItem extends NamedNavigationItem {
      *
      * @return The ou navigation item.
      */
-    public static OuNavigationItem create(
-            @NonNull final OU ou, @NonNull final ApplicationEventPublisher eventPublisher
-                                         ) {
+    static OuNavigationItem create(@NonNull final OU ou, final ApplicationEventPublisher eventPublisher) {
         return builder().ou(ou)
                         .name(ou.getOu())
                         .dn(ou.getDn())
@@ -84,37 +82,37 @@ public abstract class OuNavigationItem extends NamedNavigationItem {
     }
 
     @Override
-    public final void run() {
+    default void run() {
         getApplicationEventPublisher().publishEvent(NavigationItemOuActionEvent.of(getOu()));
     }
 
     @Override
-    public final void publishAsSelected() {
+    default void publishAsSelected() {
         getApplicationEventPublisher().publishEvent(NavigationItemOuSelectedEvent.of(this));
     }
 
     @Override
-    public final void publishRenameRequest() {
+    default void publishRenameRequest() {
         getApplicationEventPublisher().publishEvent(RenameRequestEvent.of(getDn()));
     }
 
     @Override
-    public final void publishChangePasswordRequest() {
+    default void publishChangePasswordRequest() {
         // does not support passwords
     }
 
     @Override
-    public final boolean hasFeature(@NonNull final Features feature) {
+    default boolean hasFeature(@NonNull final Features feature) {
         return getOu().hasFeature(feature);
     }
 
     @Override
-    public final String getSortableType() {
+    default String getSortableType() {
         return "1:ou";
     }
 
     @Override
-    public final String toString() {
-        return "[" + super.toString() + "]";
+    default String getLabel() {
+        return "[" + getName() + "]";
     }
 }
