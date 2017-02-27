@@ -39,7 +39,7 @@ public class UserEntityTest {
         val dn = mock(Name.class);
         val cn = "cn";
         val sn = "sn";
-        val user = User.of(cn, sn, dn);
+        val user = User.of(dn, cn, sn);
         //when
         val result = UserEntity.from(user);
         //then

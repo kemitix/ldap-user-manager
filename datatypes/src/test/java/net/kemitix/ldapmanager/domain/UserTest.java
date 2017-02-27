@@ -25,6 +25,9 @@ public class UserTest {
                          .build();
         //then
         assertThat(result).isInstanceOf(User.class);
+        assertThat(result.getDn()).isSameAs(dn);
+        assertThat(result.getCn()).isSameAs(cn);
+        assertThat(result.getSn()).isSameAs(sn);
     }
 
     @Test
@@ -51,8 +54,11 @@ public class UserTest {
         val cn = "cn";
         val sn = "sn";
         //when
-        val result = User.create(dn, cn, sn);
+        val result = User.of(dn, cn, sn);
         //then
         assertThat(result).isInstanceOf(User.class);
+        assertThat(result.getDn()).isSameAs(dn);
+        assertThat(result.getCn()).isSameAs(cn);
+        assertThat(result.getSn()).isSameAs(sn);
     }
 }

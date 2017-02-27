@@ -64,7 +64,7 @@ public class LdapConnectionIT {
         val dn = LdapNameUtil.parse("cn=bob");
         val cn = "bob";
         val sn = "smith";
-        val user = User.of(cn, sn, dn);
+        val user = User.of(dn, cn, sn);
         System.out.println("user = " + user);
         val entity = UserEntity.from(user);
         System.out.println("entity = " + entity);

@@ -111,7 +111,7 @@ public class DefaultNavigationItemActionListBoxTest {
         assertThat(spaceKeyStroke.getKeyType()).isEqualTo(KeyType.Character);
         assertThat(spaceKeyStroke.getCharacter()).isEqualTo(CHAR_SPACE);
         navigationItemUser =
-                UserNavigationItem.create(User.create(userDn, USER_NAME, "userSn"), applicationEventPublisher);
+                UserNavigationItem.create(User.of(USER_NAME, "userSn", userDn), applicationEventPublisher);
         navigationItemOU = OuNavigationItem.create(OU.of(ouDn, OU_NAME), applicationEventPublisher);
     }
 

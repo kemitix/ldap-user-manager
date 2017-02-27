@@ -55,7 +55,7 @@ public class UserEntity {
      * @return The immutable User.
      */
     final User fromLdap() {
-        return User.create(dn, cn, sn);
+        return User.of(dn, cn, sn);
     }
 
     /**

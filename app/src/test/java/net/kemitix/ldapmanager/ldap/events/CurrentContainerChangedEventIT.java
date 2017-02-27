@@ -130,11 +130,7 @@ public class CurrentContainerChangedEventIT {
     public void shouldLoadContainerObjects() throws InterruptedException {
         //given
         val ou = OU.of(ouDn, "users");
-        val user = User.builder()
-                       .dn(userDn)
-                       .cn(CN)
-                       .sn(SN)
-                       .build();
+        val user = User.of(userDn, CN, SN);
         given(ldapTemplate.find(anyObject(), eq(OUEntity.class))).willReturn(Collections.singletonList(ouEntity));
         given(ldapTemplate.find(anyObject(), eq(UserEntity.class))).willReturn(Collections.singletonList(userEntity));
         //when

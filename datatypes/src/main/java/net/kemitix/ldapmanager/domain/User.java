@@ -28,6 +28,7 @@ import org.immutables.value.Value;
 
 import javax.naming.Name;
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * A User.
@@ -37,11 +38,20 @@ import java.util.EnumSet;
 @Value.Immutable
 public interface User extends LdapEntity {
 
+    @Override
+    @Value.Parameter
+    Name getDn();
+
+    @Override
+    @Value.Parameter
+    Set<Features> getFeatureSet();
+
     /**
      * Get the CN name for the user.
      *
      * @return The CN attribute.
      */
+    @Value.Parameter
     String getCn();
 
     /**
@@ -49,6 +59,7 @@ public interface User extends LdapEntity {
      *
      * @return The SN attribute.
      */
+    @Value.Parameter
     String getSn();
 
     /**
@@ -72,18 +83,13 @@ public interface User extends LdapEntity {
     /**
      * Create a new User that may be renamed.
      *
-     * @param dn The DN of the user.
      * @param cn The CN of the user.
      * @param sn The SN of the user.
+     * @param dn The DN of the user.
      *
      * @return The new User.
      */
-    static User create(final Name dn, final String cn, final String sn) {
-        return User.builder()
-                   .dn(dn)
-                   .cn(cn)
-                   .sn(sn)
-                   .featureSet(EnumSet.of(Features.RENAME, Features.PASSWORD))
-                   .build();
+    static User of(final Name dn, final String cn, final String sn) {
+        return ImmutableUser.of(dn, EnumSet.of(Features.RENAME, Features.PASSWORD), cn, sn);
     }
 }
