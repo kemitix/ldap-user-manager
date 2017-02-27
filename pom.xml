@@ -29,7 +29,7 @@
         <digraph-dependency.version>0.8.0</digraph-dependency.version>
         <digraph-dependency.basePackage>net.kemitix.ldapmanager</digraph-dependency.basePackage>
         <lanterna.version>3.0.0-beta3</lanterna.version>
-        <assertj.version>3.6.1</assertj.version>
+        <assertj.version>3.6.2</assertj.version>
         <unboundid.version>3.2.0</unboundid.version>
         <trajano-commons-testing.version>2.1.0</trajano-commons-testing.version>
         <immutable-value.version>2.4.0</immutable-value.version>
