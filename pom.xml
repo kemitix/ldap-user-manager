@@ -77,6 +77,7 @@
                 <groupId>org.immutables</groupId>
                 <artifactId>value</artifactId>
                 <version>${immutable-value.version}</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
