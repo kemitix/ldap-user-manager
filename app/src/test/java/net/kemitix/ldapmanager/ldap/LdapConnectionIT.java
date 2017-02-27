@@ -62,17 +62,25 @@ public class LdapConnectionIT {
     public void ldapTemplateCanFindAUser() throws InvalidNameException {
         //given
         val dn = LdapNameUtil.parse("cn=bob");
-        val entity = UserEntity.from(User.builder()
-                                         .dn(dn)
-                                         .cn("bob")
-                                         .sn("smith")
-                                         .build());
+        val cn = "bob";
+        val sn = "smith";
+        val user = User.of(cn, sn, dn);
+        System.out.println("user = " + user);
+        val entity = UserEntity.from(user);
+        System.out.println("entity = " + entity);
         ldapTemplate.create(entity);
+        System.out.println("entity = " + entity);
         //when
         val userFound = ldapTemplate.lookup(dn, userContextMapper);
+        System.out.println("userFound = " + userFound);
         //then
-        assertThat(userFound).isNotNull()
-                             .extracting("cn")
-                             .containsOnly("bob");
+        assertThat(userFound).as("found user")
+                             .isNotNull()
+                             .as("is equal")
+                             .isEqualTo(user)
+                             .as("property values set")
+                             .hasFieldOrPropertyWithValue("dn", dn)
+                             .hasFieldOrPropertyWithValue("cn", cn)
+                             .hasFieldOrPropertyWithValue("sn", sn);
     }
 }

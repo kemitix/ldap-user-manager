@@ -4,8 +4,6 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.User;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.ldap.core.DirContextAdapter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,12 +15,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class UserContextMapperTest {
 
-    @InjectMocks
     private UserContextMapper contextMapper;
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        contextMapper = new UserContextMapper();
     }
 
     @Test
