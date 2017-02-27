@@ -11,6 +11,13 @@
 
     <artifactId>ldap-user-manager-datatypes</artifactId>
 
+    <properties>
+        <!-- one of the checks in level 5-complexity is crashing when attempting to scan an immutable class -->
+        <!-- "Unable to execute mojo: Failed during checkstyle configuration: Exception was thrown while processing -->
+        <!--  datatypes/src/main/java/net/kemitix/ldapmanager/domain/User.java: NullPointerException" -->
+        <kemitix-checkstyle-ruleset.level>4-tweaks</kemitix-checkstyle-ruleset.level>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>net.kemitix</groupId>
