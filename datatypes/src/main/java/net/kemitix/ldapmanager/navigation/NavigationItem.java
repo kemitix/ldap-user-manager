@@ -51,6 +51,15 @@ public interface NavigationItem extends Runnable, Comparable<NavigationItem>, Fe
     String getName();
 
     /**
+     * Return the label of the item.
+     *
+     * @return the item's label
+     */
+    default String getLabel() {
+        return getName();
+    }
+
+    /**
      * Publish an event indicating that this item has been selected.
      */
     void publishAsSelected();
