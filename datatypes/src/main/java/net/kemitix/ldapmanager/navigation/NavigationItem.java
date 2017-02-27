@@ -48,7 +48,9 @@ public interface NavigationItem extends Runnable, Comparable<NavigationItem>, Fe
      *
      * @return the item's name
      */
-    String getName();
+    default String getName() {
+        return getDn().toString();
+    }
 
     /**
      * Return the label of the item.
