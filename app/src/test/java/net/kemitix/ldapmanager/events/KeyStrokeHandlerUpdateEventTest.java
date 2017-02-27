@@ -2,12 +2,10 @@ package net.kemitix.ldapmanager.events;
 
 import lombok.val;
 import net.kemitix.ldapmanager.handlers.KeyStrokeHandler;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for {@link KeyStrokeHandlerUpdateEvent}.
@@ -16,16 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class KeyStrokeHandlerUpdateEventTest {
 
-    @Mock
-    private KeyStrokeHandler keyStrokeHandler;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
-    public void shouldOf() throws Exception {
+    public void of() throws Exception {
+        //given
+        val keyStrokeHandler = mock(KeyStrokeHandler.class);
         //when
         val event = KeyStrokeHandlerUpdateEvent.of(keyStrokeHandler);
         //then
