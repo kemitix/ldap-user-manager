@@ -58,7 +58,8 @@ public class NavigationItemUserSelectedEventTest {
 
     @Test
     public void getDn() throws Exception {
-        assertThat(event.getDn()).isSameAs(dn);
+        assertThat(event.getUserNavigationItem()
+                        .getDn()).isSameAs(dn);
     }
 
     @Test

@@ -24,11 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import lombok.NonNull;
 import net.kemitix.ldapmanager.navigation.UserNavigationItem;
 import org.immutables.value.Value;
-
-import javax.naming.Name;
 
 /**
  * Raised when a User Navigation Item is selected.
@@ -43,14 +40,8 @@ public interface NavigationItemUserSelectedEvent {
      *
      * @return the navigation item.
      */
+    @Value.Parameter
     UserNavigationItem getUserNavigationItem();
-
-    /**
-     * Gets the Dn.
-     *
-     * @return the DN.
-     */
-    Name getDn();
 
     /**
      * Creates a new NavigationItemOuSelectedEvent.
@@ -59,10 +50,7 @@ public interface NavigationItemUserSelectedEvent {
      *
      * @return the event
      */
-    static NavigationItemUserSelectedEvent of(@NonNull final UserNavigationItem userNavigationItem) {
-        return ImmutableNavigationItemUserSelectedEvent.builder()
-                                                       .userNavigationItem(userNavigationItem)
-                                                       .dn(userNavigationItem.getDn())
-                                                       .build();
+    static NavigationItemUserSelectedEvent of(final UserNavigationItem userNavigationItem) {
+        return ImmutableNavigationItemUserSelectedEvent.of(userNavigationItem);
     }
 }

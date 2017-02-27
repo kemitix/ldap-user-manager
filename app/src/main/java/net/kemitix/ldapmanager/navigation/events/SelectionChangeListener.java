@@ -81,7 +81,9 @@ class SelectionChangeListener {
      */
     @EventListener(NavigationItemUserSelectedEvent.class)
     public final void onUserSelected(final NavigationItemUserSelectedEvent event) {
-        final String message = String.format("onUserSelected(%s)", event.getDn());
+        final String message = String.format(
+                "onUserSelected(%s)", event.getUserNavigationItem()
+                                           .getDn());
         log.log(Level.FINEST, message);
         logMessages.add(message);
     }
