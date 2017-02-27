@@ -28,5 +28,10 @@
             <artifactId>value</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>net.kemitix</groupId>
+            <artifactId>ldap-user-manager-test</artifactId>
+        </dependency>
     </dependencies>
+
 </project>
