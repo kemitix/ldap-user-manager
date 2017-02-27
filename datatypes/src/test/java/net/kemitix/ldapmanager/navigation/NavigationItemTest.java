@@ -2,6 +2,7 @@ package net.kemitix.ldapmanager.navigation;
 
 import lombok.val;
 import net.kemitix.ldapmanager.domain.Features;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,48 +24,8 @@ public class NavigationItemTest {
     @Before
     public void setUp() throws Exception {
         sortableType = "TYPE";
-        name = "NAME";
-        navigationItem = new NavigationItem() {
-            @Override
-            public Name getDn() {
-                return null;
-            }
-
-            @Override
-            public String getName() {
-                return name;
-            }
-
-            @Override
-            public void publishAsSelected() {
-
-            }
-
-            @Override
-            public String getSortableType() {
-                return sortableType;
-            }
-
-            @Override
-            public void publishRenameRequest() {
-
-            }
-
-            @Override
-            public void publishChangePasswordRequest() {
-
-            }
-
-            @Override
-            public void run() {
-
-            }
-
-            @Override
-            public boolean hasFeature(final Features feature) {
-                return false;
-            }
-        };
+        name = "cn=NAME";
+        navigationItem = new TestNavigationItem();
     }
 
     @Test
@@ -76,48 +37,51 @@ public class NavigationItemTest {
     @Test
     public void compareTo() throws Exception {
         //given
-        val other = new NavigationItem() {
-            @Override
-            public boolean hasFeature(final Features feature) {
-                return false;
-            }
-
-            @Override
-            public void run() {
-
-            }
-
-            @Override
-            public Name getDn() {
-                return null;
-            }
-
-            @Override
-            public String getName() {
-                return "other";
-            }
-
-            @Override
-            public void publishAsSelected() {
-
-            }
-
-            @Override
-            public String getSortableType() {
-                return null;
-            }
-
-            @Override
-            public void publishRenameRequest() {
-
-            }
-
-            @Override
-            public void publishChangePasswordRequest() {
-
-            }
-        };
+        val other = new TestNavigationItem();
         //then
-        assertThat(navigationItem.compareTo(other)).isLessThan(0);
+        assertThat(navigationItem.compareTo(other)).isEqualTo(0);
+    }
+
+    @Test
+    public void getLabel() throws Exception {
+        assertThat(navigationItem.getLabel()).isEqualTo(name);
+    }
+
+    private class TestNavigationItem implements NavigationItem {
+
+        @Override
+        public Name getDn() {
+            return LdapNameUtil.parse(name);
+        }
+
+        @Override
+        public void publishAsSelected() {
+
+        }
+
+        @Override
+        public String getSortableType() {
+            return sortableType;
+        }
+
+        @Override
+        public void publishRenameRequest() {
+
+        }
+
+        @Override
+        public void publishChangePasswordRequest() {
+
+        }
+
+        @Override
+        public void run() {
+
+        }
+
+        @Override
+        public boolean hasFeature(final Features feature) {
+            return false;
+        }
     }
 }
