@@ -24,7 +24,6 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import lombok.NonNull;
 import net.kemitix.ldapmanager.navigation.OuNavigationItem;
 import org.immutables.value.Value;
 
@@ -35,7 +34,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface NavigationItemOuSelectedEvent {
 
     /**
@@ -43,6 +42,7 @@ public interface NavigationItemOuSelectedEvent {
      *
      * @return The OU Navigation Item selected
      */
+    @Value.Parameter
     OuNavigationItem getOuNavigationItem();
 
     /**
@@ -62,9 +62,7 @@ public interface NavigationItemOuSelectedEvent {
      *
      * @return The Event.
      */
-    static NavigationItemOuSelectedEvent of(@NonNull final OuNavigationItem ouNavigationItem) {
-        return ImmutableNavigationItemOuSelectedEvent.builder()
-                                                     .ouNavigationItem(ouNavigationItem)
-                                                     .build();
+    static NavigationItemOuSelectedEvent of(final OuNavigationItem ouNavigationItem) {
+        return ImmutableNavigationItemOuSelectedEvent.of(ouNavigationItem);
     }
 }
