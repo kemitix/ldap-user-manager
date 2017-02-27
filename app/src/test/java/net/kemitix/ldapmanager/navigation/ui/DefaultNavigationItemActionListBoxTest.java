@@ -320,7 +320,7 @@ public class DefaultNavigationItemActionListBoxTest {
         //then
         assertThat(ou.toString()).contains("ou=users", "name=users", "featureSet=[RENAME]");
         assertThat(ou.getName()).isEqualTo("users");
-        assertThat(user.toString()).contains("cn=bob", "dn=cn=bob", "name=bob");
+        assertThat(user.toString()).contains("cn=bob", "dn=cn=bob");
         assertThat(user.getName()).isEqualTo("bob");
     }
 

@@ -24,6 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.domain;
 
+import org.immutables.value.Value;
+
 import javax.naming.Name;
 import java.util.Set;
 
@@ -33,15 +35,6 @@ import java.util.Set;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 public interface LdapEntity extends FeatureSet {
-
-    /**
-     * Returns the name of an entity.
-     *
-     * <p>For Users this would the 'cn', for OUs this would the 'ou' value.</p>
-     *
-     * @return the name of the entity
-     */
-    String name();
 
     /**
      * Returns the DN attribute.
@@ -56,6 +49,16 @@ public interface LdapEntity extends FeatureSet {
      * @return The Set of Features.
      */
     Set<Features> getFeatureSet();
+
+    /**
+     * Returns the name of an entity.
+     *
+     * <p>For Users this would the 'cn', for OUs this would the 'ou' value.</p>
+     *
+     * @return the name of the entity
+     */
+    @Value.Derived
+    String name();
 
     /**
      * Checks if the entity supports the feature.
