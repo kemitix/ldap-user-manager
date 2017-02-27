@@ -24,6 +24,8 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.domain;
 
+import org.immutables.value.Value;
+
 /**
  * Represents a set of features.
  *
@@ -38,5 +40,6 @@ public interface FeatureSet {
      *
      * @return true if the feature is present, otherwise false.
      */
+    @Value.Derived
     boolean hasFeature(Features feature);
 }
