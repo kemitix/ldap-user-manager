@@ -126,9 +126,7 @@ public class CreateUserFormPanelTest {
     @Test
     public void shouldOnCreateButtonPressedPublishIfValuesSet() {
         //given
-        val createUserEvent = CreateUserEvent.builder()
-                                             .dn(dn)
-                                             .build();
+        val createUserEvent = CreateUserEvent.of(dn);
         panel.onCreateUserEvent(createUserEvent);
         panel.getCnTextBox()
              .setText("cn value");

@@ -33,7 +33,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface CreateUserEvent {
 
     /**
@@ -41,16 +41,8 @@ public interface CreateUserEvent {
      *
      * @return The DN attribute.
      */
+    @Value.Parameter
     Name getDn();
-
-    /**
-     * Create a Builder.
-     *
-     * @return The Builder.
-     */
-    static ImmutableCreateUserEvent.Builder builder() {
-        return ImmutableCreateUserEvent.builder();
-    }
 
     /**
      * Create a CreateUserEvent.
@@ -60,8 +52,6 @@ public interface CreateUserEvent {
      * @return the event.
      */
     static CreateUserEvent of(final Name dn) {
-        return ImmutableCreateUserEvent.builder()
-                                       .dn(dn)
-                                       .build();
+        return ImmutableCreateUserEvent.of(dn);
     }
 }

@@ -14,18 +14,6 @@ import static org.mockito.Mockito.mock;
 public class CreateUserEventTest {
 
     @Test
-    public void builder() throws Exception {
-        //given
-        val dn = mock(Name.class);
-        //when
-        val result = CreateUserEvent.builder()
-                                    .dn(dn)
-                                    .build();
-        //then
-        assertThat(result).isInstanceOf(CreateUserEvent.class);
-    }
-
-    @Test
     public void of() throws Exception {
         //given
         val dn = mock(Name.class);
