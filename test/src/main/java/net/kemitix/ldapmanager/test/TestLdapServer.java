@@ -26,13 +26,13 @@ package net.kemitix.ldapmanager.test;
 
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
+import com.unboundid.ldif.LDIFReader;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -80,20 +80,14 @@ public final class TestLdapServer {
             val config = new InMemoryDirectoryServerConfig(BASE);
             config.addAdditionalBindCredentials("cn=" + ADMIN_USERNAME, ADMIN_PASSWORD);
             server = new InMemoryDirectoryServer(config);
-            server.importFromLDIF(true, findFile(LDIF_FILE));
+            server.importFromLDIF(true, new LDIFReader(
+                    new ClassPathResource(LDIF_FILE, TestLdapServer.class).getInputStream()));
         }
         server.startListening();
         serverPort = server.getListenPort();
         log.info("LDAP Port: {}", serverPort);
         ldapUrl = String.format("ldap://127.0.0.1:%d/%s", serverPort, TestLdapServer.BASE);
         log.info("Started LDAP Server: " + ldapUrl);
-    }
-
-    private static String findFile(final String file) throws IOException {
-        final String filename = new ClassPathResource(file, TestLdapServer.class).getFile()
-                                                                                 .getAbsolutePath();
-        log.info("findFile({}): {}", file, filename);
-        return filename;
     }
 
     /**
