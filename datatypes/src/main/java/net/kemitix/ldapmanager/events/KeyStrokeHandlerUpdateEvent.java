@@ -32,7 +32,7 @@ import org.immutables.value.Value;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface KeyStrokeHandlerUpdateEvent {
 
     /**
@@ -40,6 +40,7 @@ public interface KeyStrokeHandlerUpdateEvent {
      *
      * @return The handler.
      */
+    @Value.Parameter
     KeyStrokeHandler getKeyStrokeHandler();
 
     /**
@@ -50,8 +51,6 @@ public interface KeyStrokeHandlerUpdateEvent {
      * @return the event
      */
     static KeyStrokeHandlerUpdateEvent of(final KeyStrokeHandler keyStrokeHandler) {
-        return ImmutableKeyStrokeHandlerUpdateEvent.builder()
-                                                   .keyStrokeHandler(keyStrokeHandler)
-                                                   .build();
+        return ImmutableKeyStrokeHandlerUpdateEvent.of(keyStrokeHandler);
     }
 }
