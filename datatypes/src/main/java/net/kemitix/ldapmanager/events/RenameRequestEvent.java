@@ -33,7 +33,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface RenameRequestEvent {
 
     /**
@@ -41,6 +41,7 @@ public interface RenameRequestEvent {
      *
      * @return the DN.
      */
+    @Value.Parameter
     Name getDn();
 
     /**
@@ -51,8 +52,6 @@ public interface RenameRequestEvent {
      * @return the event.
      */
     static RenameRequestEvent of(final Name dn) {
-        return ImmutableRenameRequestEvent.builder()
-                                          .dn(dn)
-                                          .build();
+        return ImmutableRenameRequestEvent.of(dn);
     }
 }
