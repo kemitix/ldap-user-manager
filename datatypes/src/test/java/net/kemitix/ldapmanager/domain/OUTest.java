@@ -12,22 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OUTest {
 
     @Test
-    public void builder() throws Exception {
-        //given
-        val dn = LdapNameUtil.empty();
-        val ou = "ou";
-        //when
-        val result = OU.builder()
-                       .dn(dn)
-                       .ou(ou)
-                       .build();
-        //then
-        assertThat(result).isInstanceOf(OU.class);
-        assertThat(result.getDn()).isSameAs(dn);
-        assertThat(result.getOu()).isSameAs(ou);
-    }
-
-    @Test
     public void of() throws Exception {
         //given
         val dn = LdapNameUtil.empty();
@@ -58,10 +42,7 @@ public class OUTest {
         //given
         val dn = LdapNameUtil.empty();
         val ou = "ou";
-        val subject = OU.builder()
-                        .dn(dn)
-                        .ou(ou)
-                        .build();
+        val subject = OU.of(dn, ou);
         //when
         val result = subject.name();
         //then

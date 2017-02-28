@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface OU extends LdapEntity {
 
     @Override
@@ -53,15 +53,6 @@ public interface OU extends LdapEntity {
      */
     @Value.Parameter
     String getOu();
-
-    /**
-     * Create a Builder.
-     *
-     * @return The Builder.
-     */
-    static ImmutableOU.Builder builder() {
-        return ImmutableOU.builder();
-    }
 
     /**
      * Create a new OU container that may be renamed.

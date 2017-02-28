@@ -60,10 +60,7 @@ public class SelectionChangeListenerTest {
     @Test
     public void shouldOnOuSelected() throws Exception {
         //given
-        val ou = OU.builder()
-                   .ou("users")
-                   .dn(LdapNameUtil.parse("ou=users"))
-                   .build();
+        val ou = OU.of(LdapNameUtil.parse("ou=users"), "users");
         val ouItem = OuNavigationItem.of(ou, applicationEventPublisher);
         val event = NavigationItemOuSelectedEvent.of(ouItem);
         //when
