@@ -65,14 +65,9 @@ public class LdapConnectionIT {
         val cn = "bob";
         val sn = "smith";
         val user = User.of(dn, cn, sn);
-        System.out.println("user = " + user);
-        val entity = UserEntity.from(user);
-        System.out.println("entity = " + entity);
-        ldapTemplate.create(entity);
-        System.out.println("entity = " + entity);
+        ldapTemplate.create(UserEntity.from(user));
         //when
         val userFound = ldapTemplate.lookup(dn, userContextMapper);
-        System.out.println("userFound = " + userFound);
         //then
         assertThat(userFound).as("found user")
                              .isNotNull()
