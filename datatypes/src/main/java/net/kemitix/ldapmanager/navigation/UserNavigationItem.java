@@ -41,7 +41,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 @SuppressWarnings("abstractclassname")
 public interface UserNavigationItem extends NavigationItem {
 
@@ -70,15 +70,6 @@ public interface UserNavigationItem extends NavigationItem {
     @Override
     default String getName() {
         return getUser().name();
-    }
-
-    /**
-     * Create the builder.
-     *
-     * @return The builder
-     */
-    static ImmutableUserNavigationItem.Builder builder() {
-        return ImmutableUserNavigationItem.builder();
     }
 
     /**

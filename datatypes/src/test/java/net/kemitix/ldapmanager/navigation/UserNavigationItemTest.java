@@ -28,25 +28,6 @@ public class UserNavigationItemTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void builder() throws Exception {
-        //given
-        val dn = mock(Name.class);
-        val cn = "cn";
-        val sn = "sn";
-        val user = User.of(dn, cn, sn);
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        //when
-        val result = UserNavigationItem.builder()
-                                       .user(user)
-                                       .applicationEventPublisher(applicationEventPublisher)
-                                       .build();
-        //then
-        assertThat(result).isInstanceOf(UserNavigationItem.class);
-        assertThat(result.getUser()).isSameAs(user);
-        assertThat(result.getApplicationEventPublisher()).isSameAs(applicationEventPublisher);
-    }
-
-    @Test
     public void create() throws Exception {
         //given
         val dn = mock(Name.class);
@@ -80,10 +61,7 @@ public class UserNavigationItemTest {
         val sn = "sn";
         val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        val subject = UserNavigationItem.builder()
-                                        .user(user)
-                                        .applicationEventPublisher(applicationEventPublisher)
-                                        .build();
+        val subject = UserNavigationItem.of(user, applicationEventPublisher);
         //when
         subject.run();
         //then
@@ -99,10 +77,7 @@ public class UserNavigationItemTest {
         val sn = "sn";
         val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        val subject = UserNavigationItem.builder()
-                                        .user(user)
-                                        .applicationEventPublisher(applicationEventPublisher)
-                                        .build();
+        val subject = UserNavigationItem.of(user, applicationEventPublisher);
         //when
         subject.publishAsSelected();
         //then
@@ -118,10 +93,7 @@ public class UserNavigationItemTest {
         val sn = "sn";
         val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        val subject = UserNavigationItem.builder()
-                                        .user(user)
-                                        .applicationEventPublisher(applicationEventPublisher)
-                                        .build();
+        val subject = UserNavigationItem.of(user, applicationEventPublisher);
         //when
         subject.publishRenameRequest();
         //then
@@ -137,10 +109,7 @@ public class UserNavigationItemTest {
         val sn = "sn";
         val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        val subject = UserNavigationItem.builder()
-                                        .user(user)
-                                        .applicationEventPublisher(applicationEventPublisher)
-                                        .build();
+        val subject = UserNavigationItem.of(user, applicationEventPublisher);
         //when
         subject.publishChangePasswordRequest();
         //then
@@ -156,10 +125,7 @@ public class UserNavigationItemTest {
         val sn = "sn";
         val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        val subject = UserNavigationItem.builder()
-                                        .user(user)
-                                        .applicationEventPublisher(applicationEventPublisher)
-                                        .build();
+        val subject = UserNavigationItem.of(user, applicationEventPublisher);
         //when
         val resultPassword = subject.hasFeature(Features.PASSWORD);
         val resultRename = subject.hasFeature(Features.RENAME);
@@ -176,10 +142,7 @@ public class UserNavigationItemTest {
         val sn = "sn";
         val user = User.of(dn, cn, sn);
         val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        val subject = UserNavigationItem.builder()
-                                        .user(user)
-                                        .applicationEventPublisher(applicationEventPublisher)
-                                        .build();
+        val subject = UserNavigationItem.of(user, applicationEventPublisher);
         //when
         val result = subject.getSortableType();
         //then
