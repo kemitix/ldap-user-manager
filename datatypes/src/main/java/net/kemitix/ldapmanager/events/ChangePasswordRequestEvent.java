@@ -34,7 +34,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface ChangePasswordRequestEvent {
 
     /**
@@ -42,6 +42,7 @@ public interface ChangePasswordRequestEvent {
      *
      * @return The DN to change the password of.
      */
+    @Value.Parameter
     Name getDn();
 
     /**
@@ -52,8 +53,6 @@ public interface ChangePasswordRequestEvent {
      * @return the event
      */
     static ChangePasswordRequestEvent of(final Name dn) {
-        return ImmutableChangePasswordRequestEvent.builder()
-                                                  .dn(dn)
-                                                  .build();
+        return ImmutableChangePasswordRequestEvent.of(dn);
     }
 }
