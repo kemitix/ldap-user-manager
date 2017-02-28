@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface User extends LdapEntity {
 
     @Override
@@ -69,15 +69,6 @@ public interface User extends LdapEntity {
      */
     default String name() {
         return getCn();
-    }
-
-    /**
-     * Create a Builder.
-     *
-     * @return The Builder.
-     */
-    static ImmutableUser.Builder builder() {
-        return ImmutableUser.builder();
     }
 
     /**

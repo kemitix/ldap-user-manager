@@ -12,35 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserTest {
 
     @Test
-    public void builder() throws Exception {
-        //given
-        val dn = LdapNameUtil.empty();
-        val cn = "cn";
-        val sn = "sn";
-        //when
-        val result = User.builder()
-                         .dn(dn)
-                         .cn(cn)
-                         .sn(sn)
-                         .build();
-        //then
-        assertThat(result).isInstanceOf(User.class);
-        assertThat(result.getDn()).isSameAs(dn);
-        assertThat(result.getCn()).isSameAs(cn);
-        assertThat(result.getSn()).isSameAs(sn);
-    }
-
-    @Test
     public void name() throws Exception {
         //given
         val dn = LdapNameUtil.empty();
         val cn = "cn";
         val sn = "sn";
-        val subject = User.builder()
-                          .dn(dn)
-                          .cn(cn)
-                          .sn(sn)
-                          .build();
+        val subject = User.of(dn, cn, sn);
         //when
         val result = subject.name();
         //then

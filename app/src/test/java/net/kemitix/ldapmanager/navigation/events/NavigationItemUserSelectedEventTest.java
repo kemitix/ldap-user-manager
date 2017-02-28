@@ -42,11 +42,7 @@ public class NavigationItemUserSelectedEventTest {
         MockitoAnnotations.initMocks(this);
         dn = LdapNameBuilder.newInstance()
                             .build();
-        user = User.builder()
-                   .dn(dn)
-                   .cn("bob")
-                   .sn("smith")
-                   .build();
+        user = User.of(dn, "bob", "smith");
         userNavigationItem = UserNavigationItem.of(user, applicationEventPublisher);
         event = NavigationItemUserSelectedEvent.of(userNavigationItem);
     }

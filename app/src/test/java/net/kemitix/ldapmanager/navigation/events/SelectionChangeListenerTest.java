@@ -73,11 +73,7 @@ public class SelectionChangeListenerTest {
     @Test
     public void shouldOnUserSelected() throws Exception {
         //given
-        val user = User.builder()
-                       .dn(LdapNameUtil.parse("cn=bob"))
-                       .cn("bob")
-                       .sn("smith")
-                       .build();
+        val user = User.of(LdapNameUtil.parse("cn=bob"), "bob", "smith");
         val userItem = UserNavigationItem.of(user, applicationEventPublisher);
         val event = NavigationItemUserSelectedEvent.of(userItem);
         //when

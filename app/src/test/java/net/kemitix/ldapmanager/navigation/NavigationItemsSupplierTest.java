@@ -4,8 +4,8 @@ import lombok.val;
 import net.kemitix.ldapmanager.domain.LdapEntity;
 import net.kemitix.ldapmanager.domain.OU;
 import net.kemitix.ldapmanager.domain.User;
-import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.events.NavigationItemOuActionEvent;
+import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import net.kemitix.ldapmanager.state.CurrentContainer;
 import net.kemitix.ldapmanager.state.LdapEntityContainer;
 import org.junit.Before;
@@ -61,11 +61,7 @@ public class NavigationItemsSupplierTest {
                 new NavigationItemsSupplier(currentLdapContainerSupplier, currentContainer, eventPublisher);
         usersOu = OU.of(LdapNameUtil.parse("ou=users"), "users");
         itUsersOu = OU.of(LdapNameUtil.parse("ou=it,ou=users"), "it");
-        bobUsersUser = User.builder()
-                           .dn(LdapNameUtil.parse("cn=bob,ou=users"))
-                           .cn("bob")
-                           .sn("smith")
-                           .build();
+        bobUsersUser = User.of(LdapNameUtil.parse("cn=bob,ou=users"), "bob", "smith");
     }
 
     @Test
@@ -147,16 +143,8 @@ public class NavigationItemsSupplierTest {
         //given
         val ou1 = OU.of(LdapNameUtil.parse("ou=alpha"), "alpha");
         val ou2 = OU.of(LdapNameUtil.parse("ou=beta"), "beta");
-        val user1 = User.builder()
-                        .dn(LdapNameUtil.parse("cn=alice"))
-                        .cn("alice")
-                        .sn("little")
-                        .build();
-        val user2 = User.builder()
-                        .dn(LdapNameUtil.parse("cn=bob"))
-                        .cn("bob")
-                        .sn("smith")
-                        .build();
+        val user1 = User.of(LdapNameUtil.parse("cn=alice"), "alice", "little");
+        val user2 = User.of(LdapNameUtil.parse("cn=bob"), "bob", "smith");
         val entities = new ArrayList<LdapEntity>(Arrays.asList(ou2, user2, user1, ou1));
         given(currentLdapContainerSupplier.get()).willReturn(LdapEntityContainer.of(entities.stream()));
         given(currentContainer.getDn()).willReturn(LdapNameUtil.empty());

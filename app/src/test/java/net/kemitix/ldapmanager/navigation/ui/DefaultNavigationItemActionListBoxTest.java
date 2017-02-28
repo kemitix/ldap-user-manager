@@ -311,11 +311,9 @@ public class DefaultNavigationItemActionListBoxTest {
     public void shouldShowOusWithBraces() {
         //given
         val ou = NavigationItemFactory.create(OU.of(LdapNameUtil.empty(), "users"), applicationEventPublisher);
-        val user = NavigationItemFactory.create(User.builder()
-                                                    .dn(LdapNameUtil.parse("cn=bob"))
-                                                    .cn("bob")
-                                                    .sn("smith")
-                                                    .build(), applicationEventPublisher);
+        val user = NavigationItemFactory.create(User.of(LdapNameUtil.parse("cn=bob"), "bob", "smith"),
+                                                applicationEventPublisher
+                                               );
         //then
         assertThat(ou.toString()).contains("ou=users", "name=users", "featureSet=[RENAME]");
         assertThat(ou.getName()).isEqualTo("users");

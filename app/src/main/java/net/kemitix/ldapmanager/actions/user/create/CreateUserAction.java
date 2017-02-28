@@ -65,11 +65,7 @@ class CreateUserAction {
         final LdapName userDn = LdapNameBuilder.newInstance(ouDn)
                                                .add("cn", cn)
                                                .build();
-        final User user = User.builder()
-                              .dn(userDn)
-                              .cn(cn)
-                              .sn(sn)
-                              .build();
+        final User user = User.of(userDn, cn, sn);
         ldapTemplate.create(user);
         // close form
         applicationEventPublisher.publishEvent(CloseCenterFormEvent.create());

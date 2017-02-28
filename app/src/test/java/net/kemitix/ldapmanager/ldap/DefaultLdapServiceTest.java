@@ -74,11 +74,7 @@ public class DefaultLdapServiceTest {
     @Test
     public void shouldGetLdapEntityContainer() throws Exception {
         //given
-        user = User.builder()
-                   .dn(userDn)
-                   .cn("bob")
-                   .sn("smith")
-                   .build();
+        user = User.of(userDn, "bob", "smith");
         given(ldapTemplate.find(anyObject(), eq(OUEntity.class))).willReturn(Collections.singletonList(ouEntity));
         given(ldapTemplate.find(anyObject(), eq(UserEntity.class))).willReturn(Collections.singletonList(userEntity));
         //when

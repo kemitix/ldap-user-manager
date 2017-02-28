@@ -50,11 +50,7 @@ public class DefaultRenameDnDialogTest {
         MockitoAnnotations.initMocks(this);
         dialog = new DefaultRenameDnDialog(textInputDialogFactory, validateNameNotEmpty);
         given(textInputDialogFactory.create(anyString(), any())).willReturn(textInputDialog);
-        user = User.builder()
-                   .dn(LdapNameUtil.parse("cn=bob,ou=users"))
-                   .cn("bob")
-                   .sn("smith")
-                   .build();
+        user = User.of(LdapNameUtil.parse("cn=bob,ou=users"), "bob", "smith");
     }
 
     @Test
