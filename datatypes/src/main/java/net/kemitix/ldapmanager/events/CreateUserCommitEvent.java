@@ -33,7 +33,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface CreateUserCommitEvent {
 
     /**
@@ -41,6 +41,7 @@ public interface CreateUserCommitEvent {
      *
      * @return The DN of the container.
      */
+    @Value.Parameter
     Name getDn();
 
     /**
@@ -48,6 +49,7 @@ public interface CreateUserCommitEvent {
      *
      * @return The CN attribute.
      */
+    @Value.Parameter
     String getCn();
 
     /**
@@ -55,6 +57,7 @@ public interface CreateUserCommitEvent {
      *
      * @return The SN attribute.
      */
+    @Value.Parameter
     String getSn();
 
     /**
@@ -67,10 +70,6 @@ public interface CreateUserCommitEvent {
      * @return the event.
      */
     static CreateUserCommitEvent of(final Name dn, final String cn, final String sn) {
-        return ImmutableCreateUserCommitEvent.builder()
-                                             .dn(dn)
-                                             .cn(cn)
-                                             .sn(sn)
-                                             .build();
+        return ImmutableCreateUserCommitEvent.of(dn, cn, sn);
     }
 }
