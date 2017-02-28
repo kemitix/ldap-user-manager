@@ -24,7 +24,6 @@ SOFTWARE.
 
 package net.kemitix.ldapmanager.events;
 
-import lombok.val;
 import net.kemitix.ldapmanager.ldap.LdapNameUtil;
 import org.immutables.value.Value;
 
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface ContainerExpiredEvent {
 
     /**
@@ -48,6 +47,7 @@ public interface ContainerExpiredEvent {
      *
      * @return The Containers.
      */
+    @Value.Parameter
     Set<Name> getContainers();
 
     /**
@@ -59,14 +59,11 @@ public interface ContainerExpiredEvent {
      * @return the event
      */
     static ContainerExpiredEvent containing(final Name... dn) {
-        val containers = Arrays.stream(dn)
-                               .map(LdapNameUtil::getParent)
-                               .filter(Optional::isPresent)
-                               .map(Optional::get)
-                               .collect(Collectors.toSet());
-        return ImmutableContainerExpiredEvent.builder()
-                                             .addAllContainers(containers)
-                                             .build();
+        return ImmutableContainerExpiredEvent.of(Arrays.stream(dn)
+                                                       .map(LdapNameUtil::getParent)
+                                                       .filter(Optional::isPresent)
+                                                       .map(Optional::get)
+                                                       .collect(Collectors.toSet()));
     }
 
     /**
@@ -78,8 +75,6 @@ public interface ContainerExpiredEvent {
      * @return the event
      */
     static ContainerExpiredEvent of(final Name dn) {
-        return ImmutableContainerExpiredEvent.builder()
-                                             .addAllContainers(Collections.singleton(dn))
-                                             .build();
+        return ImmutableContainerExpiredEvent.of(Collections.singleton(dn));
     }
 }
