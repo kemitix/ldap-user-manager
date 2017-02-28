@@ -33,7 +33,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface CurrentContainerChangedEvent {
 
     /**
@@ -41,6 +41,7 @@ public interface CurrentContainerChangedEvent {
      *
      * @return The container name.
      */
+    @Value.Parameter
     Name getNewContainer();
 
     /**
@@ -51,8 +52,6 @@ public interface CurrentContainerChangedEvent {
      * @return the event
      */
     static CurrentContainerChangedEvent of(final Name newContainer) {
-        return ImmutableCurrentContainerChangedEvent.builder()
-                                                    .newContainer(newContainer)
-                                                    .build();
+        return ImmutableCurrentContainerChangedEvent.of(newContainer);
     }
 }
