@@ -33,7 +33,7 @@ import org.immutables.value.Value;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 public interface NavigationItemUserActionEvent {
 
     /**
