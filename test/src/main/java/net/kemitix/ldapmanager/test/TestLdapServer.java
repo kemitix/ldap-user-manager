@@ -75,7 +75,7 @@ public final class TestLdapServer {
     public static void startServer() throws Exception {
         log.info("Starting LDAP Server");
         serverLock.lock();
-        System.out.println("Lock acquired: Start LDAP Server...");
+        log.info("Lock acquired: Start LDAP Server...");
         if (server == null) {
             val config = new InMemoryDirectoryServerConfig(BASE);
             config.addAdditionalBindCredentials("cn=" + ADMIN_USERNAME, ADMIN_PASSWORD);
@@ -100,8 +100,8 @@ public final class TestLdapServer {
         if (server != null) {
             server.shutDown(true);
         }
-        System.out.println("Stopped LDAP Server.");
+        log.info("Stopped LDAP Server.");
         serverLock.unlock();
-        System.out.println("Lock released.");
+        log.info("Lock released.");
     }
 }
