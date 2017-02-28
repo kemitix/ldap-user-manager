@@ -41,7 +41,6 @@ import javax.naming.Name;
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
 @Value.Immutable(builder = false)
-@SuppressWarnings("abstractclassname")
 public interface OuNavigationItem extends NavigationItem {
 
     @Override
