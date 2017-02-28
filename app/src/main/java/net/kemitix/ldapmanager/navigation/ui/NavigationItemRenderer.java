@@ -28,7 +28,9 @@ import com.googlecode.lanterna.gui2.AbstractListBox;
 import net.kemitix.ldapmanager.navigation.NavigationItem;
 
 /**
- * .
+ * A {@link com.googlecode.lanterna.gui2.AbstractListBox.ListItemRenderer} for {@link NavigationItem}s.
+ *
+ * <p>Renders the {@code NavigationItem} using {@link NavigationItem#getLabel()}</p>
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
