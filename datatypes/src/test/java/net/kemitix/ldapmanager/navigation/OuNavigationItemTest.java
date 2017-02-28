@@ -29,24 +29,6 @@ public class OuNavigationItemTest {
     public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void builder() throws Exception {
-        //given
-        val dn = mock(Name.class);
-        val ou = OU.of(dn, "ou");
-        val applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        //when
-        val result = OuNavigationItem.builder()
-                                     .ou(ou)
-                                     .applicationEventPublisher(applicationEventPublisher)
-                                     .build();
-        //then
-        assertThat(result).isInstanceOf(OuNavigationItem.class);
-        assertThat(result.getOu()).isSameAs(ou);
-        assertThat(result.getApplicationEventPublisher()).isSameAs(applicationEventPublisher);
-        assertThat(result.getDn()).isSameAs(dn);
-    }
-
-    @Test
     public void of() throws Exception {
         //given
         val dn = mock(Name.class);

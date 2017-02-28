@@ -40,7 +40,7 @@ import javax.naming.Name;
  *
  * @author Paul Campbell (pcampbell@kemitix.net)
  */
-@Value.Immutable
+@Value.Immutable(builder = false)
 @SuppressWarnings("abstractclassname")
 public interface OuNavigationItem extends NavigationItem {
 
@@ -73,15 +73,6 @@ public interface OuNavigationItem extends NavigationItem {
     }
 
     /**
-     * Creates a builder.
-     *
-     * @return the builder
-     */
-    static ImmutableOuNavigationItem.Builder builder() {
-        return ImmutableOuNavigationItem.builder();
-    }
-
-    /**
      * Create an OuNavigationItem.
      *
      * @param ou             The OU.
@@ -89,7 +80,7 @@ public interface OuNavigationItem extends NavigationItem {
      *
      * @return The ou navigation item.
      */
-    static OuNavigationItem of(@NonNull final OU ou, final ApplicationEventPublisher eventPublisher) {
+    static OuNavigationItem of(final OU ou, final ApplicationEventPublisher eventPublisher) {
         return ImmutableOuNavigationItem.of(ou, eventPublisher);
     }
 
